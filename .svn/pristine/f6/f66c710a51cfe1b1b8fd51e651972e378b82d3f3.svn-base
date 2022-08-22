@@ -1,0 +1,30 @@
+package kr.or.annapharm.dto;
+
+public class SelectListVO {
+	private int mdNo;
+	private String chemistCode;
+	/**
+	 * @return the mdNo
+	 */
+	public int getMdNo() {
+		return mdNo;
+	}
+	/**
+	 * @param mdNo the mdNo to set
+	 */
+	public void setMdNo(int mdNo) {
+		this.mdNo = mdNo;
+	}
+	/**
+	 * @return the chemistCode
+	 */
+	public String getChemistCode() {
+		return chemistCode;
+	}
+	/**
+	 * @param chemistCode the chemistCode to set
+	 */
+	public void setChemistCode(String chemistCode) {
+		this.chemistCode = chemistCode;
+	}
+}

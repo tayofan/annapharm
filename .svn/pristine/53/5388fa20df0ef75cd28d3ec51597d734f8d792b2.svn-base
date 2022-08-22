@@ -1,0 +1,110 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.service.BoardService;
+import kr.or.annapharm.service.ExpertDashBoardService;
+import kr.or.annapharm.service.IPatientService;
+
+@Controller
+@RequestMapping("expert")
+public class expertDashBoardController {
+
+//약국 메인대쉬보드
+	@Autowired
+	private ExpertDashBoardService service;
+	
+	
+	@RequestMapping("/main")
+	public String main(){
+		String url = "expert/main/expertDashBoard";
+		return url;
+	}
+	
+	
+	
+	@RequestMapping("/viewT/prescription")
+	public ModelAndView list(ModelAndView mnv) throws Exception{
+		
+		String url = "expert/viewT/prescription";
+
+		List<Map<String, String>> list = service.getExpertDashBoardList();
+		
+		mnv.addObject("list", list);
+		mnv.setViewName(url);
+		return mnv;
+	}
+	
+	
+//	
+//	@RequestMapping("/viewT/analysisPrescription")
+//	public String analysisPrescription() throws SQLException{
+//		String url = "expert/viewT/analysisPrescription";
+//
+//		return url;
+//	}
+//	
+//	@RequestMapping("/viewT/analysisPrescription_y")
+//	public String analysisPrescription_y() throws SQLException{
+//		String url = "expert/viewT/analysisPrescription_y";
+//
+//		return url;
+//	}
+//	
+//	
+//	@RequestMapping("/viewT/analysisPrescription_w")
+//	public String analysisPrescription_w() throws SQLException{
+//		String url = "expert/viewT/analysisPrescription_w";
+//
+//		return url;
+//	}
+//	
+//	@RequestMapping("/viewT/analysisPrescription_m")
+//	public String analysisPrescription_m() throws SQLException{
+//		String url = "expert/viewT/analysisPrescription_m";
+//
+//		return url;
+//	}
+//	
+//	
+//	
+//	@RequestMapping("/viewT/takeStatistics")
+//	public String takeStatistics() throws SQLException{
+//		String url = "expert/viewT/takeStatistics";
+//
+//		return url;
+//	}
+//	
+//	
+//	@RequestMapping("/viewT/takeStatistics_y")
+//	public String takeStatistics_y() throws SQLException{
+//		String url = "expert/viewT/takeStatistics_y";
+//
+//		return url;
+//	}
+//	
+//	
+//	
+//	@RequestMapping("/viewT/takeStatistics_m")
+//	public String takeStatistics_m() throws SQLException{
+//		String url = "expert/viewT/takeStatistics_m";
+//
+//		return url;
+//	}
+//	
+	
+	
+
+
+}

@@ -1,0 +1,71 @@
+package kr.or.annapharm.dto;
+
+import java.util.Comparator;
+
+public class PharmacyInfoMapVO extends PharmacyInfoVO implements Comparable<PharmacyInfoMapVO>{
+	private String x = "";
+	private String y = "";
+	private int distance;
+	
+	/**
+	 * @return the distance
+	 */
+	public int getDistance() {
+		return distance;
+	}
+	/**
+	 * @param distance the distance to set
+	 */
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+	/**
+	 * @return the x
+	 */
+	public String getX() {
+		return x;
+	}
+	/**
+	 * @param x the x to set
+	 */
+	public void setX(String x) {
+		this.x = x;
+	}
+	/**
+	 * @return the y
+	 */
+	public String getY() {
+		return y;
+	}
+	/**
+	 * @param y the y to set
+	 */
+	public void setY(String y) {
+		this.y = y;
+	}
+	@Override
+	public String toString() {
+		return "PharmacyInfoMapVO [x=" + x + ", y=" + y + ", toString()=" + super.toString() + ", getPiDutyname()="
+				+ getPiDutyname() + ", getPiRnum()=" + getPiRnum() + ", getPiDutyaddr()=" + getPiDutyaddr()
+				+ ", getPiDutytel1()=" + getPiDutytel1() + ", getPiDutytime1c()=" + getPiDutytime1c()
+				+ ", getPiDutytime1s()=" + getPiDutytime1s() + ", getPiDutytime2c()=" + getPiDutytime2c()
+				+ ", getPiDutytime2s()=" + getPiDutytime2s() + ", getPiDutytime3c()=" + getPiDutytime3c()
+				+ ", getPiDutytime3s()=" + getPiDutytime3s() + ", getPiDutytime4c()=" + getPiDutytime4c()
+				+ ", getPiDutytime4s()=" + getPiDutytime4s() + ", getPiDutytime5c()=" + getPiDutytime5c()
+				+ ", getPiDutytime5s()=" + getPiDutytime5s() + ", getPiDutytime6c()=" + getPiDutytime6c()
+				+ ", getPiDutytime6s()=" + getPiDutytime6s() + ", getPiDutytime7c()=" + getPiDutytime7c()
+				+ ", getPiDutytime7s()=" + getPiDutytime7s() + ", getPiDutytime8c()=" + getPiDutytime8c()
+				+ ", getPiDutytime8s()=" + getPiDutytime8s() + ", getPiHpid()=" + getPiHpid() + ", getPiPostcdn1()="
+				+ getPiPostcdn1() + ", getPiPostcdn2()=" + getPiPostcdn2() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + "]";
+	}
+	
+	@Override
+	public int compareTo(PharmacyInfoMapVO o) {
+		if(this.distance < o.getDistance()) return -1;
+		else if(this.distance > o.getDistance()) return 1;
+		else return 0;
+	}
+	
+	
+}

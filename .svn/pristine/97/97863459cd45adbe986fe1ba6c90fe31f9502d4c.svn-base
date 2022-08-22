@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Medicine-Mapper">  
+	<select id="selectMedicineClass" resultType="String">
+		select md_class
+		  from medicine
+		 where md_no = #{mdNo} 
+	</select>
+	
+	<select id="selectMedicineType" resultType="int">
+		select mi_code
+		  from medicine
+		 where md_no = #{mdNo}
+	</select>
+	
+	<select id="selectMedicineName" resultType="String">
+		select md_name
+		  from medicine
+		 where md_no =#{mdNo}
+	</select>
+	
+	<select id="selectMedicineAll" resultType="kr.or.annapharm.dto.MedicineVO">
+		select
+		   md_no
+		  ,mi_code
+		  ,md_name
+		  ,md_class
+		  ,md_nature
+		  ,md_standard_code
+		  ,md_effect
+		  ,md_use
+		  ,md_attention
+		  ,md_storage
+		  ,md_term
+		  ,md_drug
+		  ,md_component
+		from
+		   medicine
+		where
+		   md_no = #{mdNo}
+	</select>
+	
+<!-- 	<select id="selectMedicineNameList" resultType="String"> -->
+<!-- 		select md_name -->
+<!-- 		  from medicine  -->
+<!-- 		 where md_no in (select md_no -->
+<!-- 		                   from pre_drug -->
+<!-- 		                  where ps_code in (select ps_code -->
+<!-- 		                                      from prescription -->
+<!-- 		                                     where patient_code = #{patient_code})) -->
+<!-- 	</select> -->
+
+	<!-- 처방전의 첫번째 약이름 구하기  -->
+	<select id="selectPrescriptionFirstMedicine" resultType="String">
+		select b.md_name
+		  from pre_drug a, medicine b
+		 where ps_code = #{psCode}
+		   and a.md_no = b.md_no
+		   and rownum = 1
+	</select>
+	
+	<!-- 하나의 처방전에 약 갯수 구하기 -->
+	<select id="selectPrescriptionMedicineCount" resultType="int">
+		select count(a.ps_code)
+	      from pre_drug a, prescription b
+	     where b.ps_code = #{psCode}
+	       and a.ps_code = b.ps_code
+	</select>
+
+</mapper>
+

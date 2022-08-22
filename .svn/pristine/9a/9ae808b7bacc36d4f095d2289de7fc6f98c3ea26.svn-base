@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SalesAnalysis-Mapper">
+
+	<sql id="search">
+		<if test="searchType == O.toString">
+			and chemist_code == #{searchType}
+		</if>
+	</sql>
+
+	<select id="selectChemistsName" resultType="String">
+		SELECT
+		    B.mem_name
+		  FROM chemist A, member B
+		 where pharmacy_code = #{loginUserPharmacyCode}
+		   and A.mem_id = B.mem_id
+	</select>
+
+</mapper>

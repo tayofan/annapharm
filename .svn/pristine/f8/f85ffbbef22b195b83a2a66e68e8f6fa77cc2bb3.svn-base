@@ -1,0 +1,74 @@
+package kr.or.annapharm;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import kr.or.annapharm.command.PageMaker;
+import kr.or.annapharm.command.SalesByAgeCommand;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.CompareMedicineVO;
+import kr.or.annapharm.dto.SalesByAgeVO;
+import kr.or.annapharm.dto.SearchMedicineVO;
+import kr.or.annapharm.service.BusinessService;
+
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:kr/or/annapharm/context/root-context.xml")
+public class ServiceTest {
+
+	@Autowired
+	private BusinessService service;
+
+	@Test
+	public void testBusinessService() throws Exception{
+		
+		SearchCriteria cri = new SearchCriteria();
+		cri.setKeyword("산염");
+		cri.setPerPageNum(7);
+		
+		Map<String, Object> dataMap = service.searchBasisList(cri);
+		List<SearchMedicineVO> list = (List<SearchMedicineVO>) dataMap.get("searchBasisList");
+		PageMaker pageMaker = (PageMaker)dataMap.get("pageMaker");
+		
+		Assert.assertNotNull(dataMap);
+		Assert.assertEquals(7, list.size());
+		Assert.assertEquals(698, pageMaker.getTotalCount());
+	
+	}
+	
+	@Test
+	public void testCompareMedicineService() throws Exception {
+		
+		String miMaincode = "240301ATB";
+		
+		List<CompareMedicineVO> compareList = service.getCompareList(miMaincode);
+		
+		Assert.assertEquals(28,compareList.size());
+	}
+	
+	@Test
+	public void testSalesByAgeListService() throws Exception{
+		
+		String startDate = "2022-06-10";
+		String endDate = "2022-07-10";
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		
+	}
+}

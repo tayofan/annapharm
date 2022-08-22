@@ -1,0 +1,14 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public interface ExpertDashBoardService {
+
+	public List<Map<String, String>> getExpertDashBoardList() throws Exception;
+	
+
+}

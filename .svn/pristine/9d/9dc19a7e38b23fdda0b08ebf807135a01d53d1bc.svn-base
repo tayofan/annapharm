@@ -1,0 +1,32 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.BoardVO;
+
+public class BoardDAOImpl implements BoardDAO {
+
+	private SqlSession session;
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+
+	@Override
+	public List<BoardVO> SelectSearchBoardList(SearchCriteria cri) {
+		List<BoardVO> list = session.selectList("Board-Mapper.selectSearchBoardList", cri);
+
+		return list;
+	}
+
+	@Override
+	public int selectBoardCriteriaTotalCount(SearchCriteria cri) throws SQLException {
+		int boardCount = session.selectOne("Board-Mapper.selectSearchBoardListCount",cri);
+		return boardCount;
+	}
+
+
+}

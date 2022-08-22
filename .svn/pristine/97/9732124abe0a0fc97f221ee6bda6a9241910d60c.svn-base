@@ -1,0 +1,39 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.command.PageMaker;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dao.ReceiveDAO;
+import kr.or.annapharm.dto.ReceiveVO;
+
+public class ReceiveServiceImpl implements ReceiveService {
+
+	private ReceiveDAO receiveDAO;
+	
+	public void setReceiveDAO(ReceiveDAO receiveDAO) {
+		this.receiveDAO = receiveDAO;
+	}
+	
+	@Override
+	public Map<String, Object> getReceiveList(SearchCriteria cri) throws SQLException {
+		System.out.println("안녕,,?서비스");
+		Map<String, Object> receiveOrder = new HashMap<String, Object>();
+		System.out.println("크리크리 ㅋㅋ" + cri.getStartDate());
+		System.out.println("크리크리 ㅋㅋ" + cri.getEndDate());
+		List<ReceiveVO> receiveList = receiveDAO.selectReceiveCriteria(cri);
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		
+		receiveOrder.put("receiveList", receiveList);
+		receiveOrder.put("pageMaker", pageMaker);
+		
+		return receiveOrder;
+	}
+
+}

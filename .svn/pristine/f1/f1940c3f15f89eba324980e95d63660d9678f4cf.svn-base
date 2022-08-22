@@ -1,0 +1,68 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.or.annapharm.command.SalesAnalysisCommand;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.SalesAnalysisVO;
+import kr.or.annapharm.service.SalesAnalysisService;
+
+@Controller
+@RequestMapping("/sales_analysis")
+public class SalesAnalysisController {
+
+	@Autowired
+	private SalesAnalysisService salesAnalysisService;
+
+	@RequestMapping("/main")
+	public ModelAndView main(ModelAndView mnv, HttpServletRequest request) throws Exception {
+		String url = "expert/business_management/sales_analysis";
+		String loginUserPharmacyCode = null;
+
+		/* 추후 로그인 세션이 생기면 적용
+		 *
+		 * HttpSession session = request.getSession(); String loginUser =
+		 * loginUserPharmacyCode = session.getAttribute("loginUser");
+		 */
+
+		List<String> nameList = salesAnalysisService.getChemistsName(loginUserPharmacyCode);
+
+		mnv.addObject("nameList", nameList);
+		mnv.setViewName(url);
+
+		return mnv;
+	}
+
+	@RequestMapping("/search")
+	public ModelAndView main(ModelAndView mnv, SearchCriteria cri, Date no1, Date no2) throws Exception {
+		String url = "expert/business_management/sales_analysis";
+		String loginUserPharmacyCode = null;
+
+		List<String> nameList = salesAnalysisService.getChemistsName(loginUserPharmacyCode);
+		List<SalesAnalysisCommand> salesAnalysisList = salesAnalysisService.getSearchAnalysisList(cri);
+
+		mnv.addObject("salesAnalysisList", salesAnalysisList);
+		mnv.addObject("nameList", nameList);
+		mnv.setViewName(url);
+		return mnv;
+	}
+
+	@RequestMapping("/bill")
+	public ModelAndView MakeBill(ModelAndView mnv) throws Exception{
+		String url = "expert/business_management/bill/sales_analysis_bill";
+
+		mnv.setViewName(url);
+		return mnv;
+	}
+
+}

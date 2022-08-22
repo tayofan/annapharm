@@ -1,0 +1,35 @@
+package kr.or.annapharm.dto;
+
+public class OrderCartVO {
+	String orderNo;
+	int mdNo;
+	int orderCartNum;
+	int orderCartPrice;
+	
+	public String getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+	public int getMdNo() {
+		return mdNo;
+	}
+	public void setMdNo(int mdNo) {
+		this.mdNo = mdNo;
+	}
+	public int getOrderCartNum() {
+		return orderCartNum;
+	}
+	public void setOrderCartNum(int orderCartNum) {
+		this.orderCartNum = orderCartNum;
+	}
+	public int getOrderCartPrice() {
+		return orderCartPrice;
+	}
+	public void setOrderCartPrice(int orderCartPrice) {
+		this.orderCartPrice = orderCartPrice;
+	}
+	
+	
+}

@@ -1,0 +1,54 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class PrescriptionHistoryVO {
+
+	private String psCode;
+	private Date psDate;
+	private String medicineName;
+	private String hospitalName;
+	private String memName;
+	private String psStatus;
+	
+	public String getPsCode() {
+		return psCode;
+	}
+	public void setPsCode(String psCode) {
+		this.psCode = psCode;
+	}
+	public Date getPsDate() {
+		return psDate;
+	}
+	public void setPsDate(Date psDate) {
+		this.psDate = psDate;
+	}
+	public String getMedicineName() {
+		return medicineName;
+	}
+	public void setMedicineName(String medicineName) {
+		this.medicineName = medicineName;
+	}
+	public String getHospitalName() {
+		return hospitalName;
+	}
+	public void setHospitalName(String hospitalName) {
+		this.hospitalName = hospitalName;
+	}
+	public String getMemName() {
+		return memName;
+	}
+	public void setMemName(String memName) {
+		this.memName = memName;
+	}
+	public String getPsStatus() {
+		return psStatus;
+	}
+	public void setPsStatus(String psStatus) {
+		this.psStatus = psStatus;
+	}
+
+	
+
+
+}

@@ -1,0 +1,53 @@
+package kr.or.annapharm.controller;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.or.annapharm.command.Crawling;
+import kr.or.annapharm.dao.MedicineDAO;
+import kr.or.annapharm.dao.MedicineInfoDAO;
+import kr.or.annapharm.dto.MedicineVO;
+
+@Controller
+public class MedicineDetailController {
+	@Autowired
+	private MedicineDAO medicineDAO;
+	
+	@Autowired
+	private MedicineInfoDAO medicineInfoDAO;
+	
+	@RequestMapping("/medicinedetail")
+	public ModelAndView mddetail(int mdNo, ModelAndView mnv) throws Exception {
+		
+		String url="expert/viewT/medicine_detail";
+		
+		Map<String, List<String>> detail = Crawling.getAttention(mdNo);
+		
+		String company = medicineInfoDAO.selectMedicineCompany(mdNo);
+		
+		List<String> keyList = new ArrayList<String>(detail.keySet());
+		Collections.sort(keyList);
+		
+		keyList.remove("use");
+		keyList.remove("effect");
+		
+		MedicineVO vo = medicineDAO.selectMedicineAll(mdNo);
+		
+		mnv.addObject("dataMap",detail);
+		mnv.addObject("keyList",keyList);
+		mnv.addObject("company",company);
+		mnv.addObject("vo",vo);
+		mnv.setViewName(url);
+		
+		return mnv;
+		
+	}
+
+}

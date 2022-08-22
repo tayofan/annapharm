@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Prescription-Mapper">
+
+	<select id="selectPastPrescriptionList"
+		resultType="pastPrescriptionCommand">
+		SELECT
+		a.ps_code
+		,a.doctor_code
+		,a.patient_code
+		,a.chemist_code
+		,a.ps_date
+		,a.phmacy_code
+		,b.PI_DUTYNAME
+		FROM
+		prescription
+		a, PHARMACY_INFO b
+		where a.phmacy_code is not null
+		and a.phmacy_code =
+		b.PI_HPID
+		and a.PATIENT_CODE = #{patientCode}
+	</select>
+
+<!-- 	<select id="selectPastPrescriptionCount" resultType="int"> -->
+<!-- 		SELECT -->
+<!-- 		count(a.psCode) -->
+<!-- 		FROM -->
+<!-- 		prescription a, PHARMACY_INFO b -->
+<!-- 		where a.phmacy_code -->
+<!-- 		is not null -->
+<!-- 		and a.phmacy_code = b.PI_HPID -->
+<!-- 		and a.PATIENT_CODE = #{patientCode} -->
+<!-- 	</select> -->
+
+ 	<!-- 헤지 : 처방이력에서 처방전 선택 후 처방 상세 내역 출력 -->
+<!-- 	<select id="selectPastPrescriptionDetail" -->
+<!-- 		resultType="prescriptionDetail"> -->
+<!-- 		select substr(a.md_class,1,2) as md_class -->
+<!-- 		, b.mi_type -->
+<!-- 		, -->
+<!-- 		a.mi_code -->
+<!-- 		, a.md_no -->
+<!-- 		, b.mi_use -->
+<!-- 		, a.md_name -->
+<!-- 		, c.pre_drug_count -->
+<!-- 		, c.pre_drug_day -->
+<!-- 		, c.ps_code -->
+<!-- 		from medicine a, medicine_info b, pre_drug c, -->
+<!-- 		prescription d -->
+<!-- 		where d.ps_code = #{psCode} -->
+<!-- 		and a.mi_code = b.mi_code -->
+<!-- 		and -->
+<!-- 		a.md_no = c.md_no -->
+<!-- 		and c.ps_code = d.ps_code -->
+<!-- 	</select> -->
+</mapper>
+
+

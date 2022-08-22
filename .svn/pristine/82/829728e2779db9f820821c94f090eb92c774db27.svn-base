@@ -1,0 +1,14 @@
+package kr.or.annapharm.service;
+
+import kr.or.annapharm.dto.MedicienBillVO;
+
+public interface MedicienBillService {
+
+	/**
+	 * @return 약국의 조제수가 계산에 필요한 기준값 VO
+	 * @throws Exception
+	 * 	개요 : 약국의 조제수가 계산에 필요한 기준값을 가져오는 메서드
+	 * 	작성자 : 이병진
+	 */
+	public MedicienBillVO readMedicienBill() throws Exception;
+}

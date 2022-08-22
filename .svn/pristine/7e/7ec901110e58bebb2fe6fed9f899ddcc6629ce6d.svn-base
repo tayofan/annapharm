@@ -1,0 +1,52 @@
+package kr.or.annapharm.dto;
+
+public class SearchMedicineVO {
+	String md_name;
+	String md_component;
+	String md_class;
+	String unit;
+	String mi_maincode;
+
+	public String getMd_name() {
+		return md_name;
+	}
+	public void setMd_name(String md_name) {
+		this.md_name = md_name;
+	}
+
+	public String getMd_component() {
+		return md_component;
+	}
+	public void setMd_component(String md_component) {
+		this.md_component = md_component;
+	}
+
+	public String getMd_class() {
+		return md_class;
+	}
+	public void setMd_class(String md_class) {
+		this.md_class = md_class;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	
+	public String getMi_maincode() {
+		return mi_maincode;
+	}
+	public void setMi_maincode(String mi_maincode) {
+		this.mi_maincode = mi_maincode;
+	}
+	
+	@Override
+	public String toString() {
+		return "SearchMedicineVO [md_name=" + md_name + ", md_component=" + md_component + ", md_class=" + md_class
+				+ ", unit=" + unit + ", mi_maincode=" + mi_maincode + "]";
+	}
+	
+	
+}

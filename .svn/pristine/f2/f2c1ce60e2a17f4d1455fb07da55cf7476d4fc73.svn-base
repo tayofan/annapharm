@@ -1,0 +1,63 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class ProductVO {
+	String product_qr;
+	String pharmacy_code;
+	int md_no;
+	int product_ownnum;
+	String product_unit;
+	int product_ownnum_standard;
+	String product_position;
+	Date product_date;
+	
+	public String getProduct_qr() {
+		return product_qr;
+	}
+	public void setProduct_qr(String product_qr) {
+		this.product_qr = product_qr;
+	}
+	public String getPharmacy_code() {
+		return pharmacy_code;
+	}
+	public void setPharmacy_code(String pharmacy_code) {
+		this.pharmacy_code = pharmacy_code;
+	}
+	public int getMd_no() {
+		return md_no;
+	}
+	public void setMd_no(int md_no) {
+		this.md_no = md_no;
+	}
+	public int getProduct_ownnum() {
+		return product_ownnum;
+	}
+	public void setProduct_ownnum(int product_ownnum) {
+		this.product_ownnum = product_ownnum;
+	}
+	public String getProduct_unit() {
+		return product_unit;
+	}
+	public void setProduct_unit(String product_unit) {
+		this.product_unit = product_unit;
+	}
+	public int getProduct_ownnum_standard() {
+		return product_ownnum_standard;
+	}
+	public void setProduct_ownnum_standard(int product_ownnum_standard) {
+		this.product_ownnum_standard = product_ownnum_standard;
+	}
+	public String getProduct_position() {
+		return product_position;
+	}
+	public void setProduct_position(String product_position) {
+		this.product_position = product_position;
+	}
+	public Date getProduct_date() {
+		return product_date;
+	}
+	public void setProduct_date(Date product_date) {
+		this.product_date = product_date;
+	}
+}

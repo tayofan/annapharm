@@ -1,0 +1,48 @@
+package kr.or.annapharm.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public class PrescriptionDAOImpl implements PrescriptionDAO {
+	
+	private SqlSession session;
+	
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+	
+	@Override
+	public List<PrescriptionVO> selectPrescriptionList(String prescriptionCode) throws Exception {
+		return session.selectList("Prescription-Mapper.selectPrescriptionList", prescriptionCode);
+	}
+
+	@Override
+	public PrescriptionVO selectPrescriptionOne(PrescriptionVO vo) throws Exception {
+		
+//		Map<String, String> map = new HashMap<String, String>();
+//		map.put("patient_code", patientCode);
+//		map.put("ps_code", psCode);
+//		
+//		PrescriptionVO vo = new PrescriptionVO();
+//		vo.setPatient_code(patientCode);
+//		vo.setPs_code(psCode);
+		
+		return session.selectOne("Prescription-Mapper.selectPrescriptionList", vo);
+	}
+
+	@Override
+	public int selectPrescriptionCount(String patientCode) throws Exception {
+		return session.selectOne("Prescription-Mapper.selectPrescriptionCount", patientCode);
+	}
+
+	// 과거 처방 이력에서 처방전 선택 -> 해당 처방전의 상세내역 출력 (헤지)
+	@Override
+	public List<PrescriptionDetailVO> selectPrescriptionDetail(String psCode) throws Exception {
+		return session.selectList("Prescription-Mapper.selectPrescriptionDetail", psCode);
+	}
+
+}

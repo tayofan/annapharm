@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Repository -->
+	 <bean id="productDAO" class="kr.or.annapharm.dao.ProductDAOImpl"
+	 	p:session-ref="sqlSession"
+	 />
+	 <bean id="boardDAO" class="kr.or.annapharm.dao.BoardDAOImpl"
+	 	p:session-ref="sqlSession"
+	 />
+	  <bean id="annapharmInDAO" class="kr.or.annapharm.dao.AnnapharmInDAOImpl"
+	 	p:session-ref="sqlSession"
+	 />
+	<bean id="patientDAO" class="kr.or.annapharm.dao.PatientDAOImpl" 
+		p:session-ref="sqlSession"
+	/>
+	<bean id="medicineDAO" class="kr.or.annapharm.dao.MedicineDAOImpl"
+		p:session-ref="sqlSession"
+	/>
+	<bean id="medicineInfoDAO" class="kr.or.annapharm.dao.MedicineInfoDAOImpl"
+		p:session-ref="sqlSession"
+	/>
+	<bean id="classficationDAO" class="kr.or.annapharm.dao.ClassficationDAOImpl"
+		p:session-ref="sqlSession"
+	/>
+	
+	<bean id="prescriptionDAO" class="kr.or.annapharm.dao.PrescriptionDAOImpl"
+		p:session-ref="sqlSession"
+	/>
+	<bean id="menuDAO" class="kr.or.annapharm.dao.MenuDAOImpl"
+		p:session-ref="sqlSession"
+	/>
+
+
+	<!-- Service -->
+	<bean id="productService" class="kr.or.annapharm.service.ProductServiceImpl"
+		p:productDAO-ref="productDAO"
+		p:medicineDAO-ref="medicineDAO"
+		p:medicineInfoDAO-ref="medicineInfoDAO"
+	/>
+	<bean id="annapharmInService" class="kr.or.annapharm.service.AnnapharmInServiceImpl"
+		p:annapharmInDAO-ref="annapharmInDAO"
+	/>
+	
+	<bean id="boardService" class="kr.or.annapharm.service.BoardServiceImpl"
+		p:boardDAO-ref="boardDAO"
+	/>
+	
+	<bean id="patientService" class="kr.or.annapharm.service.PatientServiceImpl" 
+	      p:patientDAO-ref="patientDAO"
+	      p:medicineDAO-ref="medicineDAO"
+	/>
+	<bean id="prescriptionService" class="kr.or.annapharm.service.PrescriptionServiceImpl" 
+	      p:prescriptionDAO-ref="prescriptionDAO"
+	/>
+	<bean id="classficationService" class="kr.or.annapharm.service.ClassficationServiceImpl"
+		  p:classficationDAO-ref="classficationDAO"
+	/>
+	<bean id="menuService" class="kr.or.annapharm.service.MenuServiceImpl" 
+	      p:menuDAO-ref="menuDAO"
+	/>
+	<bean id="businessService" class="kr.or.annapharm.service.BusinessServiceImpl"
+		  p:medicineDAO-ref="medicineDAO"
+	/>
+	
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+

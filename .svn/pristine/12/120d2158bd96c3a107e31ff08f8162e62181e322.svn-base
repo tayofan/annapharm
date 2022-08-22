@@ -1,0 +1,86 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 이름과 생년월일로 조회된 회원을 출력하는 기능 -->
+<script  type="text/x-handlebars-template"  id="lookUp-list-template">
+	{{#each .}}
+		<tr class="lookUp_tbody" ondblclick="readyListInsert('{{patient_name}}', '{{patient_code}}')">
+			<td>{{inc @index}}</td>
+			<td>{{patient_name}}</td>
+			<td>{{patient_regnum}}</td>
+			<td>{{patient_phone}}</td>
+		</tr>
+	{{/each}}
+</script>
+
+
+<script>
+Handlebars.registerHelper({
+	"prettifyDate":function(timeValue){ //Handlbars에 날짜출력함수 등록
+		var dateObj=new Date(timeValue);
+		var year=dateObj.getFullYear();
+		var month=dateObj.getMonth()+1;
+		var date=dateObj.getDate();
+		return year+"/"+month+"/"+date;
+	},
+	"LookUpCheck":function(replyer){
+		var result="none";
+		if(replyer == "${loginUser.id}") result="visible";
+		return result;
+	}
+});
+
+function LookUp_read(){
+	$('.lookUp_tbody').remove();
+	var lookUpName = $('#lookUpName').val();
+	var lookUpBirth = $('#lookUpBirth').val();
+
+	console.log(lookUpName);
+	console.log(lookUpBirth);
+
+	var data={
+			"lookUpName":lookUpName,
+			"lookUpBirth":lookUpBirth
+	}
+
+	$.ajax({
+		url:"lookUp",
+		type:"post",
+		data:data,
+		success:function(data){
+			alert('회원이 조회되었습니다.');
+			console.log(data);
+			if(data == ""){
+				var str = "<tr class='lookUp_tbody'><td colspan='4'>조회 결과가 없습니다.</td></tr>";
+				$('#lookUp_List').append(str)
+			}else{
+				printData(data,$('#lookUp_List'),$('#lookUp-list-template'))
+			}
+		},
+		error:function(error){
+			alert('회원 조회에 실패하였습니다.')
+			/* AjaxErrorSecurityRedirectHandler(error.status); */
+		}
+	});
+}
+
+function printData(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.lookUp_tbody').remove();
+	target.append(html);
+}
+</script>
+
+<script>
+ // 대기열 추가
+ function readyListInsert(ptName, ptCode){
+	 str = "<tr><td>숫자</td><td>" + ptName + "</td></tr>";
+	 $('readyList').append()
+	 
+ }
+
+
+</script>

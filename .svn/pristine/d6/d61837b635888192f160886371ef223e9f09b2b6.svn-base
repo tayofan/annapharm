@@ -1,0 +1,46 @@
+package kr.or.annapharm.dao;
+
+import java.util.List;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.MedicienBillVO;
+import kr.or.annapharm.dto.MedicienCalculatVO;
+import kr.or.annapharm.dto.SalesAnalysisVO;
+
+/**
+ * @author PC-09
+ *	개요 : 약국 매출 현황의 화면구성에 필요한 DAO 인터페이스
+ *	작성자 : 이병진
+ */
+public interface SalesAnalysisDAO {
+
+	/**
+	 * @param cri : 사용자가 정의한 조회할 약사 / 기간을 받아오는 파라미터
+	 * @return : 매출 목록
+	 * @throws Exception
+	 * 	개요 : 약사 / 기간 정보를 받아 매출 목록에 출력될 데이터를 가져오는 메서드
+	 * 	작성자 : 이병진
+	 */
+	public List<SalesAnalysisVO> selectSearchAnalysisList(SearchCriteria cri) throws Exception;
+
+	/**
+	 * @param psCode : 처방전 코드
+	 * @return : 처방전에 들어있는 약품 목록 데이터
+	 * @throws Exception
+	 * 	개요 : 처방전코드를 받아 해당 처방전에 사용된 약품의 종류,갯수를 가져오는 메서드
+	 * 	작성자 : 이병진
+	 */
+	public List<MedicienCalculatVO> selectSearchAnalysisListMedicienData(String psCode) throws Exception;
+
+	/**
+	 * @param loginChemistCode : 로그인한 사람의 약국 코드
+	 * @return : 가져온 이름 목록
+	 * @throws Exception
+	 * 	개요 : 로그인된 정보로 해당 약국의 약사 이름을 가져오는 메서드
+	 * 	작성자 : 이병진
+	 */
+	public List<String> selectChemistsName(String loginUserPharmacyCode) throws Exception;
+
+
+
+}

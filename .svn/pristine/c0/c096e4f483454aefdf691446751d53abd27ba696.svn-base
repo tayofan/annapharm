@@ -1,0 +1,101 @@
+package kr.or.annapharm.dto;
+
+public class MedicineVO {
+	int md_no;
+	int mi_code;
+	String md_name;
+	String md_class;
+	String md_nature;
+	long md_standard_code;
+	String md_effect;
+	String md_use;
+	String md_attention;
+	String md_storage;
+	String md_term;
+	String md_drug;
+	String md_component;
+	
+	public long getMd_standard_code() {
+		return md_standard_code;
+	}
+	public void setMd_standard_code(long md_standard_code) {
+		this.md_standard_code = md_standard_code;
+	}
+	public int getMd_no() {
+		return md_no;
+	}
+	public void setMd_no(int md_no) {
+		this.md_no = md_no;
+	}
+	public int getMi_code() {
+		return mi_code;
+	}
+	public void setMi_code(int mi_code) {
+		this.mi_code = mi_code;
+	}
+	public String getMd_name() {
+		return md_name;
+	}
+	public void setMd_name(String md_name) {
+		this.md_name = md_name;
+	}
+	public String getMd_class() {
+		return md_class;
+	}
+	public void setMd_class(String md_class) {
+		this.md_class = md_class;
+	}
+	public String getMd_nature() {
+		return md_nature;
+	}
+	public void setMd_nature(String md_nature) {
+		this.md_nature = md_nature;
+	}
+	public void setMd_standard_code(int md_standard_code) {
+		this.md_standard_code = md_standard_code;
+	}
+	public String getMd_effect() {
+		return md_effect;
+	}
+	public void setMd_effect(String md_effect) {
+		this.md_effect = md_effect;
+	}
+	public String getMd_use() {
+		return md_use;
+	}
+	public void setMd_use(String md_use) {
+		this.md_use = md_use;
+	}
+	public String getMd_attention() {
+		return md_attention;
+	}
+	public void setMd_attention(String md_attention) {
+		this.md_attention = md_attention;
+	}
+	public String getMd_storage() {
+		return md_storage;
+	}
+	public void setMd_storage(String md_storage) {
+		this.md_storage = md_storage;
+	}
+	public String getMd_term() {
+		return md_term;
+	}
+	public void setMd_term(String md_term) {
+		this.md_term = md_term;
+	}
+	public String getMd_drug() {
+		return md_drug;
+	}
+	public void setMd_drug(String md_drug) {
+		this.md_drug = md_drug;
+	}
+	public String getMd_component() {
+		return md_component;
+	}
+	public void setMd_component(String md_component) {
+		this.md_component = md_component;
+	}
+	
+	
+}

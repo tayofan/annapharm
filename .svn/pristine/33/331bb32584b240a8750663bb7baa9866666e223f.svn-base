@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Product-Mapper">
+	<sql id="search">
+		<if test="searchType == 'ETC'.toString()">
+			and md_no in (select md_no
+                            from medicine
+                           where md_class like '%'||'전문'||'%')			
+		</if>
+		<if test="searchType == 'OTC'.toString()">
+			and md_no in (select md_no
+                            from medicine
+                           where md_class like '%'||'일반'||'%')			
+		</if>
+		
+	</sql>
+	<sql id="search2">
+		<if test="searchType2 != null">
+			and md_no in(select md_no
+                           from medicine
+                          where mi_code in(select mi_code
+                                             from medicine_info
+                                            where mi_type like '%'||#{searchType2}||'%'))			
+		</if>		
+	</sql>
+	<sql id="keyword">
+		<if test="keyword != null">
+			and md_no in (select md_no
+               from medicine
+              where md_name like '%'||#{keyword}||'%')
+        </if>      
+	</sql>
+	
+	<select id="selectProductList" resultType="product">
+		select *
+	      from product
+	     where product_qr is not null
+	     <include refid="search"/>
+	     <include refid="search2"/>
+	     <include refid="keyword"/>
+	</select>
+	
+	<select id="selectProductList2" resultType="product">
+		select *
+		  from product
+		 where product_qr is not null 
+	</select>
+		
+	<select id="selectSearchProductListCount" resultType="int">
+		select count(*)
+		  from product
+		 where product_qr is not null
+	     <include refid="search"/>
+	     <include refid="search2"/>
+	     <include refid="keyword"/>
+	</select>
+</mapper>
+
+
+

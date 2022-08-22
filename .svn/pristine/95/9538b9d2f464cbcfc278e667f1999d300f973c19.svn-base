@@ -1,0 +1,84 @@
+package kr.or.annapharm.command;
+
+import java.util.Date;
+
+/**
+ * @author PC-09
+ *	개요 : 약국 매출 현황 페이지 매출 목록에 데이터를 넣기 위한 command객체
+ *	작성자 : 이병진
+ */
+public class SalesAnalysisCommand {
+
+	private Date psCompleteDate;	// 처방 완료 날짜
+	private String psType;			// 처방전 구분
+	private String patientName;		// 환자명
+	private String chemistName;		// 조제약사
+	private String totalMedicienBill;// 약제비
+	private String charge;			// 청구액
+	private String patientCharge;	// 본인부담금
+	private String deposit;			// 입금액
+	private String compoundingFee;	// 조제료
+	private String medicienBill;	// 약가 합산
+
+	public Date getPsCompleteDate() {
+		return psCompleteDate;
+	}
+	public void setPsCompleteDate(Date psCompleteDate) {
+		this.psCompleteDate = psCompleteDate;
+	}
+	public String getPsType() {
+		return psType;
+	}
+	public void setPsType(String psType) {
+		this.psType = psType;
+	}
+	public String getPatientName() {
+		return patientName;
+	}
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
+	public String getChemistName() {
+		return chemistName;
+	}
+	public void setChemistName(String chemistName) {
+		this.chemistName = chemistName;
+	}
+	public String getTotalMedicienBill() {
+		return totalMedicienBill;
+	}
+	public void setTotalMedicienBill(String totalMedicienBill) {
+		this.totalMedicienBill = totalMedicienBill;
+	}
+	public String getCharge() {
+		return charge;
+	}
+	public void setCharge(String charge) {
+		this.charge = charge;
+	}
+	public String getPatientCharge() {
+		return patientCharge;
+	}
+	public void setPatientCharge(String patientCharge) {
+		this.patientCharge = patientCharge;
+	}
+	public String getDeposit() {
+		return deposit;
+	}
+	public void setDeposit(String deposit) {
+		this.deposit = deposit;
+	}
+	public String getCompoundingFee() {
+		return compoundingFee;
+	}
+	public void setCompoundingFee(String compoundingFee) {
+		this.compoundingFee = compoundingFee;
+	}
+	public String getMedicienBill() {
+		return medicienBill;
+	}
+	public void setMedicienBill(String medicienBill) {
+		this.medicienBill = medicienBill;
+	}
+
+}

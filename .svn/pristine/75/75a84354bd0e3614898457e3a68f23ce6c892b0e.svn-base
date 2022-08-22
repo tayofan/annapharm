@@ -1,0 +1,21 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.OrderCartVO;
+import kr.or.annapharm.dto.ReceiveCartVO;
+import kr.or.annapharm.dto.ReceiveOrderCartVO;
+
+public interface ReceiveOrderService {
+	
+	public Map<String, Object> getReceiveList(SearchCriteria cri)throws SQLException;
+	
+	public Map<String, Object> getOrderList(SearchCriteria cri)throws SQLException;
+	
+	public List<ReceiveOrderCartVO> getReceiveCartList(int no)throws SQLException;
+	
+	public List<ReceiveOrderCartVO> getOrderCartList(int no)throws SQLException;
+}

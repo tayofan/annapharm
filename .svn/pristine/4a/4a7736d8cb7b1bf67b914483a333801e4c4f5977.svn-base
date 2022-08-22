@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Business-Mapper">  
+	<select id="selectSearchMedicine" resultType="kr.or.annapharm.dto.SearchMedicineVO">
+		select
+			 a.md_name as md_name
+			,a.md_component as md_component
+			,a.md_class as md_class
+			,substr(b.mi_name,instr(b.mi_name,'_' )+1) as unit
+			,b.mi_maincode as mi_maincode
+		  from medicine a, medicine_info b
+		 where a.mi_code = b.mi_code
+		   and a.md_name like '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="selectSearchMedicineCount" resultType="int">
+		select count(*)
+		from medicine
+		where md_name like '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="selectSearchBasis" resultType="kr.or.annapharm.dto.SearchMedicineVO">
+		select
+		distinct a.md_component as md_component
+		,b.mi_type
+		,a.md_class as md_class
+		,substr(b.mi_name,instr(b.mi_name,'_' )+1) as unit
+		,b.mi_maincode as mi_maincode
+		,b.mi_use
+		from medicine a, medicine_info b
+		where a.mi_code = b.mi_code
+		and a.md_component like '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="selectSearchBasisCount" resultType="int">
+		select count(*)
+		from (
+		select
+		distinct a.md_component as md_component
+		,b.mi_type
+		,a.md_class as md_class
+		,substr(b.mi_name,instr(b.mi_name,'_' )+1) as unit
+		,b.mi_maincode as mi_maincode
+		from medicine a, medicine_info b
+		where a.mi_code = b.mi_code
+		and a.md_component like '%'||#{keyword}||'%'
+		)
+	</select>
+	
+	<select id="selectCompareMedicine" resultType="kr.or.annapharm.dto.CompareMedicineVO">
+		select
+		 a.md_no
+		,a.md_name
+		,b.mi_company
+		,a.md_class
+		,b.mi_price
+		from medicine a, medicine_info b
+		where a.mi_code = b.mi_code
+		and b.mi_maincode = #{miMaincode}
+	</select>
+	
+	<update id="insertSelectList" parameterType="kr.or.annapharm.dto.SelectListVO">
+		insert into select_list(md_no,chemist_code) 
+		values(#{mdNo},#{chemistCode})
+	</update>
+	
+	<delete id="deleteSelectList" parameterType="kr.or.annapharm.dto.SelectListVO">
+		delete from select_list 
+		where md_no = #{mdNo}
+		and chemist_code = #{chemistCode}
+	</delete>
+	
+	<select id="selectSelectList" resultType="kr.or.annapharm.dto.SelectListVO">
+		select
+		 a.md_no
+		,c.chemist_code 
+		,a.md_name
+		,b.mi_company
+		,a.md_class
+		,b.mi_price
+		from medicine a, medicine_info b, select_list c
+		where a.mi_code = b.mi_code
+		and a.md_no = c.md_no
+		and c.chemist_code = #{chemistCode}
+	</select>
+	
+	<select id="salesByAge" resultType="kr.or.annapharm.dto.SalesByAgeVO">
+		select a.age
+		      ,a.sex
+		      ,a.type
+		      ,count(a.price) as count_ps
+		      ,sum(a.price) as sum_price
+		from(select
+		         trunc(to_number(to_char(sysdate,'yyyy')+1-(substr(c.patient_regnum,0,2)+
+		         (case
+		          <![CDATA[when substr(c.patient_regnum,8,1) < 3 then 1900]]>
+		          <![CDATA[when substr(c.patient_regnum,8,1) >=3 then 2000]]>
+		          end)))/10)*10 as age
+		         ,(case when substr(c.patient_regnum,8,1) = '1' or 
+		                       substr(c.patient_regnum,8,1) = '3' then 
+		                       '남성'
+		             else      
+		                       '여성'    
+		             end) as sex
+		         ,d.sale_price as price
+		         ,b.ps_type as type
+		      from patient c, sale d, prescription b
+		      where c.patient_code = d.patient_code
+		      and b.patient_code = c.patient_code
+		      and b.ps_code = d.ps_code
+		      and b.ps_complete_date is not null
+		      and d.sale_date between to_date(#{startDate}) 
+		                          and to_date(#{endDate})) a
+		group by a.age, a.sex, a.type
+	</select>
+</mapper>
+

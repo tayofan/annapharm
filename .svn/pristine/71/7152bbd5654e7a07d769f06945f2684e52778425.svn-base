@@ -1,0 +1,61 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
+<script>
+$(function() {
+	alert("!!");
+	fixdate();
+});
+</script>
+
+<script>
+function fixdate(){
+   var end = new Date();
+   var endDate = $('#endDate').val(end.toISOString().substring(0, 10));
+   var start = new Date();
+   start = new Date(start.setMonth(start.getMonth() - 1));
+   var startDate = $('#startDate').val(start.toISOString().substring(0, 10));
+
+   $('#endDate').attr('max',end.toISOString().substring(0, 10));
+   $('#startDate').attr('max',end.toISOString().substring(0, 10));
+
+   $('#endDate').change(function(){
+      var changeEnd = $(this).val();
+      $('#startDate').attr('max',changeEnd);
+
+      var endDate = $('#endDate').val();
+      var startDate = $('#startDate').val();
+
+      if(!compareDate(startDate,endDate)){
+         $('#startDate').val(endDate);
+      }
+   })
+}
+</script>
+<script type="text/javascript">
+		function enterkey() {
+			if (window.event.keyCode == 13) {
+				recallList_go(1);
+			}
+		}
+</script>
+
+<script type="text/javascript">
+	function recallList_go(page, url) {
+		if (!url)
+			url = "<%=request.getContextPath()%>/retrieveList/list.do";
+
+		var recallListForm = $('#recallListForm');
+		recallListForm.find("[name='page']").val(page);
+
+		recallListForm.find("[name='startDate']").val($('input[name="startDate"]').val());
+		recallListForm.find("[name='endDate']").val($('input[name="endDate"]').val());
+		recallListForm.find("[name='keyword']").val($('div.input-group>input[name="keyword"]').val());
+
+		recallListForm.attr({
+			action : url,
+			method : 'get'
+		}).submit();
+
+	}
+</script>

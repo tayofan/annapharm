@@ -1,0 +1,14 @@
+package kr.or.annapharm.dao;
+
+import java.util.List;
+
+import kr.or.annapharm.dto.MemberVO;
+
+public interface MemberDAO {
+
+	// 회원리스트조회
+	List<MemberVO> selectMemberList() throws Exception;
+	
+	// 회원 추가
+	public void insertMember(MemberVO member) throws Exception;
+}

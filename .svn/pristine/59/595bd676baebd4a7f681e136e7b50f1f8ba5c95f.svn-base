@@ -1,0 +1,31 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import kr.or.annapharm.command.Criteria;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dao.IPatientDAO;
+import kr.or.annapharm.dto.PatientVO;
+
+public class PatientServiceImpl implements IPatientService {
+	
+	private IPatientDAO patientDAO;
+	
+	public void setPatientDAO(IPatientDAO patientDAO) {
+		this.patientDAO = patientDAO;
+	}
+
+	@Override
+	public List<PatientVO> getPatientList() throws Exception {
+		
+		List<PatientVO> patientList = null;
+		
+		patientList = patientDAO.selectPatientList();
+			
+		return patientList;
+	}
+
+}

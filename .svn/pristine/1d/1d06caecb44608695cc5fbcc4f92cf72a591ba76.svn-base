@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ExpertDashBoard-Mapper">
+
+
+
+
+	<select id="runtimeSelectPatientList" resultType="map" parameterType="member">
+
+		select ps_code
+		     , TO_CHAR(ps_date, 'YYYY/MM/DD') as ps_date
+		     , ps_status
+		     , hospital_name
+		     , mem_name
+             , chemist_code
+             , ps_type
+        from ((select a.ps_code
+                     , a.ps_date
+                     , a.ps_status
+                     , b.hospital_name
+                     , c.mem_name
+                     , d.chemist_code
+                     , a.ps_complete_date
+                     , a.ps_type
+                  from prescription a, doctor b, member c, CHEMIST d
+                 where
+                     a.doctor_code = b.doctor_code
+                   and b.mem_id = c.mem_id
+                   and a.CHEMIST_CODE = d.CHEMIST_CODE
+                   and d.MEM_ID = #{memId}
+                   and a.ps_status = '조제대기'
+                   and TO_CHAR(a.ps_complete_date) = TO_CHAR(SYSDATE))
+                union
+               (select a.ps_code
+                     , a.ps_date
+                     , a.ps_status
+                     , b.hospital_name
+                     , c.mem_name
+                     , d.chemist_code
+					 , a.ps_complete_date
+					 , a.ps_type
+                  from prescription a, doctor b, member c, CHEMIST d
+                 where
+                     a.doctor_code = b.doctor_code
+                   and b.mem_id = c.mem_id
+                   and a.CHEMIST_CODE = d.CHEMIST_CODE
+                   and d.MEM_ID = #{memId}
+                   and a.ps_status = '조제완료'
+                   and TO_CHAR(a.ps_complete_date) = TO_CHAR(SYSDATE)))e
+        where ROWNUM <![CDATA[ <= ]]> 10
+        ORDER BY e.ps_complete_date DESC, e.ps_status ASC
+
+	</select>
+
+
+
+	<select id="selectPharmacistINList" resultType="map">
+		select CHEMIST_IN_CODE
+				,PATIENT_CODE
+				,CHEMIST_IN_TITLE
+				,TO_CHAR(CHEMIST_IN_DATE, 'YYYY/MM/DD') as CHEMIST_IN_DATE
+				,CHEMIST_IN_CONTENT
+				,CHEMIST_IN_VIEWCNT
+				,CHEMIST_IN_TYPE
+				,CHEMIST_IN_WRITER
+			from CHE_IN
+	     where ROWNUM <![CDATA[ <= ]]> 5
+	        	ORDER BY CHEMIST_IN_DATE DESC
+	</select>
+
+	<select id="selectCumulativeStockList" resultType="map" parameterType="string">
+	  	   SELECT B.MD_NAME
+               ,TO_CHAR(C.RECEIVE_LASTDATE, 'YYYY/MM/DD') as RECEIVE_LASTDATE
+               ,D.RECEIVE_CART_NUM
+               ,A.PRODUCT_OWNNUM
+            FROM RECEIVE C
+            LEFT OUTER JOIN RECEIVE_CART D ON D.RECEIVE_NO = C.RECEIVE_NO
+            LEFT OUTER JOIN MEDICINE B ON B.MD_NO = D.MD_NO
+            LEFT OUTER JOIN PRODUCT A ON A.MD_NO = B.MD_NO
+        WHERE ROWNUM <![CDATA[ <= ]]> 6
+             AND NOT D.RECEIVE_NO is NULL
+             AND C.PHARMACY_CODE = ANY (SELECT PHARMACY_CODE FROM CHEMIST WHERE MEM_ID = #{memId})
+        ORDER BY C.RECEIVE_LASTDATE DESC
+
+	</select>
+	
+	<sql id="maximumsaleDate">
+		<if test="startDate == 'month'.toString()">
+			 AND C.SALE_DATE BETWEEN SYSDATE-30 AND SYSDATE
+		</if>
+		<if test="startDate == 'week'.toString()">
+			 AND C.SALE_DATE BETWEEN SYSDATE-7 AND SYSDATE
+		</if>
+		<if test="startDate == 'today'.toString()">
+			 AND C.SALE_DATE BETWEEN TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD')) AND SYSDATE
+		</if>
+		<if test="startDate == 'yesterday'.toString()">
+			 AND C.SALE_DATE BETWEEN TO_DATE(TO_CHAR(SYSDATE-1,'YYYYMMDD')) AND SYSDATE-1
+		</if>
+	</sql>
+	
+	<select id="selectMaximumSalesList" resultType="kr.or.annapharm.dto.PreferMedicineVO">
+		SELECT B.MD_NAME
+			 , SUM(A.SALE_CART_PRICE) AS PRICE
+	      FROM SALE_CART A, MEDICINE B, SALE C
+	     WHERE A.MD_NO = B.MD_NO
+	     <include refid="maximumsaleDate"/>
+	     GROUP BY B.MD_NAME
+	     ORDER BY TOTAL_SALE_PRICE DESC;			
+	</select>
+	
+	
+	
+</mapper>
+
+

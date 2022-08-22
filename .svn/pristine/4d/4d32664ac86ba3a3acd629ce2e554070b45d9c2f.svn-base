@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+
+<!-- 안녕하세요 곽성상 입니다!!!!!!!!!! 일반 상용자 session을 가져왔습니다!!!!!!!!!!! -->
+
+<script>
+	
+	var container = document.getElementById('map'),
+    options = {
+         center: new kakao.maps.LatLng(36.367547, 127.424980),
+         level: 3
+    };
+ 
+	var map = new kakao.maps.Map(container, options);
+	
+	var places = new kakao.maps.services.Places();
+
+	places.setMap(map);
+	
+	
+	
+</script>

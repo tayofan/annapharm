@@ -1,0 +1,74 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class PrescriptionVO {
+
+	private String ps_code;
+	private String doctor_code;
+	private String patient_code;
+	private String chemist_code;
+	private Date ps_date;
+	private Date ps_lastdate;
+	private String ps_modify_req;
+	private Date ps_complete_date;
+	private String ps_status;
+	
+	public String getPs_code() {
+		return ps_code;
+	}
+	public void setPs_code(String ps_code) {
+		this.ps_code = ps_code;
+	}
+	public String getDoctor_code() {
+		return doctor_code;
+	}
+	public void setDoctor_code(String doctor_code) {
+		this.doctor_code = doctor_code;
+	}
+	public String getPatient_code() {
+		return patient_code;
+	}
+	public void setPatient_code(String patient_code) {
+		this.patient_code = patient_code;
+	}
+	public String getChemist_code() {
+		return chemist_code;
+	}
+	public void setChemist_code(String chemist_code) {
+		this.chemist_code = chemist_code;
+	}
+	public Date getPs_date() {
+		return ps_date;
+	}
+	public void setPs_date(Date ps_date) {
+		this.ps_date = ps_date;
+	}
+	public Date getPs_lastdate() {
+		return ps_lastdate;
+	}
+	public void setPs_lastdate(Date ps_lastdate) {
+		this.ps_lastdate = ps_lastdate;
+	}
+	public String getPs_modify_req() {
+		return ps_modify_req;
+	}
+	public void setPs_modify_req(String ps_modify_req) {
+		this.ps_modify_req = ps_modify_req;
+	}
+	public Date getPs_complete_date() {
+		return ps_complete_date;
+	}
+	public void setPs_complete_date(Date ps_complete_date) {
+		this.ps_complete_date = ps_complete_date;
+	}
+	public String getPs_status() {
+		return ps_status;
+	}
+	public void setPs_status(String ps_status) {
+		this.ps_status = ps_status;
+	}
+	
+	
+	
+}

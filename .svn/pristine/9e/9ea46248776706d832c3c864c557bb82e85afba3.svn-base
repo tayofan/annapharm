@@ -1,0 +1,48 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script>
+$(function(){
+	var end = new Date();
+	var endDate = $('#endDate').val(end.toISOString().substring(0, 10));
+	var start = new Date();
+	start = new Date(start.setMonth(start.getMonth() - 6));
+	var startDate = $('#startDate').val(start.toISOString().substring(0, 10));
+	
+	$('#endDate').attr('max',end.toISOString().substring(0, 10));
+	$('#startDate').attr('max',end.toISOString().substring(0, 10));
+	
+	$('#endDate').change(function(){
+		var changeEnd = $(this).val();
+		$('#startDate').attr('max',changeEnd);
+		
+		var endDate = $('#endDate').val();
+		var startDate = $('#startDate').val();
+		
+		if(!compareDate(startDate,endDate)){
+			$('#startDate').val(endDate);
+		}
+	})
+});
+
+function searchDate(){
+	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	
+	
+}
+
+function compareDate(startDate, endDate) {
+	
+	var start = new Date(startDate);
+	var end = new Date(endDate);
+	
+	var result;
+	
+	if(start <= end) result = true;
+	else result = false;
+	
+	return result;
+}
+</script>

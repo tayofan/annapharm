@@ -1,0 +1,130 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.AnnapharmInVO;
+import kr.or.annapharm.service.BoardService;
+import kr.or.annapharm.service.ExpertDashBoardService;
+import kr.or.annapharm.service.IPatientService;
+import kr.or.annapharm.service.ManagerDashBoardService;
+
+
+@Controller
+@RequestMapping("manager")
+public class ManagerDashBoardController {
+
+//약국 메인대쉬보드
+	@Autowired
+	private ManagerDashBoardService service;
+	
+	
+	@RequestMapping("/main")
+	public String main(){
+		String url = "manager/main/managerDashBoard";
+		return url;
+	}
+	
+	
+	
+	@RequestMapping("/viewT/memberCount")
+	public ModelAndView list(ModelAndView mnv) throws Exception{
+		
+		String url = "manager/viewT/memberCount";
+
+		String allCount = service.allCount();
+		String allCountCompare = service.allCountCompare();
+		String allPharmacy = service.allPharmacy();
+		String allPountCompare = service.allPountCompare();
+		String allDoctor = service.allDoctor();
+		String allDoctorCompare = service.allDoctorCompare();
+		String allNormal = service.allNormal();
+		String allNormalCompare = service.allNormalCompare();
+		String newCount = service.newCount();
+		String newCountCompare = service.newCountCompare();
+		
+		
+		
+		mnv.addObject("allCount", allCount);
+		mnv.addObject("allCountCompare", allCountCompare);
+		mnv.addObject("allPharmacy", allPharmacy);
+		mnv.addObject("allPountCompare", allPountCompare);
+		mnv.addObject("allDoctor", allDoctor);
+		mnv.addObject("allDoctorCompare", allDoctorCompare);
+		mnv.addObject("allNormal", allNormal);
+		mnv.addObject("allNormalCompare", allNormalCompare);
+		mnv.addObject("newCount", newCount);
+		mnv.addObject("newCountCompare", newCountCompare);
+		mnv.setViewName(url);
+		return mnv;
+	}
+	
+	
+
+	
+
+	
+	
+//	@RequestMapping("/viewT/analysisPrescription_y")
+//	public String analysisPrescription_y() throws SQLException{
+//		String url = "expert/viewT/analysisPrescription_y";
+//
+//		return url;
+//	}
+//	
+//	
+//	@RequestMapping("/viewT/analysisPrescription_w")
+//	public String analysisPrescription_w() throws SQLException{
+//		String url = "expert/viewT/analysisPrescription_w";
+//
+//		return url;
+//	}
+//	
+//	@RequestMapping("/viewT/analysisPrescription_m")
+//	public String analysisPrescription_m() throws SQLException{
+//		String url = "expert/viewT/analysisPrescription_m";
+//
+//		return url;
+//	}
+//	
+//	
+//	
+//	@RequestMapping("/viewT/takeStatistics")
+//	public String takeStatistics() throws SQLException{
+//		String url = "expert/viewT/takeStatistics";
+//
+//		return url;
+//	}
+//	
+//	
+//	@RequestMapping("/viewT/takeStatistics_y")
+//	public String takeStatistics_y() throws SQLException{
+//		String url = "expert/viewT/takeStatistics_y";
+//
+//		return url;
+//	}
+//	
+//	
+//	
+//	@RequestMapping("/viewT/takeStatistics_m")
+//	public String takeStatistics_m() throws SQLException{
+//		String url = "expert/viewT/takeStatistics_m";
+//
+//		return url;
+//	}
+//	
+	
+	
+
+
+}

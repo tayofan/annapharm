@@ -1,0 +1,40 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.command.Criteria;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.SearchMedicineVO;
+
+public class BusinessDAOImpl implements BusinessDAO {
+	
+	private SqlSession session;
+	
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+	
+	// 약 검색결과 리스트 가져오기
+	@Override
+	public List<SearchMedicineVO> selectSearchMedicine(Criteria cri) throws SQLException {
+		
+		SearchCriteria searchCri = (SearchCriteria)cri;
+		cri.setPerPageNum(7);
+		int offset=cri.getStartRowNum();
+		int limit=cri.getPerPageNum();		
+		RowBounds rowBounds=new RowBounds(offset,limit);		
+		
+		List<SearchMedicineVO> searchMedicineList=session.selectList("Business-Mapper.selectSearchMedicine",searchCri,rowBounds);
+		
+		return searchMedicineList;
+	}
+
+	@Override
+	public int selectSearchMedicineCount(String keyword) throws SQLException {
+		return session.selectOne("Business-Mapper.selectSearchMedicineCount",keyword);
+	}
+}

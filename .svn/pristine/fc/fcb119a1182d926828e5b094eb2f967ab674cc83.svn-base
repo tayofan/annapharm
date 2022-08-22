@@ -1,0 +1,270 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>의사-처방전작성</title>
+<%-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css?v=3.2.0"> --%>
+
+<style>
+label {
+	width: 90px;
+	margin-left: 10px;
+}
+
+#total_* {
+	text-align: right;
+}
+
+.title{
+	font-weight: bold;
+	
+}
+
+.patientList{
+	padding:0px;
+	font-size: 15px;
+}
+
+th{
+	background-color: #E8F5FF;
+	text-align: center;
+}
+
+
+</style>
+</head>
+<body>
+	<div class="content-wrapper">
+		<div class="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card card-outline">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="card card-primary card-outline">
+							<div class="card-header">
+								<h5 class="card-title m-0 title">처방 대기 환자 목록</h5>
+							</div>
+							<div class="card-body patientList ">
+								<div class="row">
+									<div class="col-12">
+										<div class="card">
+											<!-- /.card-header -->
+											<div class="card-body table-responsive p-0" style="height: 600px;">
+												<table class="table table-bordered">
+													<thead class="listTitle">
+														<tr>
+															<th>NO</th>
+															<th>환자명</th>
+															<th>생년월일</th>
+															<th>최근처방일</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>24</td>
+															<td>이순신</td>
+															<td>981215</td>
+															<td>2022.01.25</td>
+														</tr>
+														<tr>
+															<td>25</td>
+															<td>홍길동</td>
+															<td>990101</td>
+															<td>2022.05.11</td>
+														</tr>
+														<tr>
+															<td>26</td>
+															<td>개나리</td>
+															<td>850224</td>
+															<td>2021.10.27</td>
+														</tr>
+														<tr>
+															<td>27</td>
+															<td>박보검</td>
+															<td>940812</td>
+															<td>2022.06.11</td>
+														</tr>
+														<tr>
+															<td>28</td>
+															<td>이순신</td>
+															<td>750928</td>
+															<td>2021.09.15</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<!-- /.card-body -->
+										</div>
+										<!-- /.card -->
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card card-primary card-outline">
+							<div class="card-header">
+								<h5 class="card-title m-0 title">환자 정보</h5>
+							</div>
+							<div class="card-body">
+								<form action="" class="" style="padding-right: 30px;">
+										<div class="patientInfoDetail mb-3">
+											<label for="total_salesCount" style="text-align:right;">이름</label> 
+											<input type="text" id="total_salesCount" value="홍길동" readonly><br />
+										</div>
+
+										<div class="patientInfoDetail mb-3">
+											<label for="total_salesFee" style="text-align:right;">생년월일</label> 
+											<input type="text" id="total_salesFee" value="990101" readonly\><br />
+										</div>
+
+										<div class="patientInfoDetail mb-3">
+											<label for="total_compoundingFee" style="text-align:right;">전화번호</label> 
+											<input type="text" id="total_compoundingFee" value="010-****-1234" readonly\><br />
+										</div>
+
+										<div class="patientInfoDetail">
+											<label for="total_carge" style="text-align:right;">주소</label> 
+											<input type="text" id="total_carge" value="245,927,870" readonly><br />
+										</div>
+
+								</form>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-lg-8">
+						<!-- 표가 들어갈 곳 -->
+						<div class="card card-primary card-outline " style="font-size:13px;">
+							<div class="card-header">
+								<h5 class="card-title m-0 title">과거처방이력</h5>
+							</div>
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>NO</th>
+											<th>교부번호</th>
+											<th>교부일자</th>
+											<th>약명</th>
+											<th>처방병원</th>
+											<th>의사명</th>
+											<th>상태</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>2205110011</td>
+											<td>2022.05.11</td>
+											<td>록소젠정(내복) 외 3개</td>
+											<td>말끄미병원</td>
+											<td>이말끔</td>
+											<td></td>
+										</tr>								
+									</tbody>
+								</table>
+						</div>
+						<div class="card card-primary card-outline" style="font-size:13px;">
+							<div class="card-header">
+								<h5 class="card-title m-0 title">처방 내역</h5>
+							</div>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>NO</th>
+										<th>구분</th>
+										<th>분류코드</th>
+										<th>약코드</th>
+										<th>약명</th>
+										<th>횟수</th>
+										<th>일수</th>
+										<th>보험</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>1</td>
+										<td></td>
+										<td>131</td>
+										<td>69200120</td>
+										<td>프레드포르테점안액(외용)</td>
+										<td>6</td>
+										<td>1</td>
+										<td>급여</td>
+									</tr>
+									<tr>
+										<td>2</td>
+										<td></td>
+										<td>131</td>
+										<td>69200456</td>
+										<td>오큐시클로점안액(외용)</td>
+										<td>6</td>
+										<td>1</td>
+										<td>급여</td>
+									</tr>
+									<tr>
+										<td>3</td>
+										<td></td>
+										<td>131</td>
+										<td>69200789</td>
+										<td>솔로젠정(내복)</td>
+										<td>6</td>
+										<td>1</td>
+										<td>급여</td>
+									</tr>
+									<tr>
+										<td>4</td>
+										<td></td>
+										<td>131</td>
+										<td>69200951</td>
+										<td>록소젠정(내복)</td>
+										<td>6</td>
+										<td>1</td>
+										<td>급여</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="card card-primary card-outline" style="font-size:13px;">
+							<div class="card-header">
+								<h5 class="card-title m-0 title">처방전 작성</h5>
+							</div>
+							<div class="card-body">
+								<label for="chemistName">조제약사</label> <select id="chemistName">
+									<option>전체약사</option>
+									<option>김동글 약사</option>
+									<option>아나팜 약사</option>
+								</select> <input type="button" value="조회">
+							</div>
+						</div>
+
+					</div>
+					</div>
+					
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<%-- <script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js?v=3.2.0"></script>
+
+<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/demo.js"></script> --%>
+
+</body>
+</html>

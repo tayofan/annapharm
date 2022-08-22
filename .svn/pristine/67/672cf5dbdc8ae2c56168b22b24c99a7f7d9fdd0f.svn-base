@@ -1,0 +1,55 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.dao.IPatientDAO;
+import kr.or.annapharm.dao.MedicineDAO;
+import kr.or.annapharm.dto.PatientVO;
+import kr.or.annapharm.dto.PrescriptionHistoryVO;
+
+public class PatientServiceImpl implements IPatientService {
+
+	private IPatientDAO patientDAO;
+	
+
+	public void setPatientDAO(IPatientDAO patientDAO) {
+		this.patientDAO = patientDAO;
+	}
+
+	@Override
+	public List<Map<String, String>> getPatientList() throws Exception {
+
+		List<Map<String, String>> patientList = null;
+
+		patientList = patientDAO.selectPatientList();
+
+		return patientList;
+	}
+
+	@Override
+	public PatientVO getPatientOne(String code) throws Exception {
+		PatientVO patientOne = null;
+
+		patientOne = patientDAO.selectPatientOne(code);
+
+		return patientOne;
+	}
+
+	@Override
+	public List<PatientVO> getPatentLsit(PatientVO vo) throws Exception {
+		return patientDAO.selectPatientToNameRegnum(vo);
+	}
+	
+//	@Override
+//	public List<String> getMedicineName(String code) throws Exception{
+//		return medicineDAO.selectMedicineNameList(code);
+//	}
+	
+	// 환자의 과거 처방이력 조회
+	@Override
+	public List<PrescriptionHistoryVO> getPatientPreList(String code) throws Exception {
+		return patientDAO.selectPatientPrescription(code);
+	}
+
+}

@@ -1,0 +1,22 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+
+import kr.or.annapharm.dto.ChemistVO;
+import kr.or.annapharm.dto.DoctorVO;
+import kr.or.annapharm.dto.MemberVO;
+
+public interface MemberService {
+
+	public List<MemberVO> getMemberList() throws Exception;
+	
+	public int insertMember(MemberVO member) throws Exception;
+	public int insertMember(DoctorVO member) throws Exception;
+	public int insertMember(ChemistVO member) throws Exception;
+	
+	public int insertDoctor(DoctorVO doctor) throws Exception;
+	public int insertChemist(ChemistVO chemist) throws Exception;
+	
+	public int getCountSameId(String id) throws Exception;
+	
+}

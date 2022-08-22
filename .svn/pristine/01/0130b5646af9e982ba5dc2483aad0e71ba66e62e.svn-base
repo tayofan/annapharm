@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Patient-Mapper">
+		
+	<sql id="search">
+		<if test="searchType == 't'.toString()">
+			and title like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'w'.toString()">
+			and writer like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'c'.toString()">
+			and content like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'tc'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'cw'.toString()">
+			and (
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'tcw'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+	</sql>
+	
+
+	<select id="selectPatientList" resultType="map">
+		select a.patient_name
+			   ,substr(a.patient_regnum,1,6) as patient_birth
+			   ,a.patient_code
+			   ,a.patient_phone
+			   ,a.patient_addr
+		  from patient a, prescription b
+		 where b.ps_status = '조제대기'
+		   and a.patient_code = b.patient_code
+		 order by b.ps_code	
+	</select>
+	
+	<select id="selectPatientOne" resultType="patient">
+		select a.patient_name
+			   ,substr(a.patient_regnum,1,6) as patient_birth
+			   ,a.patient_code
+			   ,a.patient_phone
+			   ,a.patient_addr
+		  from patient a, prescription b
+		 where b.ps_status = '조제대기'
+		   and a.patient_code = b.patient_code
+		   and a.patient_code = #{patient_code}
+		 order by b.ps_code	
+	</select>
+	
+	<select id="selectPatientListCount" resultType="int">
+		select 
+		count(*)
+		from
+		patient
+		order by patient_regnum desc 	
+	</select>
+	
+</mapper>  
+
+

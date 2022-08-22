@@ -1,0 +1,50 @@
+package kr.or.annapharm.dto;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+public class UpdatePrescriptionVO {
+	private String psCode;	// 처방전코드
+	private String mdNo;	// 약코드
+	private int preDrugNum;	// 수량
+	private int preDrugDay;	// 일수
+	private int preDrugCount;	// 횟수
+	
+	public String getPsCode() {
+		return psCode;
+	}
+	public void setPsCode(String psCode) {
+		this.psCode = psCode;
+	}
+	public String getMdNo() {
+		return mdNo;
+	}
+	public void setMdNo(String mdNo) {
+		this.mdNo = mdNo;
+	}
+	public int getPreDrugNum() {
+		return preDrugNum;
+	}
+	public void setPreDrugNum(int preDrugNum) {
+		this.preDrugNum = preDrugNum;
+	}
+	public int getPreDrugDay() {
+		return preDrugDay;
+	}
+	public void setPreDrugDay(int preDrugDay) {
+		this.preDrugDay = preDrugDay;
+	}
+	public int getPreDrugCount() {
+		return preDrugCount;
+	}
+	public void setPreDrugCount(int preDrugCount) {
+		this.preDrugCount = preDrugCount;
+	}
+	
+	@Override
+	public String toString() { // JSON형태로 toString오버라이드
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+	}
+	
+	
+}

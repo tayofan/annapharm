@@ -1,0 +1,671 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 이름과 생년월일로 조회된 회원을 출력하는 기능 -->
+<script  type="text/x-handlebars-template"  id="lookUp-list-template">
+	{{#each .}}
+		<tr class="lookupTbody" ondblclick="readyListInsert('{{patientName}}', '{{patientCode}}')">
+			<td>{{inc @index}}</td>
+			<td>{{patientName}}</td>
+			<td>{{patientRegnum}}</td>
+			<td>{{patientPhone}}</td>
+		</tr>
+	{{/each}}
+</script>
+<!-- 환자 코드로 환자의 과거 처방 이력을 조회하는 기능 -->
+<script  type="text/x-handlebars-template"  id="preList-list-template">
+	{{#each .}}
+		<tr class="preListTr" val="{{psCode}}" onclick="preListDetail('{{psCode}}')">
+			<td>{{inc @index}}</td>
+			<td>{{psType}}</td>
+			<td>{{psCode}}</td>
+			<td>
+				{{prettifyDate psDate}}
+			</td>
+			<td>
+				{{prettifyDate psCompleteDate}}
+			</td>
+			<td>{{hospitalName}}</td>
+			<td>{{memName}}</td>
+			<td>{{pharmacyName}}</td>
+			{{#eq psStatus "조제대기"}}
+				<td class="statusReady">{{psStatus}}</td>
+			{{else eq psStatus "조제완료"}}
+				<td class="statusEnd">{{psStatus}}</td>
+			{{else}}
+				<td class="statusUpdate">{{psStatus}}</td>
+			{{/eq}}
+		</tr>
+	{{/each}}
+</script>
+
+<script>
+window.onload = function(){
+	getCookie('readyList');
+}
+</script>
+
+<script>
+// 환자 조회 엔터키 event
+function lookupEnter(){
+	if (window.event.keyCode == 13) {
+		lookupRead();
+	}
+}
+</script>
+
+<script>
+// 과거 처방 이력 중 하나 클릭 시 이벤트
+function preListDetail(code){
+	//alert(code + " 확인");
+	
+	// 처방전의 첫번째 약 정보를 가져오는 함수
+	readMedicineInfo(code);
+	
+	var data = {"psCode":code};
+	
+	$.ajax({
+		url : "prescriptionDetail",
+		type : "post",
+		data : data,
+		success : function(res){
+			
+// 			console.log(res.pdvo.psStatus);
+			
+			var psDate = res.pdvo.psLastDate;
+			
+			$('#prePsCode').attr('value', res.pdvo.psCode);
+			$('#prePsDate').attr('value', res.pdvo.psLastDate);
+			$('#preHospitalName').attr('value', res.pdvo.hospitalName);
+			$('#preDoctorName').attr('value', res.pdvo.memName);
+			$('#prePharmacyName').attr('value', '-');
+			$('#prePharmacistName').attr('value', '-');
+			$('#prePsStatus').attr('value', res.pdvo.psStatus);
+			
+			var parent_val = $("#preHospitalName").attr('value'); 
+			
+			console.log("parent_val : " + parent_val);
+			
+			if(res.pdvo.psStatus == "조제대기"){
+				$('#preUpdateBtn').attr("disabled",false);
+			}else if(res.pdvo.psStatus == "조제완료" || res.pdvo.psStatus == "수정요청"){
+				$('#preUpdateBtn').attr("disabled",true);
+			}
+			
+			printDataDetail(res.pdList,$('#prescriptionChoiceDetail'),$('#preDetailList-list-template'));
+			printDataPrice(res.pdList,$('#receiptMoney'),$('#preDetailPriceList-list-template'));
+			
+			let resDay = "";
+			let today = new Date();   
+
+			let year = today.getFullYear(); // 년도
+			let month = today.getMonth() + 1;  // 월
+			let date = today.getDate();  // 날짜
+			let day = today.getDay();  // 요일
+
+			resDay = year + '.' + month + '.' + date;
+			var vo = res.pdvo;
+			$('#receiptRightDay').text(resDay);	// 조제일자
+			$('#receiptRightTotal').text(vo.totalMedicienBill.toLocaleString('ko-KR') + '(￦)');	// 약제비총액
+			$('#receiptRightPatient').text(vo.patientCharge.toLocaleString('ko-KR') + '(￦)');	// 본인부담금
+			$('#receiptRightCharge').text(vo.charge.toLocaleString('ko-KR') + '(￦)');	// 보험자부담금
+			$('#receiptRightNon').text(vo.nonBenefit.toLocaleString('ko-KR') + '(￦)');	// 비급여
+			$('#receiptRightPatientTotal').text(vo.patientCharge.toLocaleString('ko-KR') + '(￦)');	// 총 처방금액
+		},
+		error : function(){
+			alert("실패~");
+		}
+	})
+}
+
+// 처방전의 첫번째 약 정보를 가져오는 함수
+function readMedicineInfo(code){
+	var data = {"psCode":code};
+
+	//console.log(data);
+	//console.log(code);
+
+	$.ajax({
+		url: "medicineInfo",
+		type: "post",
+		data: data,
+		success:function(res){
+			$('#readMName').text(res.mdName);
+			$('#readMUrl').attr('onclick', 'OpenWindow("'+res.mdUrl+'", "상세정보", "600", "800")');
+			$('#readMEffect').attr('onclick', 'location.href="' + res.mdEffect + '"');
+			$('#readMUse').attr('onclick', 'location.href="' + res.mdUse + '"');
+			$('#readMAttention').attr('onclick', 'location.href="' + res.mdAttention + '"');
+		},
+		error:function(error){
+			alert("약품 상세 정보 조회에 실패하였습니다.");
+		}
+	});
+}
+
+function mediChoice(mdNo){
+	var data = {"mdNo":mdNo};
+	
+// 	console.log(data);
+// 	console.log(mdNo);
+
+	$.ajax({
+		url: "medicineInfoChoice",
+		type: "post",
+		data: data,
+		success:function(res){
+			$('#readMName').text(res.mdName);
+			$('#readMUrl').attr('onclick', 'OpenWindow("'+res.mdUrl+'", "상세정보", "600", "800")');
+			$('#readMEffect').attr('onclick', 'location.href="' + res.mdEffect + '"');
+			$('#readMUse').attr('onclick', 'location.href="' + res.mdUse + '"');
+			$('#readMAttention').attr('onclick', 'location.href="' + res.mdAttention + '"');
+		},
+		error:function(error){
+			alert("약품 상세 정보 조회에 실패하였습니다.");
+		}
+	});
+	
+}
+
+</script>
+
+<script>
+//헤지 : 처방전 상세 내역 출력 핸들바스
+function printDataDetail(list,target,templateObject){
+	btnDisabled();
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.preDetailList').remove();
+	target.append(html);
+}
+
+function printDataPrice(list,target,templateObject){
+	btnDisabled();
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.preDetailPriceList').remove();
+	target.append(html);
+}
+</script>
+
+
+
+<script  type="text/x-handlebars-template"  id="preDetailList-list-template">
+	{{#each .}}
+		<tr class="preDetailList" id="preDetailList" style="height: 25px;" onclick="mediChoice('{{mdNo}}')">
+			<td style="padding: 0px; padding-bottom: 4px; width: 30px;">{{inc @index}}</td>
+
+			{{#eq mdClass "전문"}}
+				<td class="sortPro" style="width: 33px;">{{mdClass}}</td>
+			{{else}}
+				<td class="sortGeneral" style="width: 33px;">{{mdClass}}</td>
+			{{/eq}}
+
+			<td  class="mdNo" value="{{mdNo}}" style="width: 88px;">{{mdNo}}</td>
+			<td data-toggle="tooltip" title="{{mdName}}" style="width: 214px;text-align:left;">{{mdName}}</td>
+			<td>{{preDrugCount}}</td>
+			<td>{{preDrugDay}}</td>
+			<td>(위치)</td>
+			<td>(재고)</td>
+			<td style="padding-right: 0;width: 40px;">보험</td>
+			<td>
+				<input type="checkbox" class="deleteChk" id="deleteChk" name="deleteChk" value="{{miCode}}" disabled="true">
+			</td>
+		</tr>
+	{{/each}}
+</script>
+
+<script  type="text/x-handlebars-template"  id="preDetailPriceList-list-template">
+	{{#each .}}
+		<tr class="preDetailPriceList" id="preDetailPriceList">
+			<td data-toggle="tooltip" title="{{mdName}}" style="width: 200px; text-align:left;">{{mdName}}</td>
+			<td style="text-align:right;">{{numToComma miPrice}}</td>
+		</tr>
+	{{/each}}
+</script>
+
+<script>
+// 환자 정보를 입력 후 조회 버튼 클릭시 이벤트
+function lookupRead(){
+	$('.lookupTbody').remove();
+	var lookUpName = $('#lookUpName').val();
+	var lookUpBirth = $('#lookUpBirth').val();
+
+	if(lookUpName == ""){
+		alert('이름을 입력해주세요!');
+		return;
+	}
+
+	if(lookUpBirth == ""){
+		alert('생년월일을 입력해주세요!');
+		return;
+	}
+	var data={
+			"lookUpName":lookUpName,
+			"lookUpBirth":lookUpBirth
+	}
+
+	$.ajax({
+		url:"lookUp",
+		type:"post",
+		data:data,
+		success:function(data){
+			alert('회원이 조회되었습니다.');
+			if(data == ""){
+				var str = "<tr class='lookupTbody'><td colspan='4'>조회 결과가 없습니다.</td></tr>";
+				$('#lookupList').append(str)
+			}else{
+				printData(data,$('#lookupList'),$('#lookUp-list-template'))
+			}
+		},
+		error:function(error){
+			alert('회원 조회에 실패하였습니다.')
+		}
+	});
+}
+
+function printData(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.lookupTbody').remove();
+	target.append(html);
+}
+
+// 과거 처방 이력 출력 핸들바스 생성
+function printDataPreList(list,target,templateObject){
+	btnDisabled();
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.preListTr').remove();
+	target.append(html);
+}
+
+// 환자 클릭하고 과거 처방 이력 출력
+function preList(data){
+	btnDisabled();
+	var ptCode = data.getAttribute('val');
+	var ptNo = $(data).find('td:eq(0)').text();
+	var ptName = $(data).find('td:eq(1)').text();
+
+	$('#newPreBtn').attr('disabled', false);
+	
+	// 클릭한 환자의 데이터를 table에 넣기
+	$('#prescriptTable').attr('val', ptCode);
+	$('#prescriptTable').attr('base-value', ptName);
+
+	// 과거처방이력 옆에 클릭한 환자의 데이터 표시하기
+	$('#prescriptSpanNo').text(ptNo);
+	$('#prescriptSpanName').text(ptName);
+
+	$.ajax({
+		url:"preList.do",
+		type:"post",
+		data: {"ptCode":ptCode},
+		success:function(data){
+			if(data == ""){
+				var str = "<tr class='preForChemistHead'><td colspan='9'>조회 결과가 없습니다.</td></tr>";
+				$('#preList').append(str)
+			}else{
+				printDataPreList(data,$('#preList'),$('#preList-list-template'))
+			}
+		},
+		error:function(error){
+			alert('과거 내역 조회에 실패하였습니다.')
+		}
+	});
+}
+</script>
+
+<script>
+
+ var readyListCount = 0;
+ // 대기열 추가
+ function readyListInsert(ptName, ptCode){
+
+	 var overlapCheck = new Array();
+	 overlapCheck = document.getElementsByClassName('readyListTr');
+	 //console.log('확인', overlapCheck.length);
+
+	 // 쿠키와 숫자 중복 방지
+	 if(overlapCheck.length > 0){
+		readyListCount = overlapCheck[overlapCheck.length - 1].children[0].innerText;
+	 }
+
+	 // 환자 중복 등록 방지
+	 if(overlapCheck.length > 0){
+		 for(let i = 0; i < overlapCheck.length; i++){
+			 if(overlapCheck[i].getAttribute('val') == ptCode){
+				 alert('이미 대기열에 등록된 환자입니다,');
+				return;
+			 }
+		 }
+	 }
+	 // 대기열 숫자 증가
+	 readyListCount++;
+
+	 var str = "<tr val="+ ptCode +" class='readyListTr' onclick='preList(this)' ondblclick='listDelete("+'"'+ ptName +'"'+", this)'><td>"+ readyListCount +"</td><td>" + ptName + "</td></tr>";
+	 $('#readyList').append(str);
+
+	 forJson(overlapCheck);
+ }
+
+ function forJson(data){
+	 for(let j = 0; j < data.length; j++){
+		 var readyData = "";
+		 for(let i = 0; i < data.length; i++){
+			 if(i != 0){
+			 	readyData += ",";
+			 }
+			 var readyCount = data[i].children[0].innerText;
+			 var readyName = data[i].children[1].innerText;
+			 var readyCode = data[i].getAttribute('val')
+
+			 readyData += '{"count" : "' + readyCount + '"';
+			 readyData += ', "name" : "' + readyName + '"';
+			 readyData += ', "code" : "' + readyCode + '"}';
+		 }
+		 var readyJson = "[" + readyData + "]";
+	 }
+
+// 	 console.log(readyJson);
+// 	 console.log(JSON.stringify(readyJson));
+	 setInstantCookie('readyList', readyJson);
+ }
+
+</script>
+
+<script>
+// 약국 대기목록에서 대기 환자 삭제
+function listDelete(name, data){
+	var deleteCheck = confirm(name +' 환자를 대기열에서 지우시겠습니까?')
+
+	if(deleteCheck){
+		data.remove();
+		alert(name + ' (님)이 대기 목록에서 삭제되었습니다.');
+		var overlapCheck = new Array();
+		overlapCheck = document.getElementsByClassName('readyListTr');
+		forJson(overlapCheck);
+	}else{
+		alert('작업이 취소되었습니다.');
+	}
+}
+</script>
+
+<script>
+// 브라우저가 닫히면 없어지는 쿠키 생성
+function setInstantCookie(cName, cValue){
+	var expire = new Date();
+	cookies = cName + '=' + escape(cValue)+";"; // 한글 깨짐을 막기위해 escape(cValue)를 합니다.
+	document.cookie = cookies;
+// 	alert(JSON.parse(document.cookie));
+//	alert(document.cookie);
+}
+
+// 쿠키 가져오기 함수
+function getCookie(cName) {
+	cName = cName + '=';
+	var cookieData = document.cookie;
+	var start = cookieData.indexOf(cName);
+	var cValue = '';
+	if(start != -1){
+		start += cName.length;
+		var end = cookieData.indexOf(';', start);
+			if(end == -1)end = cookieData.length;
+		cValue = cookieData.substring(start, end);
+	}
+	//console.log(cValue);
+// 	console.log(unescape(cValue));
+// 	console.log('테스트',JSON.parse(unescape(cValue)));
+	//console.log('테스트',JSON.parse(unescape(cValue))[0].name);
+	//console.log('테스트2',JSON.parse(unescape(cValue)).length);
+	if(unescape(cValue)){
+		var result = JSON.parse(unescape(cValue));
+		var resultStr = "";
+		var count = 0;
+
+		for(let i = 0; i < result.length; i++){
+			resultStr += "<tr val="+ result[i].code +" class='readyListTr' onclick='preList(this)' ondblclick='listDelete("+'"'+ result[i].name +'"'+", this)'><td>"+ result[i].count +"</td><td>" + result[i].name + "</td></tr>";
+			count = result[i].count;
+		}
+
+		$('#readyList').append(resultStr)
+	}
+	return count;
+	}
+
+</script>
+
+
+<!-- 약사 창에서 [등록]버튼 클릭 : 환자 등록 창 오픈 -->
+<script>
+	function memberInsert(){
+		window.open('<%=request.getContextPath() %>/pharmacist/addPatient.do','환자등록','width=400,height=270,left=600,top=300,location=no,status=no,scrollbars=yes');
+	}
+
+</script>
+
+<!-- 헤지 : 약사 수정요청 -->
+<script>
+	function requestUpdatePre() {
+		// window.name = "부모창 이름"; 
+		// window.open("open할 window", "자식창 이름", "팝업창 옵션");
+		var openWin2 = window.open('<%=request.getContextPath() %>/pharmacist/requestUpdatePrescription.do','처방수정요청','width=500,height=370,left=600,top=150,location=no,status=no,scrollbars=yes');
+		
+// 		console.log("하이 : " + document.getElementById("preHospitalName").value)
+		
+		var hosName = document.getElementById("preHospitalName").value;
+		var doctorName = document.getElementById("preDoctorName").value;
+		
+		var ptCode = $('#prescriptTable').attr('val');
+		
+		var psCode = $('#prePsCode').attr('value');
+		
+		var patientName = $('#prescriptTable').attr('base-value');
+		console.log("환자코드 : " + ptCode);
+		console.log("환자이름 : " + patientName);
+		console.log("처방전코드 : " + psCode);
+		
+		setTimeout(() => {
+// 			console.log(openWin2.document.getElementById("hosNameRequest"));
+// 			console.log(openWin2.$('#hosNameRequest'));
+			
+			// 병원명
+			openWin2.document.getElementById("hosNameRequest").value = hosName;
+			// 의사명
+			openWin2.document.getElementById("DoctorNameRequest").value = doctorName;
+			// 환자코드
+			openWin2.document.getElementById("PatientCodeRequest").value = ptCode;
+			// 환자이름
+			openWin2.document.getElementById("PatientNameRequest").value = patientName;
+			// 처방전코드
+			openWin2.document.getElementById("PrescriptionRequest").value = psCode;
+			
+		}, 800);
+		
+		
+		
+// 		openWin2.document.getElementById("hosNameRequest").value = hosName;
+	}
+</script>
+
+<!-- 헤지 : 약사가 [새처방]클릭 -->
+<script>
+	function newPreForChemist(){
+		// 처방상세내역 비우기
+		$('.preDetailList').remove();
+		// 처방전코드 비우기
+		$('#prePsCode').attr("value"," -");
+		// 처방전상태 비우기
+		$('#prePsStatus').attr("value"," -");
+		
+		window.open('<%=request.getContextPath()%>/pharmacist/addMedicinalChemist.do','약등록','width=748,height=950,left=600,top=600,location=no,status=no,scrollbars=yes');
+	}
+</script>
+
+<script>
+	function btnDisabled(){
+		
+		// 버튼들 비활성화하기
+		$('#newMedicineForChemist').attr("disabled",true);
+		$('#deleteMediBtnForChemist').attr("disabled",true);
+		$('#saveNewMedicineForChemist').attr("disabled",true);
+		$('#newMedicineCancelForChemist').attr("disabled",true);
+		
+		// 버튼들 배경색  : 파란색 -> 회색
+		$('#newMedicineForChemist').css('background', '#6c757d');
+		$('#deleteMediBtnForChemist').css('background', '#6c757d');
+		$('#saveNewMedicineForChemist').css('background', '#6c757d');
+		$('#newMedicineCancelForChemist').css('background', '#6c757d');	
+	}
+</script>
+
+<!-- 헤지 : [추가] -->
+<script>
+	function newMedicineForChemist(){
+		window.open('<%=request.getContextPath()%>/pharmacist/addMedicinalChemist.do','약등록','width=748,height=950,left=600,top=600,location=no,status=no,scrollbars=yes');
+	}
+</script>
+
+
+<!-- [삭제]버튼 클릭시... -->
+<script>
+	function deleteMediBtnForChemist(){
+		$("input:checkbox[name='deleteChk']:checked").each(function(index,obj){
+
+			console.log("삭제 : " + obj.parentElement.parentElement);
+			
+			var grandparents = obj.parentNode.parentNode;
+			
+			console.log("부모" + grandparents);
+			
+			deleteMedicineTr(grandparents);	
+			
+		})
+	}
+	
+	// 약 삭제 함수
+	function deleteMedicineTr(data){
+		
+		var a = data;
+		var b = a.children;
+		
+		console.log("데이터 : " + b);
+		
+		for(var i=0; i<b.length; i++){
+			console.log(b[i].innerText);
+		}
+		
+		data.remove();
+	}
+</script>
+
+<!-- [저장]버튼 눌렀을때... -->
+<script>
+	function saveNewMedicineForChemist(){
+		alert("저장");
+		
+		// 버튼비활성화
+		btnDisabled();
+		
+		// 횟수, 일수 비활성화
+		$('.registCountForChemist').attr("readonly", true);
+		$('.registDayForChemist').attr("readonly", true);
+		// 횟수, 일수 글자색 검정
+		$('.registCountForChemist').css('color', 'black');
+		$('.registDayForChemist').css('color', 'black');
+		
+		// 체크박스 비활성화
+		$('.deleteChk').attr("disabled", true);
+		
+		// 환자코드
+		var patientCode = $('#prescriptTable').attr('val');
+		console.log("환자코드 : " + patientCode);
+		
+		// 약번호
+		var mdNo = document.querySelectorAll(".mdNo");
+		
+		// 횟수
+		var count = document.getElementsByClassName("registCountForChemist");
+		// 일수
+		var day = document.getElementsByClassName("registDayForChemist");
+		
+		var arr = [];
+		
+		for(var i = 0; i < mdNo.length; i++){
+			var obj = "";
+			
+			var mediNo = $(mdNo[i]).attr("value");
+			// 횟수
+			var countfor = count[i].value;
+			// 일수
+ 			var dayfor = day[i].value;
+			
+			obj += '{"mdNo" : "' + mediNo + '"';
+			obj += ', "patientCode" : "' + patientCode + '"'
+			obj += ', "preDrugCount" : "' + countfor + '"'
+			obj += ', "preDrugDay" : "' + dayfor + '"}';
+			
+			arr.push(obj);
+		}
+		
+		console.log("JSON.registArr" + JSON.parse(JSON.stringify(arr)));
+		
+		$.ajax({
+			url:"newMedicineInsertForChemicist.do",
+			data:JSON.stringify(arr),
+			contentType : "application/json",
+			type:"post",
+			success:function(res){
+// 				console.log("res : " + res);
+				alert("처방전 작성 완료");
+				window.location.reload();
+			},
+			error:function(){
+				alert("에러ㅓㅓㅓㅓㅓㅓㅓㅓㅓ");
+			}
+		})
+		
+// 		console.log("약번호 : " + mdno);
+		
+		var mdName = document.querySelectorAll(".mdName");
+		
+		var nameArr = [];
+		
+		for(var i = 0; i < mdName.length; i++){
+			var nameObj = "";
+			
+			var mediName = $(mdName[i]).attr("value");
+			
+			nameObj += '{"mdName" : "' + mediName + '"}';
+			
+			nameArr.push(nameObj);
+			
+		}
+		
+// 		console.log("약이름들....<br>" + JSON.parse(JSON.stringify(nameArr)));
+		
+// 		$("#receiptMoney").append(`<tr>
+// 										<td style="text-align:left;" >\${nameTd}</td>
+// 										<td>금액</td>
+// 									</tr>`);
+		
+	}
+</script>
+
+<!-- [취소]버튼 눌렀을때... -->
+<script>
+	function newMedicineCancelForChemist(){
+		btnDisabled();
+		$('.preDetailList').remove();
+		$('#prePsDate').attr("value", " -");
+	}
+</script>
+
+
+
+
+
+
+
+

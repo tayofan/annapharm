@@ -1,0 +1,264 @@
+package kr.or.annapharm.controller;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.or.annapharm.dto.ProductCommandVO;
+import kr.or.annapharm.dto.ProductVO;
+import kr.or.annapharm.dto.ReceiveOrderCartVO;
+import kr.or.annapharm.service.ProductService;
+import kr.or.annapharm.service.ReceiveOrderService;
+
+@RestController
+@RequestMapping("/expert/product")
+
+public class ProductRestController {
+	
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private ReceiveOrderService receiveOrderService;
+	
+	@RequestMapping(value="/receiveOrderDetail", method = RequestMethod.POST)
+	public ResponseEntity<List<ReceiveOrderCartVO>> receiveOrderDetail(int no, String type) throws Exception{
+		ResponseEntity<List<ReceiveOrderCartVO>> entity = null;
+		
+		List<ReceiveOrderCartVO> receiveCart = receiveOrderService.getReceiveCartList(no);
+		List<ReceiveOrderCartVO> orderCart = receiveOrderService.getOrderCartList(no);
+		if(type.equals("receive")) {
+			entity = new ResponseEntity<List<ReceiveOrderCartVO>>(receiveCart,HttpStatus.OK);
+		}else {
+			entity = new ResponseEntity<List<ReceiveOrderCartVO>>(orderCart,HttpStatus.OK);
+		}
+		return entity;
+	}
+	
+	 @RequestMapping(value="/productDetail", method = RequestMethod.POST)
+	   public ResponseEntity<Map<String, Object>> productDetail(int mdNo) throws Exception{
+	      ResponseEntity<Map<String, Object>> entity = null;
+	      List<ProductVO> detail = productService.getProductDetail(mdNo);
+	      
+	      Map<String, Object> map = new HashMap<String, Object>();
+	      map.put("detail", detail);
+	      
+	      entity = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+	      
+	      return entity;
+	   }
+	 
+	 private void insertReceiveData(String medicine, boolean flag, int a) throws Exception {
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateFormatM = new SimpleDateFormat("MM");
+			SimpleDateFormat dateFormatD = new SimpleDateFormat("dd");
+			ProductCommandVO pro = new ProductCommandVO();
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			int maxRno = receiveOrderService.getMaxReceiveNo();
+			if(flag == true) {
+				receiveOrderService.insertReceive(maxRno + 1);
+			}
+			
+		 List<String> medicineList = objectMapper.readValue(medicine, new TypeReference<List>() {});
+			for(int i = 0; i < medicineList.size(); i++) {
+				String uuid = UUID.randomUUID().toString();
+				Map<String, String> medicineMap = objectMapper.readValue(medicineList.get(i), new TypeReference<Map<String,String>>() {}); // JSON 데이터를 한번 더 Map에 저장
+				String mdName = (String)medicineMap.get("mdName");
+				String miCompany = (String)medicineMap.get("miCompany");
+				String miType = (String)medicineMap.get("miType");
+				String miPos = (String)medicineMap.get("miPos");
+				String miUnit = (String)medicineMap.get("miUnit");
+				String mdOwnnum = (String)medicineMap.get("mediNum");
+				String mdNo = (String)medicineMap.get("mdNo");
+				String mediDate = (String)medicineMap.get("mediDate");
+				String miPrice = (String)medicineMap.get("miPrice");
+				String mdTerm = (String)medicineMap.get("mdTerm");
+				
+				System.out.println("제조일로부터" + mdTerm);
+				System.out.println("제조일 : " + mediDate);
+				Date transDate = dateFormat.parse(mediDate); // ajax로 받은 날짜를 date 형식으로 변환
+				long mediDateSec = transDate.getTime(); // 제조일 + 제조일로부터 사용날짜를 더하기 위해 date타입을 getTime() 메서드를 사용해 long 형식으로 변환
+				
+//				mdTerm.substring(mdTerm.length() - 1); // 끝문자 추출
+//				mdTerm.substring(0,mdTerm.length() - 1); // 끝문자를 제외한 앞의 숫자 추출
+				
+				if(mdTerm.substring(mdTerm.length() - 1).equals("M")) { // DB에 'xxM' 으로 저장되어 있는 mdTerm(제조일로부터 ~~M(월))부분 조건문
+					Date mType = dateFormatM.parse(mdTerm.substring(0,mdTerm.length() - 1)); // 끝문자의 M을 제거한 숫자를 xx월 Date타입으로 변환
+					long mSec = mType.getTime(); // 해당 mdTerm을 getTime() 메서드를 사용해 long형식으로 변환
+					long sum = mediDateSec + mSec; // 제조일과 사용기간을 더한 값
+					Date sumDate = new Date(sum); // 제조일과 사용기간을 더한 값을 Date 타입으로 다시 변환
+					String res = dateFormat.format(sumDate); // 더한 값을 VO에 넣기 위해 'yyyy-MM-dd'형식으로 포맷
+					pro.setProductDate(res);
+				}else if(mdTerm.substring(mdTerm.length() - 1).equals("D")) { // DB에 'xxD' 으로 저장되어 있는 mdTerm(제조일로부터 ~~M(월))부분 조건문
+					Date dType = dateFormatD.parse(mdTerm.substring(0,mdTerm.length() - 1));
+					long dSec = dType.getTime();
+					long sum = mediDateSec + dSec; 
+					Date sumDate = new Date(sum); 
+					String res = dateFormat.format(sumDate); 
+					pro.setProductDate(res);
+				}
+				
+				pro.setProductQr(uuid.substring(0,7) + mdNo);
+				pro.setPharmacyCode("C2104147");	
+				pro.setMdName(mdName);
+				pro.setMiCompany(miCompany);
+				pro.setMiType(miType);
+				pro.setProductPosition(miPos);
+				pro.setProductUnit(miUnit);
+				pro.setProductOwnnum(mdOwnnum);
+				pro.setMdNo(mdNo);
+				pro.setReceiveCartPrice(miPrice);
+				pro.setReceiveShelfLife(mediDate);
+				pro.setReceiveCartNum(mdOwnnum);
+				if(a == 0) {
+					pro.setReceiveNo(maxRno + 1);
+				}else {
+					pro.setReceiveNo(a);
+				}
+				if(productService.selectProductOwnStandardNum(pro.getMdNo()) != null) {
+					pro.setProductOwnnumStandard(productService.selectProductOwnStandardNum(pro.getMdNo()));
+				}else {
+					pro.setProductOwnnumStandard("-1");
+				}
+				productService.insertProduct(pro);
+				receiveOrderService.insertReceiveCart(pro);
+			}
+	 }
+	 
+	 private void insertOrderData(String medicine, boolean flag, int a) throws Exception {
+			ProductCommandVO pro = new ProductCommandVO();
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			int maxOno = receiveOrderService.getMaxOrderNo();
+			if(flag == true) {
+				receiveOrderService.insertOrder(maxOno + 1);
+			}
+			
+		 List<String> medicineList = objectMapper.readValue(medicine, new TypeReference<List>() {});
+		 for(int i = 0; i < medicineList.size(); i++) {
+				Map<String, String> medicineMap = objectMapper.readValue(medicineList.get(i), new TypeReference<Map<String,String>>() {}); // JSON 데이터를 한번 더 Map에 저장
+				String mdName = (String)medicineMap.get("mdName");
+				String miCompany = (String)medicineMap.get("miCompany");
+				String miType = (String)medicineMap.get("miType");
+				String miUnit = (String)medicineMap.get("miUnit");
+				String mdNo = (String)medicineMap.get("mdNo");
+				String mdOwnnum = (String)medicineMap.get("mediNum");
+				String miPrice = (String)medicineMap.get("miPrice");
+				
+				pro.setPharmacyCode("C2104147");	
+				pro.setMdName(mdName);
+				pro.setMiCompany(miCompany);
+				pro.setMiType(miType);
+				pro.setProductUnit(miUnit);
+				pro.setMdNo(mdNo);
+				pro.setOrderCartPrice(miPrice);
+				pro.setOrderCartNum(mdOwnnum);
+				if(a == 0) {
+					pro.setOrderNo(maxOno + 1);
+				}else {
+					pro.setOrderNo(a);
+				}
+				receiveOrderService.insertOrderCart(pro);
+			}
+	 }
+	 
+	@RequestMapping(value="/receiveInsert",method=RequestMethod.POST)
+		public void receiveInsert(@RequestBody String medicine) throws Exception{
+		boolean flag = true;
+		int a = 0;
+		
+		insertReceiveData(medicine, flag, a);
+	}
+	
+	@RequestMapping(value="/receiveModify",method=RequestMethod.POST)
+		public String receiveModify(@RequestBody String medicine, HttpServletRequest request) throws Exception{			
+			if(medicine.equals("[]")) {
+				return "fail";
+			}
+			ObjectMapper objectMapper = new ObjectMapper();
+			boolean flag = false;
+			int paramRno = 0;
+			 List<String> medicineList = objectMapper.readValue(medicine, new TypeReference<List>() {});
+				for(int i = 0; i < medicineList.size(); i++) {
+					Map<String, String> medicineMap = objectMapper.readValue(medicineList.get(i), new TypeReference<Map<String,String>>() {}); // JSON 데이터를 한번 더 Map에 저장
+					String receiveNo = (String)medicineMap.get("receiveNo");
+					paramRno = Integer.parseInt(receiveNo);
+					productService.deleteProduct(receiveNo); 
+					receiveOrderService.deleteReceiveCart(receiveNo);
+				}
+				insertReceiveData(medicine, flag, paramRno);
+			return "success";
+	}
+	
+	@RequestMapping(value="/orderInsert",method=RequestMethod.POST)
+		public void OrderInsert(@RequestBody String medicine) throws Exception{
+		boolean flag = true;
+		int a = 0;
+		
+		insertOrderData(medicine, flag, a);
+	}	
+	
+	@RequestMapping(value="/orderModify",method=RequestMethod.POST)
+	public void OrderModify(@RequestBody String medicine) throws Exception{
+		ObjectMapper objectMapper = new ObjectMapper();
+		boolean flag = false;
+		 List<String> medicineList = objectMapper.readValue(medicine, new TypeReference<List>() {});
+			for(int i = 0; i < medicineList.size(); i++) {
+				Map<String, String> medicineMap = objectMapper.readValue(medicineList.get(i), new TypeReference<Map<String,String>>() {}); // JSON 데이터를 한번 더 Map에 저장
+				String orderNo = (String)medicineMap.get("orderNo");
+				int paramOno = Integer.parseInt(orderNo);
+				receiveOrderService.deleteOrderCart(orderNo);
+				receiveOrderService.deleteOrder(orderNo);
+				insertOrderData(medicine, flag, paramOno);
+			}
+	}
+	
+	@RequestMapping(value="/receiveDelete", method=RequestMethod.POST)
+	public void receiveDelete(@RequestBody String data, HttpServletRequest request) throws Exception{
+		String receiveNo = request.getParameter("no");
+		productService.deleteProduct(receiveNo);
+		receiveOrderService.deleteReceiveCart(receiveNo);
+		receiveOrderService.deleteReceive(receiveNo);
+	}
+	
+	@RequestMapping(value="/orderDelete", method=RequestMethod.POST)
+	public void orderDelete(@RequestBody String data, HttpServletRequest request) throws Exception{
+		String orderNo = request.getParameter("no");
+		receiveOrderService.deleteOrderCart(orderNo);
+		receiveOrderService.deleteOrder(orderNo);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

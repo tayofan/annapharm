@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Medicine-Mapper">  
+	<select id="selectMedicineClass" resultType="String">
+		select md_class
+		  from medicine
+		 where md_no = #{md_no} 
+	</select>
+	
+	<select id="selectMedicineType" resultType="int">
+		select mi_code
+		  from medicine
+		 where md_no = #{md_no}
+	</select>
+	
+	<select id="selectMedicineName" resultType="String">
+		select md_name
+		  from medicine
+		 where md_no =#{md_no}
+	</select>
+
+</mapper>
+

@@ -1,0 +1,13 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.ProductVO;
+
+public interface RetrieveDAO {
+	public List<ProductVO> selectRetrieveProductList(SearchCriteria cri) throws SQLException;
+
+ 	public int selectSearchRetrieveProductListCount(SearchCriteria cri) throws SQLException;
+}

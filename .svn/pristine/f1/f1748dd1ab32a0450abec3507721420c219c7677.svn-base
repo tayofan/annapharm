@@ -1,0 +1,202 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<head>
+<style>
+.btn-block+.btn-block {
+	margin-top: 0px;
+}
+</style>
+</head>
+<body>
+	<div class="content-wrapper">
+		<div class="card">
+			<div class="card-header" style="text-align: center; height: 80px;">
+				<span style="font-size: 20px; font-weight: bold;">2022.07.08
+					입고장</span><br>
+				<div class="buttons" style="height: 50px;">
+					<span
+						style="font-size: 16px; font-weight: bold; margin-left: 190px;">-QR태그
+						출력-</span>
+					<button type="button" class="btn btn-block btn-danger"
+						style="width: 90px; float: right; margin-left: 10px;" onclick="closePage();">취소</button>
+					<button type="button" class="btn btn-block btn-info"
+						style="width: 90px; float: right;">출력하기</button>
+				</div>
+			</div>
+			<div class="card-body" style="height: auto;">
+				<div class="receive_No" style="margin-top: 10px;">
+					<div class="pro_Name">
+						<span style="font-weight:bold; color: royalblue;">1.A회사 - 포크랄시럽(포수클로랄)_(9.5g/95mL) / 유통기한(2023.xx.xx)</span>
+					</div>
+					<div class="pro_QR">
+						<img src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" />
+					</div>
+				</div>
+				<div class="receive_No" style="margin-top: 10px;">
+					<div class="pro_Name">
+						<span style="font-weight:bold; color: royalblue;">2.B회사 - 독세정3밀리그램(독세핀염산염)_(3.39mg/1정) / 유통기한(2024.xx.xx)</span>
+					</div>
+					<div class="pro_QR">
+						<img src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" />
+					</div>
+				</div>
+				<div class="receive_No" style="margin-top: 10px;">
+					<div class="pro_Name">
+						<span style="font-weight:bold; color: royalblue;">3.C회사 - 리치나잇정6밀리그램(독세핀염산염)_(6.78mg/1정) / 유통기한(2023.xx.xx)</span>
+					</div>
+					<div class="pro_QR">
+						<img src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" />
+					</div>
+				</div>
+				<div class="receive_No" style="margin-top: 10px;">
+					<div class="pro_Name">
+						<span style="font-weight:bold; color: royalblue;">4.D회사 - 루나팜정(플루니트라제팜)_(1mg/1정) / 유통기한(2024.xx.xx)</span>
+					</div>
+					<div class="pro_QR">
+						<img src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" /> <img
+							src="<%=request.getContextPath()%>/resources/img/testQR.jpg"
+							style="width: 95px; height: 95px;" />
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:0px auto;"> 
+				<div class="col-sm-12 col-md-5">
+					<div class="dataTables_paginate paging_simple_numbers"
+						id="example2_paginate">
+						<ul class="pagination">
+							<li class="paginate_button page-item previous disabled"
+								id="example2_previous"><a href="#" aria-controls="example2"
+								data-dt-idx="0" tabindex="0" class="page-link">&lt;</a></li>
+							<li class="paginate_button page-item active"><a href="#"
+								aria-controls="example2" data-dt-idx="1" tabindex="0"
+								class="page-link">1</a></li>
+							<li class="paginate_button page-item "><a href="#"
+								aria-controls="example2" data-dt-idx="2" tabindex="0"
+								class="page-link">2</a></li>
+							<li class="paginate_button page-item "><a href="#"
+								aria-controls="example2" data-dt-idx="3" tabindex="0"
+								class="page-link">3</a></li>
+							<li class="paginate_button page-item "><a href="#"
+								aria-controls="example2" data-dt-idx="4" tabindex="0"
+								class="page-link">4</a></li>
+							<li class="paginate_button page-item "><a href="#"
+								aria-controls="example2" data-dt-idx="5" tabindex="0"
+								class="page-link">5</a></li>
+							<li class="paginate_button page-item "><a href="#"
+								aria-controls="example2" data-dt-idx="6" tabindex="0"
+								class="page-link">6</a></li>
+							<li class="paginate_button page-item next" id="example2_next">
+								<a href="#" aria-controls="example2" data-dt-idx="7"
+								tabindex="0" class="page-link">&gt;</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+	<script>
+	function closePage(){
+		if(confirm("QR태그 출력을 취소하시겠습니까?") == true){
+			self.close();
+		}
+	}
+	
+	</script>
+</body>
+
+
+
+
+
+
+
+
+
+

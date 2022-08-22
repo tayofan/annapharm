@@ -1,0 +1,51 @@
+package kr.or.annapharm;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import kr.or.annapharm.dto.CompareMedicineVO;
+import kr.or.annapharm.dto.SearchMedicineVO;
+
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:kr/or/annapharm/context/root-context.xml")
+public class SessionTest {
+	
+	@Autowired
+	private SqlSession session;
+	
+//	@Before
+//	public void init()throws SQLException{
+//		medicineDAO = se
+//	}
+//	
+//	@After
+//	public void destroy() throws SQLException{
+//		conn.close();
+//	}
+	
+//	@Test
+//	public void testSQL() throws Exception{
+//		MedicineVO vo = medicineDAO.selectMedicineAll(200002787);
+//		
+//		List<CompareMedicineVO> company = session.selectList("Business-Mapper.selectCompareMedicine","염산염");
+//		
+//		Assert.assertEquals(10, company.size());
+//	}
+	
+	@Test
+	public void compareMedicineTest() throws Exception{
+		List<CompareMedicineVO> compareList = session.selectList("Business-Mapper.selectCompareMedicine","240301ATB");
+		
+		Assert.assertEquals(28,compareList.size());
+	}
+
+}

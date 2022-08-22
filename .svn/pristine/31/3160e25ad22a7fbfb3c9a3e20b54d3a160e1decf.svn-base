@@ -1,0 +1,14 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public interface PrescriptionService {
+
+	public List<PrescriptionVO> getPrescriptionList(String prescriptionCode) throws Exception;
+	
+	public PrescriptionVO getPrescriptionOne (PrescriptionVO vo) throws Exception;
+	
+	public int getPrescriptionCount(String patientCode) throws Exception;
+}

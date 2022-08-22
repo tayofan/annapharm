@@ -1,0 +1,47 @@
+package kr.or.annapharm.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.or.annapharm.dto.FindPharmacyCommandVO;
+import kr.or.annapharm.dto.PharmacyInfoMapVO;
+import kr.or.annapharm.service.BusinessService;
+
+@Controller
+@RequestMapping("/searchPharmacy")
+public class FindPharmacyController {
+//	/annapharm/searchPharmacy/main.do
+	
+	@Autowired
+	BusinessService businessService; 
+	
+	@RequestMapping("/main")
+	public String main() throws Exception {
+		String url = "/main/find_pharmacy/findpharmacy";
+		return url;
+	}
+	
+	@RequestMapping(value = "/getMakerInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<List<PharmacyInfoMapVO>> getMakerInfo(@RequestBody List<FindPharmacyCommandVO> commandList) throws Exception{
+		ResponseEntity<List<PharmacyInfoMapVO>> entity = null;		
+		
+		for(FindPharmacyCommandVO vo : commandList) {
+			System.out.println(vo);
+		}
+		
+		List<PharmacyInfoMapVO> list = businessService.getPharmacyInfoList(commandList);
+		
+		entity = new ResponseEntity<List<PharmacyInfoMapVO>>(list, HttpStatus.OK);
+		
+		return entity;
+	}
+}

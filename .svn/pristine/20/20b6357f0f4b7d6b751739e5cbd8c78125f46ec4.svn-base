@@ -1,0 +1,174 @@
+package kr.or.annapharm.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.or.annapharm.dto.PatientVO;
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionHistoryVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+import kr.or.annapharm.dto.UpdatePrescriptionVO;
+import kr.or.annapharm.service.IPatientService;
+import kr.or.annapharm.service.MedicineService;
+import kr.or.annapharm.service.PrescriptionService;
+
+
+@RestController
+@RequestMapping("/patient")
+public class PatientRestController {
+
+	@Autowired
+	private IPatientService patientService;
+
+	@Autowired
+	private PrescriptionService prescriptionService;
+
+	@Autowired
+	private MedicineService medicineService;
+
+	// 환자 선택 후 환자 정보 & 과거 처방 이력 출력
+	@RequestMapping(value ="/readCode", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> readCode(String code, String name) throws Exception{
+		ResponseEntity<Map<String, Object>> entity = null;
+
+		List<PatientVO> info = patientService.getPatientOne(code);
+		
+		List<PrescriptionHistoryVO> preInfo = patientService.getPatientPreList(code);
+
+		for(PrescriptionHistoryVO vo : preInfo) {
+
+			//String name =  prescriptionService.getPrescriptionList(vo.getPs_code()); //--> 2번 sql 구하는 service(약명)
+			String medicineName = medicineService.getPrescriptionFirstMedicine(vo.getPsCode());
+			
+			//int num = prescriptionService.getPrescriptionList(vo.getPs_code()); //--> 3번 sql 구하는 service(약 수)
+			int medicineNum = medicineService.getPrescriptionMedicineCount(vo.getPsCode());
+
+			if(medicineNum == 1) {
+				
+				vo.setMedicineName(medicineName);
+			}else {
+				vo.setMedicineName(medicineName + "외" + (medicineNum - 1)  +"개");
+			}
+		}
+
+		//System.out.println("preInfo : " + preInfo);
+		
+		//System.out.println(medicineCount);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("info", info);					// 환자 정보
+		map.put("preInfo", preInfo);			// 해당 환자의 과거 처방 이력
+		//map.put("medicineName", medicineName);	// 처방전의 약 이름들
+		//map.put("medicineCount", medicineCount);// 처방전의 약 갯수
+
+//		entity = new ResponseEntity<PatientVO>(info, HttpStatus.OK);
+		//entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		return entity;
+	}
+	
+	// 처방 상세 이력 출력
+	@RequestMapping(value ="/readPre", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> readPrescription(String psCode, String psStatus) throws Exception{
+		
+		//System.out.println("-----------------------------------------------------------------"+psCode);
+		//System.out.println("psStatus : " + psStatus);
+		ResponseEntity<Map<String, Object>> preEntity = null;
+		
+		List<PrescriptionDetailVO> detailInfo = prescriptionService.getPrescriptioinDetil(psCode);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("detailInfo", detailInfo);
+		map.put("psStatus", psStatus);
+		
+		//System.out.println(detailInfo);
+		
+		preEntity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		
+		return preEntity;
+	}
+	
+	// 의사 : 수정 처방전 저장
+	@RequestMapping(value="/medicineUpdate", method = RequestMethod.POST)
+	public ResponseEntity<List<UpdatePrescriptionVO>> updatePrescriptionList(@RequestBody String arr) throws Exception{
+		ResponseEntity<List<UpdatePrescriptionVO>> entity = null;
+		
+		//System.out.println("arr" + arr);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		List<String> arrList = objectMapper.readValue(arr, new TypeReference<List>() {});
+		
+		List<UpdatePrescriptionVO> vo = new ArrayList<UpdatePrescriptionVO>();
+		
+		for(int i = 0; i < arrList.size(); i++) {
+			Map<String, String> arrListMap = objectMapper.readValue(arrList.get(i), new TypeReference<Map<String, String>>() {});
+			UpdatePrescriptionVO updateVO = new UpdatePrescriptionVO();	// vo에 넣기위해
+			System.out.println("arrList : " + arrList);
+			
+			int code = Integer.parseInt(arrListMap.get("mdNo"));
+//			String preDrugCount2 = arrListMap.get("preDrugCount");
+//			System.out.println("preDrugCount2 : " + preDrugCount2);
+			int preDrugCount = Integer.parseInt(arrListMap.get("preDrugCount"));
+			int preDrugDay = Integer.parseInt(arrListMap.get("preDrugDay"));
+			System.out.println("arrListMap.get(\"pscode\")" + arrListMap.get("pscode"));
+			String psCode = arrListMap.get("pscode");
+			
+			
+			updateVO.setMdNo(code);
+			updateVO.setPreDrugCount(preDrugCount);
+			updateVO.setPreDrugDay(preDrugDay);
+			updateVO.setPsCode(psCode);
+			updateVO.setPreDrugNum(preDrugDay * preDrugCount);
+			vo.add(updateVO);
+		}
+		
+		System.out.println("arrList2 : " + arrList);
+		System.out.println("vo : " + vo);
+		
+		//System.out.println("123" + arrList.size());
+
+		//System.out.println("확인 : " + arrList.getClass().getSimpleName());
+		
+		prescriptionService.deleteOriginalPrescription(vo);
+		System.out.println("삭제 통과");
+		prescriptionService.updatePrescription(vo);
+		System.out.println("업데이트 통과");
+		return entity;
+	}
+
+	// 의사 : 새 처방전 작성
+	@RequestMapping(value="/newMedicineInsert", method = RequestMethod.POST)
+	public ResponseEntity<List<UpdatePrescriptionVO>> newMedicineInsert() throws Exception{
+		ResponseEntity<List<UpdatePrescriptionVO>> entity = null;
+		
+		List<UpdatePrescriptionVO> mediVo = new ArrayList<UpdatePrescriptionVO>();
+		
+		PrescriptionVO preVo = null;
+		
+		// 처방전 추가
+		prescriptionService.insertNewPrescription(preVo);
+		
+		// 약추가
+		medicineService.insertNewMedicine(mediVo);
+		
+		return entity;
+	}
+	
+
+}
+

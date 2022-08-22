@@ -1,0 +1,37 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.dto.MedicineVO;
+
+public class MedicineDAOImpl implements MedicineDAO {
+
+	private SqlSession session;
+	
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+	
+	@Override
+	public String selectMedicineClass(int md_no) throws SQLException {
+		return session.selectOne("Medicine-Mapper.selectMedicineClass",md_no); 
+	}
+
+	@Override
+	public int selectMedicineType(int md_no) throws SQLException {
+		return session.selectOne("Medicine-Mapper.selectMedicineType",md_no);
+	}
+
+	@Override
+	public String selectMedicineName(int md_no) throws SQLException {
+		return session.selectOne("Medicine-Mapper.selectMedicineName",md_no);
+	}
+
+	@Override
+	public MedicineVO selectMedicineAll(int md_no) throws SQLException {
+		return session.selectOne("Medicine-Mapper.selectMedicineAll",md_no);
+	}
+
+}

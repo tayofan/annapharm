@@ -1,0 +1,20 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.OrderCartVO;
+import kr.or.annapharm.dto.OrderVO;
+import kr.or.annapharm.dto.ReceiveCartVO;
+import kr.or.annapharm.dto.ReceiveVO;
+
+public interface ReceiveOrderDAO {
+	public List<ReceiveVO> selectReceiveCriteria(SearchCriteria cri) throws SQLException;
+	
+	public List<OrderVO> selectOrderCriteria(SearchCriteria cri) throws SQLException;
+	
+	public List<ReceiveCartVO> selectReceiveCartList(int no) throws SQLException;
+
+	public List<OrderCartVO> selectOrderCartList(int no) throws SQLException;
+}

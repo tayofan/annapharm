@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AnnapharmIn-Mapper">
+
+<!-- 	<sql id="search">
+		<if test="searchType == 'A'.toString()">
+			and (
+			board_type = 'A'
+			or
+			board_type = 'P'
+			or
+			board_type = 'D'
+			or
+			board_type = 'T'
+			)
+		</if>
+		<if test="searchType == 'P'.toString()">
+			and board_type = 'P'
+		</if>
+		<if test="searchType == 'D'.toString()">
+			and board_type = 'D'
+		</if>
+		<if test="searchType == 'T'.toString()">
+			and board_type = 'T'
+		</if>
+	</sql>
+	<sql id="searchText">
+
+	</sql> -->
+
+	<select id="selectSearchAnnapharmInList"	resultType="annapharmIn">
+
+
+SELECT
+	     C.CHEMIST_IN_CODE
+	    ,C.PATIENT_CODE
+	    ,C.CHEMIST_IN_TITLE
+	    ,TO_CHAR(C.CHEMIST_IN_DATE, 'YY.MM.DD') AS CHEMIST_IN_DATE
+	    ,C.CHEMIST_IN_CONTENT
+	    ,C.CHEMIST_IN_VIEWCNT
+	    ,C.CHEMIST_IN_TYPE
+	    ,C.CHEMIST_IN_WRITER
+	    ,TO_CHAR(C.ANS_DATE, 'YY.MM.DD') AS ANS_DATE
+	    ,C.COUNT1 AS CHEMIST_IN_REPLY_CNT
+    FROM   (SELECT
+                     A.CHEMIST_IN_CODE
+                    ,A.PATIENT_CODE
+                    ,A.CHEMIST_IN_TITLE
+                    ,A.CHEMIST_IN_DATE
+                    ,A.CHEMIST_IN_CONTENT
+                    ,A.CHEMIST_IN_VIEWCNT
+                    ,A.CHEMIST_IN_TYPE
+                    ,A.CHEMIST_IN_WRITER
+                    ,B.ANS_DATE
+                    , RANK() OVER (PARTITION BY A.CHEMIST_IN_CODE ORDER BY B.ANS_DATE DESC) RANK1
+                    ,D.COUNT1
+                FROM
+                    che_in A, CHE_IN_ANS B, (SELECT COUNT(CHEMIST_IN_CODE) AS COUNT1,CHEMIST_IN_CODE FROM CHE_IN_ANS GROUP BY CHEMIST_IN_CODE) D
+                WHERE A.CHEMIST_IN_CODE <![CDATA[=]]> B.CHEMIST_IN_CODE
+                AND D.CHEMIST_IN_CODE  <![CDATA[=]]> A.CHEMIST_IN_CODE
+                order by chemist_in_date desc)C
+    WHERE RANK1 <![CDATA[=]]> 1
+
+
+
+	<!--
+		SELECT
+
+			 CHEMIST_IN_CODE
+			,PATIENT_CODE
+			,CHEMIST_IN_TITLE
+			,CHEMIST_IN_REPLY_CNT
+			,CHEMIST_IN_DATE
+			,CHEMIST_IN_CONTENT
+			,CHEMIST_IN_VIEWCNT
+			,CHEMIST_IN_TYPE
+			,CHEMIST_IN_WRITER
+		FROM
+	    	che_in
+		<include refid="search" />
+		<include refid="searchTest" />
+		order by chemist_in_date desc -->
+	</select>
+
+	<select id="selectSearchAnnapharmInListCount" resultType="int">
+		select
+		count(*)
+		from
+		che_in
+<!-- 		<include refid="search" /> -->
+		<!-- <include refid="searchTest" /> -->
+		order by chemist_in_date desc
+	</select>
+
+
+
+
+
+
+<!-- 	<select id="selectBoardByImage" resultType="board">
+		select
+		*
+		from board
+		where content like '%'||#{imageFile}||'%'
+	</select> -->
+
+
+
+	<select id="selectAnnapharmInByBno"  resultType="annapharmIn">
+		select *
+		from che_in
+		where chemist_in_code=#{chemist_in_code}
+	</select>
+
+	<update id="insertAnnapharmIn" parameterType="annapharmIn">
+		insert
+		into
+		che_in(
+			 CHEMIST_IN_CODE
+			,PATIENT_CODE
+			,CHEMIST_IN_TITLE
+			,CHEMIST_IN_DATE
+			,CHEMIST_IN_CONTENT
+			,CHEMIST_IN_VIEWCNT
+			,CHEMIST_IN_TYPE
+			,CHEMIST_IN_WRITER)
+		values
+		((select annapharmin_num_seq.nextval as chemist_in_code from dual), #{patientCode},#{chemistInTitle}, SYSDATE,
+		#{chemistInContent}, 0, #{chemistInType},#{chemistInWriter})
+	</update>
+
+	<update id="updateAnnapharmIn" parameterType="AnnapharmIn">
+		update
+		che_in
+		set
+		chemist_in_title=#{chemistInTitle}, chemist_in_content=#{chemistInContent}, chemist_in_writer = #{chemistInWriter}
+		where chemist_in_code=#{chemistInCode}
+	</update>
+
+	<update id="deleteAnnapharmIn" parameterType="int">
+		delete
+		from che_in
+		where chemist_in_code=#{chemistInCode}
+	</update>
+
+	<update id="increaseViewCnt" parameterType="int">
+		update
+		che_in
+		set
+		chemist_in_viewcnt=chemist_in_viewcnt+1
+		where chemist_in_code=#{chemistInode}
+	</update>
+
+	<select id="selectAnnapharmInSeqNext" resultType="int">
+		select annapharmin_num_seq.nextval as chemist_in_code from dual
+	</select>
+
+</mapper>
+
+

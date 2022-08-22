@@ -1,0 +1,43 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.dto.MemberVO;
+
+public class MemberDAOImpl implements MemberDAO {
+
+	private SqlSession session;
+	private MemberDAO memberDAO;
+	
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+	public void setMemberDAO(MemberDAO memberDAO) {
+		this.memberDAO = memberDAO;
+	}
+	
+	@Override
+	public List<MemberVO> selectMemberList() throws Exception {
+		return session.selectList("Member-Mapper.selectMemberList");
+	}
+
+	@Override
+	public void insertMember(MemberVO member) throws Exception {
+		memberDAO.insertMember(member);
+
+	}
+	@Override
+	public MemberVO selectMemberById(/* SqlSession session, */ String id) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int selectSameId(String id) throws SQLException {
+		// TODO Auto-generated method stub
+		return session.selectOne("Member-Mapper.selectSameId",id);
+	}
+
+}

@@ -1,0 +1,97 @@
+package kr.or.annapharm.dto;
+
+public class PharmacyVO {
+	private String pharmacyCode;
+	private String pharmacyName;
+	private String pharmacyAddr;
+	private String pharmacyPhone;
+	private String pharnacyTime_mon;
+	private String pharnacyTime_tue;
+	private String pharnacyTime_wed;
+	private String pharnacyTime_thu;
+	private String pharnacyTime_fri;
+	private String pharnacyTime_sat;
+	private String pharnacyTime_sun;
+	private String pharnacyTime_red;
+	public String getPharmacyCode() {
+		return pharmacyCode;
+	}
+	public void setPharmacyCode(String pharmacyCode) {
+		this.pharmacyCode = pharmacyCode;
+	}
+	public String getPharmacyName() {
+		return pharmacyName;
+	}
+	public void setPharmacyName(String pharmacyName) {
+		this.pharmacyName = pharmacyName;
+	}
+	public String getPharmacyAddr() {
+		return pharmacyAddr;
+	}
+	public void setPharmacyAddr(String pharmacyAddr) {
+		this.pharmacyAddr = pharmacyAddr;
+	}
+	public String getPharmacyPhone() {
+		return pharmacyPhone;
+	}
+	public void setPharmacyPhone(String pharmacyPhone) {
+		this.pharmacyPhone = pharmacyPhone;
+	}
+	public String getPharnacyTime_mon() {
+		return pharnacyTime_mon;
+	}
+	public void setPharnacyTime_mon(String pharnacyTime_mon) {
+		this.pharnacyTime_mon = pharnacyTime_mon;
+	}
+	public String getPharnacyTime_tue() {
+		return pharnacyTime_tue;
+	}
+	public void setPharnacyTime_tue(String pharnacyTime_tue) {
+		this.pharnacyTime_tue = pharnacyTime_tue;
+	}
+	public String getPharnacyTime_wed() {
+		return pharnacyTime_wed;
+	}
+	public void setPharnacyTime_wed(String pharnacyTime_wed) {
+		this.pharnacyTime_wed = pharnacyTime_wed;
+	}
+	public String getPharnacyTime_thu() {
+		return pharnacyTime_thu;
+	}
+	public void setPharnacyTime_thu(String pharnacyTime_thu) {
+		this.pharnacyTime_thu = pharnacyTime_thu;
+	}
+	public String getPharnacyTime_fri() {
+		return pharnacyTime_fri;
+	}
+	public void setPharnacyTime_fri(String pharnacyTime_fri) {
+		this.pharnacyTime_fri = pharnacyTime_fri;
+	}
+	public String getPharnacyTime_sat() {
+		return pharnacyTime_sat;
+	}
+	public void setPharnacyTime_sat(String pharnacyTime_sat) {
+		this.pharnacyTime_sat = pharnacyTime_sat;
+	}
+	public String getPharnacyTime_sun() {
+		return pharnacyTime_sun;
+	}
+	public void setPharnacyTime_sun(String pharnacyTime_sun) {
+		this.pharnacyTime_sun = pharnacyTime_sun;
+	}
+	public String getPharnacyTime_red() {
+		return pharnacyTime_red;
+	}
+	public void setPharnacyTime_red(String pharnacyTime_red) {
+		this.pharnacyTime_red = pharnacyTime_red;
+	}
+	@Override
+	public String toString() {
+		return "PharmacyVO [pharmacyCode=" + pharmacyCode + ", pharmacyName=" + pharmacyName + ", pharmacyAddr="
+				+ pharmacyAddr + ", pharmacyPhone=" + pharmacyPhone + ", pharnacyTime_mon=" + pharnacyTime_mon
+				+ ", pharnacyTime_tue=" + pharnacyTime_tue + ", pharnacyTime_wed=" + pharnacyTime_wed
+				+ ", pharnacyTime_thu=" + pharnacyTime_thu + ", pharnacyTime_fri=" + pharnacyTime_fri
+				+ ", pharnacyTime_sat=" + pharnacyTime_sat + ", pharnacyTime_sun=" + pharnacyTime_sun
+				+ ", pharnacyTime_red=" + pharnacyTime_red + "]";
+	}
+}

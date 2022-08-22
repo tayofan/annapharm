@@ -1,0 +1,20 @@
+package kr.or.annapharm.service;
+
+import kr.or.annapharm.dao.MedicienBillDAO;
+import kr.or.annapharm.dto.MedicienBillVO;
+
+public class MedicienBillServiceImpl implements MedicienBillService {
+
+	private MedicienBillDAO medicienBillDAO;
+
+	public void setMedicienBillDAO(MedicienBillDAO medicienBillDAO) {
+		this.medicienBillDAO = medicienBillDAO;
+	}
+
+	// 약국 조제수가 계산시 필요한 기준값을 가져오는 메서드
+	@Override
+	public MedicienBillVO readMedicienBill() throws Exception {
+		return medicienBillDAO.getMedicienBill();
+	}
+
+}

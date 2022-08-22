@@ -1,0 +1,18 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import kr.or.annapharm.command.InsertRetrieveCommand;
+import kr.or.annapharm.command.SearchCriteria;
+
+public interface RetrieveService {
+
+	public Map<String, Object> getRetrieveProductList(SearchCriteria cri) throws SQLException;
+
+	public int selectRetrieveNo() throws SQLException;
+
+	public int insertRetrieve(InsertRetrieveCommand insertRetrieveCommand) throws SQLException;
+
+	public int insertRetrieveList(InsertRetrieveCommand insertRetrieveCommand) throws SQLException;
+}

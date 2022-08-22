@@ -1,0 +1,51 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class ReplyVO {
+	
+	private int chemistInCode;
+	private String chemistCode;
+	private String chemistInReply;
+	private String chemistInAdopt;
+	private int chemistAnsCode;
+	
+	
+	public int getChemistInCode() {
+		return chemistInCode;
+	}
+	public void setChemistInCode(int chemistInCode) {
+		this.chemistInCode = chemistInCode;
+	}
+	public String getChemistCode() {
+		return chemistCode;
+	}
+	public void setChemistCode(String chemistCode) {
+		this.chemistCode = chemistCode;
+	}
+	public String getChemistInReply() {
+		return chemistInReply;
+	}
+	public void setChemistInReply(String chemistInReply) {
+		this.chemistInReply = chemistInReply;
+	}
+	public String getChemistInAdopt() {
+		return chemistInAdopt;
+	}
+	public void setChemistInAdopt(String chemistInAdopt) {
+		this.chemistInAdopt = chemistInAdopt;
+	}
+	public int getChemistAnsCode() {
+		return chemistAnsCode;
+	}
+	public void setChemistAnsCode(int chemistAnsCode) {
+		this.chemistAnsCode = chemistAnsCode;
+	}
+	
+	
+	
+	
+	
+	
+	
+}

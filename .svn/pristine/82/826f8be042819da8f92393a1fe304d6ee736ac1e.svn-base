@@ -1,0 +1,38 @@
+package kr.or.annapharm.dto;
+
+public class RetrieveVO {
+	private String retrieveNo;
+	private String chemistCode;
+	private String pharmacyCode;
+	private String retrieveDate;
+
+	public String getRetrieveNo() {
+		return retrieveNo;
+	}
+	public void setRetrieveNo(String retrieveNo) {
+		this.retrieveNo = retrieveNo;
+	}
+	public String getChemistCode() {
+		return chemistCode;
+	}
+	public void setChemistCode(String chemistCode) {
+		this.chemistCode = chemistCode;
+	}
+	public String getPharmacyCode() {
+		return pharmacyCode;
+	}
+	public void setPharmacyCode(String pharmacyCode) {
+		this.pharmacyCode = pharmacyCode;
+	}
+	public String getRetrieveDate() {
+		return retrieveDate;
+	}
+	public void setRetrieveDate(String retrieveDate) {
+		this.retrieveDate = retrieveDate;
+	}
+	@Override
+	public String toString() {
+		return "RetrieveVO [retrieveNo=" + retrieveNo + ", chemistCode=" + chemistCode + ", pharmacyCode="
+				+ pharmacyCode + ", retrieveDate=" + retrieveDate + "]";
+	}
+}

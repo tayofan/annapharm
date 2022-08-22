@@ -1,0 +1,291 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 이름과 생년월일로 조회된 회원을 출력하는 기능 -->
+<script  type="text/x-handlebars-template"  id="lookUp-list-template">
+	{{#each .}}
+		<tr class="lookupTbody" ondblclick="readyListInsert('{{patientName}}', '{{patientCode}}')">
+			<td>{{inc @index}}</td>
+			<td>{{patientName}}</td>
+			<td>{{patientRegnum}}</td>
+			<td>{{patientPhone}}</td>
+		</tr>
+	{{/each}}
+</script>
+<!-- 환자 코드로 환자의 과거 처방 이력을 조회하는 기능 -->
+<script  type="text/x-handlebars-template"  id="preList-list-template">
+	{{#each .}}
+		<tr class="preListTr" onclick="preListDetail('{{psCode}}')">
+			<td>{{inc @index}}</td>
+			<td>{{psType}}</td>
+			<td>{{psCode}}</td>
+			<td>
+				{{prettifyDate psDate}}
+			</td>
+			<td>
+				{{prettifyDate psCompleteDate}}
+			</td>
+			<td>{{hospitalName}}</td>
+			<td>{{memName}}</td>
+			<td>{{pharmacyName}}</td>
+			{{#eq psStatus "조제대기"}}
+				<td class="statusReady">{{psStatus}}</td>
+			{{else eq psStatus "조제완료"}}
+				<td class="statusEnd">{{psStatus}}</td>
+			{{else}}
+				<td class="statusUpdate">{{psStatus}}</td>
+			{{/eq}}
+		</tr>
+	{{/each}}
+</script>
+
+<script>
+window.onload = function(){
+	getCookie('readyList');
+}
+</script>
+
+<script>
+// 환자 조회 엔터키 event
+function lookupEnter(){
+	if (window.event.keyCode == 13) {
+		lookupRead();
+	}
+}
+</script>
+
+<script>
+// 과거 처방 이력 클릭 시 이벤트
+function preListDetail(code){
+	//alert(code + " 확인");
+	readMedicineInfo(code);
+}
+
+// 처방전의 첫번째 약 정보를 가져오는 함수
+function readMedicineInfo(code){
+	var data = {"psCode":code};
+
+	//console.log(data);
+	//console.log(code);
+
+	$.ajax({
+		url: "medicineInfo",
+		type: "post",
+		data: data,
+		success:function(res){
+			$('#readMName').text(res.mdName);
+			$('#readMUrl').attr('onclick', 'OpenWindow("'+res.mdUrl+'", "상세정보", "600", "800")');
+			$('#readMEffect').attr('onclick', 'location.href="' + res.mdEffect + '"');
+			$('#readMUse').attr('onclick', 'location.href="' + res.mdUse + '"');
+			$('#readMAttention').attr('onclick', 'location.href="' + res.mdAttention + '"');
+		},
+		error:function(error){
+			alert("약품 상세 정보 조회에 실패하였습니다.");
+		}
+	});
+}
+
+</script>
+
+<script>
+// 환자 정보를 입력 후 조회 버튼 클릭시 이벤트
+function lookupRead(){
+	$('.lookupTbody').remove();
+	var lookUpName = $('#lookUpName').val();
+	var lookUpBirth = $('#lookUpBirth').val();
+
+	if(lookUpName == ""){
+		alert('이름을 입력해주세요!');
+		return;
+	}
+
+	if(lookUpBirth == ""){
+		alert('생년월일을 입력해주세요!');
+		return;
+	}
+
+
+	var data={
+			"lookUpName":lookUpName,
+			"lookUpBirth":lookUpBirth
+	}
+
+	$.ajax({
+		url:"lookUp",
+		type:"post",
+		data:data,
+		success:function(data){
+			alert('회원이 조회되었습니다.');
+			if(data == ""){
+				var str = "<tr class='lookupTbody'><td colspan='4'>조회 결과가 없습니다.</td></tr>";
+				$('#lookupList').append(str)
+			}else{
+				printData(data,$('#lookupList'),$('#lookUp-list-template'))
+			}
+		},
+		error:function(error){
+			alert('회원 조회에 실패하였습니다.')
+		}
+	});
+}
+
+function printData(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.lookupTbody').remove();
+	target.append(html);
+}
+
+// 과거 처방 이력 출력 핸들바스 생성
+function printDataPreList(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.preListTr').remove();
+	target.append(html);
+}
+
+// 과거 처방 이력 출력
+function preList(data){
+	$('.preListTr').remove();
+	var ptCode = data.getAttribute('val');
+
+
+	$.ajax({
+		url:"preList.do",
+		type:"post",
+		data: {"ptCode":ptCode},
+		success:function(data){
+			if(data == ""){
+				var str = "<tr class='preListTr'><td colspan='9'>조회 결과가 없습니다.</td></tr>";
+				$('#preList').append(str)
+			}else{
+				printDataPreList(data,$('#preList'),$('#preList-list-template'))
+			}
+		},
+		error:function(error){
+			alert('과거 내역 조회에 실패하였습니다.')
+		}
+	});
+}
+</script>
+
+<script>
+
+ var readyListCount = 0;
+ // 대기열 추가
+ function readyListInsert(ptName, ptCode){
+
+	 var overlapCheck = new Array();
+	 overlapCheck = document.getElementsByClassName('readyListTr');
+	 //console.log('확인', overlapCheck.length);
+
+	 // 쿠키와 숫자 중복 방지
+	 if(overlapCheck.length > 0){
+		readyListCount = overlapCheck[overlapCheck.length - 1].children[0].innerText;
+	 }
+
+	 // 환자 중복 등록 방지
+	 if(overlapCheck.length > 0){
+		 for(let i = 0; i < overlapCheck.length; i++){
+			 if(overlapCheck[i].getAttribute('val') == ptCode){
+				 alert('이미 대기열에 등록된 환자입니다,');
+				return;
+			 }
+		 }
+	 }
+	 // 대기열 숫자 증가
+	 readyListCount++;
+
+	 var str = "<tr val="+ ptCode +" class='readyListTr' onclick='preList(this)' ondblclick='listDelete("+'"'+ ptName +'"'+", this)'><td>"+ readyListCount +"</td><td>" + ptName + "</td></tr>";
+	 $('#readyList').append(str);
+
+	 forJson(overlapCheck);
+ }
+
+ function forJson(data){
+	 for(let j = 0; j < data.length; j++){
+		 var readyData = "";
+		 for(let i = 0; i < data.length; i++){
+			 if(i != 0){
+			 	readyData += ",";
+			 }
+			 var readyCount = data[i].children[0].innerText;
+			 var readyName = data[i].children[1].innerText;
+			 var readyCode = data[i].getAttribute('val')
+
+			 readyData += '{"count" : "' + readyCount + '"';
+			 readyData += ', "name" : "' + readyName + '"';
+			 readyData += ', "code" : "' + readyCode + '"}';
+		 }
+		 var readyJson = "[" + readyData + "]";
+	 }
+
+// 	 console.log(readyJson);
+// 	 console.log(JSON.stringify(readyJson));
+	 setInstantCookie('readyList', readyJson);
+ }
+
+</script>
+
+<script>
+// 약국 대기목록에서 대기 환자 삭제
+function listDelete(name, data){
+	var deleteCheck = confirm(name +' 환자를 대기열에서 지우시겠습니까?')
+
+	if(deleteCheck){
+		data.remove();
+		alert(name + ' (님)이 대기 목록에서 삭제되었습니다.');
+		var overlapCheck = new Array();
+		overlapCheck = document.getElementsByClassName('readyListTr');
+		forJson(overlapCheck);
+	}else{
+		alert('작업이 취소되었습니다.');
+	}
+}
+</script>
+
+<script>
+// 브라우저가 닫히면 없어지는 쿠키 생성
+function setInstantCookie(cName, cValue){
+	var expire = new Date();
+	cookies = cName + '=' + escape(cValue)+";"; // 한글 깨짐을 막기위해 escape(cValue)를 합니다.
+	document.cookie = cookies;
+// 	alert(JSON.parse(document.cookie));
+//	alert(document.cookie);
+	}
+
+// 쿠키 가져오기 함수
+function getCookie(cName) {
+	cName = cName + '=';
+	var cookieData = document.cookie;
+	var start = cookieData.indexOf(cName);
+	var cValue = '';
+	if(start != -1){
+		start += cName.length;
+		var end = cookieData.indexOf(';', start);
+			if(end == -1)end = cookieData.length;
+		cValue = cookieData.substring(start, end);
+	}
+	//console.log(cValue);
+// 	console.log(unescape(cValue));
+// 	console.log('테스트',JSON.parse(unescape(cValue)));
+	//console.log('테스트',JSON.parse(unescape(cValue))[0].name);
+	//console.log('테스트2',JSON.parse(unescape(cValue)).length);
+	if(unescape(cValue)){
+		var result = JSON.parse(unescape(cValue));
+		var resultStr = "";
+		var count = 0;
+
+		for(let i = 0; i < result.length; i++){
+			resultStr += "<tr val="+ result[i].code +" class='readyListTr' onclick='preList(this)' ondblclick='listDelete("+'"'+ result[i].name +'"'+", this)'><td>"+ result[i].count +"</td><td>" + result[i].name + "</td></tr>";
+			count = result[i].count;
+		}
+
+		$('#readyList').append(resultStr)
+	}
+	return count;
+	}
+
+</script>

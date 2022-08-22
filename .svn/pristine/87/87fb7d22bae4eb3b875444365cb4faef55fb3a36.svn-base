@@ -1,0 +1,26 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+
+import kr.or.annapharm.dto.AddMedicineListVO;
+
+public interface MedicineService {
+
+	// 처방전의 첫번째 약이름 구하기
+	public String getPrescriptionFirstMedicine(String psCode) throws Exception;
+	
+	// 하나의 처방전에 약 갯수 구하기
+	public int getPrescriptionMedicineCount(String psCode) throws Exception;
+	
+	// 약의 분류코드 가져오기
+	public int getMedicineType(int mdNo) throws SQLException;
+	
+	public String getMedicineName(int mdNo) throws SQLException;
+	
+	public String getMedicineClass(int mdNo) throws SQLException;
+	
+	// 의사 : 약 목록 출력
+	public List<AddMedicineListVO> getAddMedicineList(String keyword) throws SQLException;
+}

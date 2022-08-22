@@ -1,0 +1,295 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/dist/css/adminlte.min.css">
+
+<head>
+<style>
+input, select{
+	margin:2px;
+	height: 15px;
+}
+
+input[type="date"] {
+	width: 74px;
+} 
+input[type="number"]{
+	width: 45px;
+}
+input[type="text"]{
+	width: 56px;
+}
+
+/* 약목록 스크롤 */
+.tableScroll {
+	overflow: auto;
+}
+
+table {
+	table-layout: fixed;	
+}	  
+td { 		 
+	vertical-align: middle; 		
+	padding:5px;		
+	overflow:hidden;		
+	white-space : nowrap;		
+	text-overflow: ellipsis;	 
+}
+
+/* 표 머리행 */
+table{
+	font-size:16px; 
+}
+th {
+	background-color: #E8F5FF;
+	text-align: center;
+	position: sticky;
+	top: 0px;  
+	paddong:0px;
+}
+.card{
+	margin-bottom:0px;
+}
+.tableNum{	
+	text-align:right;
+}
+.table td, .table th{
+	padding:0;
+}
+
+.tableTextCenter{
+	text-align:center;
+}
+.card-body.p-0 .table thead>tr>th:first-of-type{
+	padding:0;
+}
+
+</style>
+</head>
+
+<body>
+	<div class="content-wrapper">
+		<div class="row m-0">
+			<div class="card" style="margin-left:2px;">
+				<div class="card-header" style="text-align: center; height:108px;"> 
+					<h1>- 2022.07.08 입고장 -</h1>
+					<h2>입고품 검색</h2>
+				</div>
+				<div class="searchBox" style="display:flex; margin-top:3px; margin-bottom:3px;margin-left:75px;">
+					<select id="type" name="type" style="height: 24px; margin-left:300px; font-size:13px;"> 
+						<option value="all">전체</option>
+						<option value="ETC">전문</option>
+						<option value="OTC">일반</option>
+					</select> 
+					<select id="type2" name="type" style="height: 24px; margin-left:5px; font-size:13px;">
+						<option value="receive">입고장</option>
+						<option value="order">발주서</option>
+					</select> 
+					<input list="classification-code" id="ice-cream-choice" name="ice-cream-choice" value="분류코드입력"
+							style="width: 122px; height: 24px; margin-left:5px; font-size:13px;">
+						<datalist id="classification-code">
+							<option value="100">신경계 감각기관용 의약품</option>
+							<option value="110">중추신경계용 약</option>
+							<option value="111">전신마취제</option>
+							<option value="112">최면진정제</option>
+							<option value="113">항전간제</option>
+							<option value="114">해열,진통,소염제</option>
+							<option value="115">각성제,흥분제</option>
+							<option value="116">진훈제</option>
+							<option value="117">정신신경용제</option>
+							<option value="119">기타의 중추신경용 약</option>
+							<option value="120">말초신경계용 약</option>
+							<option value="121">국소마취제</option>
+							<option value="122">골격근이완제</option>
+						</datalist>
+					<input type="text" style="width: 150px; height: 24px; margin-left:5px; font-size:13px;"> 
+					<input type="button" value="검색" style="width: 50px; height: 24px; margin-left:5px; font-size:13px;">
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body p-0" style="width:846px; height:810px;"> 
+					<div class="card card-primary" style="height: 330px;">
+								<div class="tableScroll" style="height:330px;">
+									<table class="table table-bordered table-hover"
+										style="overflow: auto; font-size: 16px;"> 
+										<thead>
+											<tr>
+												<th style="width: 57px;">No</th>
+												<th style="width: 61px;">구분</th>
+												<th style="width: 89px;">분류코드</th>
+												<th style="width: 79px;">약코드</th>
+												<th style="width: 90px;">제약회사</th>
+												<th style="width: 57px;">투여</th>
+												<th>약명</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="tableNum">1</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692001201</td>
+												<td class="tableTextCenter">급여</td>                      	
+												<td class="tableTextCenter">외용</td>	
+												<td class="medicalTxt">프레드포르테점안액</td>
+											</tr>
+											<tr>
+												<td class="tableNum">2</td>											
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692004561</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">외용</td>
+												<td class="medicalTxt">오큐시클로점안액</td>
+											</tr>
+											<tr>
+												<td class="tableNum">3</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692007891</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">내복</td>
+												<td class="medicalTxt">솔로젠정</td>
+											</tr>
+											<tr>
+												<td class="tableNum">4</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692009511</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">내복</td>
+												<td class="medicalTxt">타이레놀500밀리그램</td>
+											</tr>
+											<tr>
+												<td class="tableNum">5</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692009511</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">외용</td>
+												<td class="medicalTxt">프레드포르테점안액</td>
+											</tr>
+											<tr>
+												<td class="tableNum">6</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692009511</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">외용</td>
+												<td class="medicalTxt">오큐시클로점안액</td>
+											</tr>
+											<tr>
+												<td class="tableNum">7</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692009511</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">내복</td>
+												<td class="medicalTxt">록소젠정</td>
+											</tr>
+											<tr>
+												<td class="tableNum">8</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692009511</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">내복</td>
+												<td class="medicalTxt">록소젠정</td>
+											</tr>
+											<tr>
+												<td class="tableNum">9</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692009511</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">내복</td>
+												<td class="medicalTxt">록소젠정</td>
+											</tr>
+											<tr>
+												<td class="tableNum">10</td>
+												<td class="tableTextCenter">전문</td>
+												<td class="tableNum">131</td>
+												<td class="tableNum">692009511</td>
+												<td class="tableTextCenter">급여</td>
+												<td class="tableTextCenter">내복</td>
+												<td class="medicalTxt">록소젠정</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="addBtnDiv" style="text-align:center; margin-bottom:5px; margin-top:5px;">
+									<input type="button" value="추가 ∨" style="height:30px;">
+							</div>		 
+							<div class="card card-primary" style="height: 340px;">
+								<div class="tableScroll" style="height:340px;"> 
+									<table class="table table-bordered table-hover"  
+										style="overflow: auto; font-size: 16px;"> 
+										<thead>
+											<tr>
+												<th style="width: 52px;">No</th>
+												<th style="width: 49px;">구분</th>
+												<th style="width: 73px;">분류코드</th>
+												<th style="width: 61px;">약코드</th>
+												<th style="width: 75px;">제약회사</th>
+												<th style="width: 197px;">약명</th>
+												<th style="width: 79px;">제조일</th>
+												<th>수량</th>
+												<th style="width: 49px;">단위</th>
+												<th style="width: 61px;">약위치</th>
+												<th style="width: 60px;">금액(원)</th> 
+												<th> </th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td>전문</td>
+												<td>112</td>
+												<td>123456789</td>
+												<td>제약회사임요</td>
+												<td class="medicalTxt">프레드포르테점안액(외용)</td>
+												<td><input type="date"></td>
+												<td><input type="number"></td>
+												<td><select style="width:45px;">
+													  <option>개</option>
+													  <option>캡슐</option>
+													  <option>정</option>
+													  <option>병</option>
+													  <option>통</option>
+													  <option>앰플</option>
+													</select></td>
+												<td><input type="text"></td>
+												<td>5,300</td>
+												<td>삭제</td>                      		
+											</tr>
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="buttonsDiv" style="height:100px;">
+																		
+							</div>
+				</div>
+				<!-- /.card-body -->
+			</div> 
+			<!-- /.card -->
+		</div>
+	</div>
+<!-- jQuery -->
+	<script
+		src="<%=request.getContextPath()%>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script
+		src="<%=request.getContextPath()%>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script
+		src="<%=request.getContextPath()%>/resources/bootstrap/dist/js/adminlte.min.js"></script>
+
+</body>

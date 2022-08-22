@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+    <style>
+    .nav-sidebar .nav-item>.nav-link{
+		    position: relative;
+		    font-size: 12px;
+		    border-bottom: 1px solid #ddd;
+		    border-radius: 0;
+		    padding: 20px;
+    }
+    [class*=sidebar-dark] .user-panel{
+		border-bottom:0;
+    }
+
+    body:not(.layout-fixed) .main-sidebar .sidebar{
+		    padding-left: 20px;
+    }
+    </style>
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-1 pb-1 mb-1 d-flex">
+        <div class="info" style="width:200px;">
+             <div class="row" style="align-items: end;">
+		          &nbsp;<a href="#" class="d-block" style="font-weight:bold; font-size:1.8em;" >김동글</a>&nbsp;&nbsp;<span style="font-weight:bold;color:white">약사님</span>
+	         </div>
+	         <a href="#">ID : <span>ID0104</span> </a><br/><br/>
+        </div>
+      </div>
+
+
+    </div>
+    <!-- /.sidebar -->
+
+    <!-- Sidebar Menu -->
+    <div class="row" style="margin-left: 0px;">
+    	<ul class="nav nav-pills nav-sidebar flex-column subMenuList" data-widget="treeview" role="menu" data-accordion="false" style="width: 100%;">
+			<li class="nav-item"> <a href="#" class="nav-link">
+					<p>
+						<i class="left fas fa-angle-right sideIcon"></i>&nbsp;내 복약 답변 확인
+					</p>
+			</a>
+			</li>
+			<li class="nav-item"><a href="#" class="nav-link">
+					<p>
+						<i class="left fas fa-angle-right sideIcon"></i>&nbsp;문의하기
+					</p>
+			</a>
+			</li>
+			<li class="nav-item"><a href="#" class="nav-link">
+					<p>
+						<i class="left fas fa-angle-right sideIcon"></i>&nbsp;개인정보 수정
+					</p>
+			</a>
+			</li>
+			<li class="nav-item">
+				<a href="#" class="nav-link">
+					<p>
+						<i class="left fas fa-angle-right sideIcon"></i>&nbsp;회원탈퇴
+					</p>
+				</a>
+			</li>
+        </ul>
+    </div>
+    <!-- /.sidebar-menu -->
+  </aside>

@@ -1,0 +1,190 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script type="text/x-handlebars-template"  id="searchMedicine-list-template" >
+{{#each .}}
+<tr class="mdList" onclick="goCompare('<%=request.getContextPath()%>/expert/business/compare/list/',this)">
+	<td>{{mdName}}</td>
+	<td>{{componentFilter mdComponent}}</td>
+	<td>{{classFilter mdClass}}</td>
+	<td>{{unitFilter unit}}</td>
+	<td>{{miMaincode}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="searchMedicine-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="basis-list-template" >
+{{#each .}}
+<tr class="basisList" onclick="goCompare(this)">
+	<td>{{miType}}</td>
+	<td>{{componentFilter mdComponent}}</td>
+	<td>{{miMaincode}}</td>
+	<td>{{unitFilter unit}}</td>
+	<td>{{miUse}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="basis-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="compare-list-template" >
+{{#each .}}
+<tr class="compareList" onclick="goDetail(this)">
+	<td><i class='far fa-star'></i></td>
+	<td>{{mdName}}</td>
+	<td>{{miCompany}}</td>
+	<td>{{classFilter mdClass}}</td>
+	<td>{{miPrice}}</td>
+	<td><input type="checkbox" /></td>
+</tr>
+{{/each}}
+</script>	
+	
+<script type="text/javascript">
+var replyPage=1;
+var basisPage=1;
+
+function goCompare(pageInfo,target){
+	var mainCode;
+	if($(target).attr('class') == "mdList"){
+		mainCode = $(target).children(':last').text();
+	}else {
+		mainCode = $(target).children(':eq(2)').text();
+	}
+	pageInfo += mainCode;
+	$.getJSON(pageInfo,function(data){
+		console.log(data);
+		printData(data,$('#compareList'),$('#compare-list-template'),"compareList");
+	});
+// 	console.log(mainCode);
+}
+
+function getSearchMedicinePage(pageInfo,page,keyword){
+	if(page) replyPage = page;
+	if(!keyword) keyword = $("#nameKeyword").val();
+	console.log(keyword);
+	pageInfo += keyword + '/' + replyPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchMedicineList,$('#searchMedicineList'),$('#searchMedicine-list-template'),"medicineSearch");
+		printPagination(data.pageMaker,$('#test3561'),$('#searchMedicine-pagination-template'));
+	});
+}
+
+function getSearchBasisPage(pageInfo,page,keyword){
+	if(page) basisPage = page;
+	if(!keyword) keyword = $("#basisKeyword").val();
+	console.log(keyword);
+	pageInfo += keyword + '/' + basisPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchBasisList,$('#searchBasisList'),$('#basis-list-template'),"basisSearch");
+		printPagination(data.pageMaker,$('#basis3561'),$('#basis-pagination-template'));
+	});
+}
+
+
+Handlebars.registerHelper({
+	"unitFilter" : function(unit){
+		var newUnit = unit.slice(0,-1).substr(1);
+		return newUnit;
+	},
+	"componentFilter" : function(component){
+		return component.replace(/\[(.*?)\]/gm,'').replaceAll('|',',');
+	},
+	"signActive" : function(pageNum){
+		if(pageNum == replyPage) return 'active';
+	},
+	"classFilter": function(className){
+		return className.replace("의약품","");
+	}
+});
+
+function printData(replyArr,target,templateObject,targetName){
+	var template=Handlebars.compile(templateObject.html());
+	var html = template(replyArr);
+	if(targetName == "medicineSearch") $('.mdList').remove();
+	if(targetName == "basisSearch") $('.basisList').remove();
+	if(targetName == "compareList") $('.compareList').remove();
+	target.after(html);
+}
+
+/* pagination */
+function printPagination(pageMaker,target,templateObject){
+	var pageNumArray = new Array(pageMaker.endPage-pageMaker.startPage+1);
+	for(var i=0;i<pageMaker.endPage-pageMaker.startPage+1;i++){
+		pageNumArray[i]=pageMaker.startPage+i;
+	}	
+	pageMaker.pageNum=pageNumArray;  
+	pageMaker.prevPageNum=pageMaker.startPage-1;
+	pageMaker.nextPageNum=pageMaker.endPage+1;
+	
+	var template=Handlebars.compile(templateObject.html());	
+	var html = template(pageMaker);	
+	target.html("").html(html);
+}
+
+</script>

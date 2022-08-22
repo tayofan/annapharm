@@ -1,0 +1,165 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<script type="text/javascript">
+	function enterkey() {
+		if (window.event.keyCode == 13) {
+			retrieveList_go(1);
+		}
+	}
+</script>
+
+<script type="text/javascript">
+	function retrieveList_go(page, url) {
+		if (!url)
+			url = "list.do";
+
+		var retrieveForm = $('#retrieveForm');
+		retrieveForm.find("[name='page']").val(page);
+
+		var checkboxValue;
+
+		if (document.querySelector("input[type='checkbox']").checked) {
+			checkboxValue = document.querySelector("input[type='checkbox']").value
+			console.log(checkboxValue);
+			retrieveForm.find("[name='searchType']").val(checkboxValue);
+		} else {
+			checkboxValue = document.querySelector("input[type='checkbox']").value
+			retrieveForm.find("[name='searchType']").val("");
+		}
+
+		retrieveForm.find("[name='endDate']").val($('input[name="endDate"]').val());
+		retrieveForm.find("[name='keyword']").val($('div.input-group>input[name="keyword"]').val());
+
+		retrieveForm.attr({
+			action : url,
+			method : 'get'
+		}).submit();
+
+	}
+</script>
+
+
+<script type="text/javascript">
+	function md_detailGo(clickTr) {
+		//목록에서 선택 시 값 가져와 출력
+		var productNo = $(clickTr).find('.productNo').text();
+		var productName = $(clickTr).find('.productName').text();
+		var productQr = $(clickTr).find('.productQr').text();
+		var productOwnnum = $(clickTr).find('.productOwnnum').text();
+
+		console.log(clickTr);
+		console.log(productNo);
+		console.log(productName);
+		console.log(productQr);
+		console.log(productOwnnum);
+
+		$('.miNum').attr("max", productOwnnum);
+		$('.miNum').val(productOwnnum);
+		var productUnit = $(clickTr).find('.productUnit').text();
+		console.log(productUnit);
+
+		$('.miName').val(productName);
+		$('.miCode').val(productNo);
+		$('.miQr').val(productQr);
+		$('.miUnit').val(productUnit);
+
+	}
+</script>
+
+
+<script type="text/javascript">
+	var listNum = 1;
+	function mdAdd() {
+		//회수내역에 추가하기
+		//추가 버튼을 눌렀을 때 이력한 정보 가져오기
+
+		var miName = $('.miName').val();
+		var miCode = $('.miCode').val();
+		var miQr = $('.miQr').val();
+		var miDate = document.querySelector(".miDate").value;
+		var miNum = $('.miNum').val();
+		var miUnit = $('.miUnit').val();
+		var reason = $('.reason').val();
+
+		if (miNum == "") {
+			alert("회수수량을 입력해주세요!");
+			return;
+		}
+		if (reason == "") {
+			alert("회수 사유를 입력해주세요!");
+			return;
+		}
+
+		var str = "";
+
+		str += '<tr class="nomedi" value="' + miCode + '" ondblclick="mdRemove(this);">';
+		str += '	<td name="" style="text-align: center;">' + listNum + '</td>';
+		str += '	<td class="rlCode" value="' + miCode+'" style="text-align: center;">'+ miCode + '</td>';
+		str += '	<td class="rlQr" value="' + miQr+'" style="text-align: center;">'+ miQr + '</td>';
+		str += '	<td class="rlName"  value="' + miName+'" style="text-align: left;" data-toggle="tooltip" title="'+ miName +'">'+ miName + '</td>';
+		str += '	<td class="rlReason"  value="' + reason+'" style="text-align: left;">'+ reason + '</td>';
+		str += '	<td class="rlNum" value="' + miNum+'" style="text-align: center;">'+ miNum + '</td>';
+		str += '	<td class="miUnit" value="' + miUnit+'" style="text-align: center;">'+ miUnit + '</td>';
+		str += '	<td style="text-align: center;">' + miDate + '</td>';
+		str += '</tr>';
+
+		$('#retrievelist').append(str);
+		var totalNum = $('#retrievelist > tr').length
+		$('.totalNum').text(totalNum);
+
+		$('.miName').val("");
+		$('.miCode').val("");
+		$('.miQr').val("");
+		$('.miNum').val("");
+		$('.miUnit').val("");
+		$('.reason').val("");
+
+	}
+	function mdRemove(clickOne) {
+		$(clickOne).remove();
+		var totalNum = $('#retrievelist > tr').length
+
+		console.log(totalNum);
+		$('.totalNum').text(totalNum);
+	}
+</script>
+
+<script type="text/javascript">
+	function retrieveAdd() {
+
+		var trAll = $('#retrievelist > tr');
+		var i;
+		for (i = 0; i < trAll.length; i++) {
+
+			var rlName = trAll.eq(i).find('.rlName').text();
+			var rlCode = trAll.eq(i).find('.rlCode').text();
+			var rlReason = trAll.eq(i).find('.rlReason').text();
+			var rlNum = trAll.eq(i).find('.rlNum').text();
+			var rlQr = trAll.eq(i).find('.rlQr').text();
+			var miUnit = trAll.eq(i).find('.miUnit').text();
+
+			data={
+				"flag" : i,
+				"rlName" : rlName,
+				"rlCode" : rlCode,
+				"rlReason" : rlReason,
+				"rlNum" : rlNum,
+				"rlQr" : rlQr,
+				"miUnit" : miUnit
+			}
+
+			console.log(data);
+
+			$.ajax({
+				url : "<%=request.getContextPath()%>/retrieve/registRetrieve",
+				type : "post",
+				data : JSON.stringify(data),
+				contentType : "application/json",
+				success : function(data) {
+				},
+				error : function(error) {
+				}
+			});
+		}
+	}
+</script>

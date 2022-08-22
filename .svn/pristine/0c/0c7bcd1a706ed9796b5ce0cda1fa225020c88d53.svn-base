@@ -1,0 +1,39 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.service.BoardService;
+
+@Controller
+@RequestMapping("manager")
+public class managerDashBoardController {
+
+//관리자 메인대쉬보드
+	
+	@RequestMapping("/main")
+	public String expertMain() throws SQLException{
+		String url = "manager/main/managerDashBoard";
+
+		return url;
+	}
+	
+	
+	
+	@RequestMapping("/viewT/visit")
+	public String visit() throws SQLException{
+		String url = "manager/viewT/visit";
+
+		return url;
+	}
+	
+	
+
+}

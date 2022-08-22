@@ -1,0 +1,45 @@
+package kr.or.annapharm.command;
+
+import java.util.Date;
+
+public class SearchCriteria extends Criteria {
+	
+	private String keyword;
+	private String searchType;
+	private String searchType2;
+	private Date startDate;
+	private Date endDate;
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	public String getSearchType2() {
+		return searchType2;
+	}
+	public void setSearchType2(String searchType2) {
+		this.searchType2 = searchType2;
+	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+	
+	
+}

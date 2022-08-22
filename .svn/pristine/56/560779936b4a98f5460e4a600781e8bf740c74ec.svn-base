@@ -1,0 +1,71 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 이름과 생년월일로 조회된 회원을 출력하는 기능 -->
+
+<script>
+	function detailGo(mdNo){
+	console.log(mdNo);
+	$.ajax({
+		url:"productDetail.do",
+		data:{"mdNo" : mdNo},
+		type:"post",
+		success:function(res){
+			console.log(res);
+			OpenWindow('product_detail.do?from=product&mdNo='+mdNo,'상세보기',1000,800);
+		},
+		error:function(){
+			alert('응애!!');
+		}
+	});	
+}
+	function detailModify(){
+		$('.detailDate').attr("disabled", false);
+		$('.detailPosition').attr("disabled", false);
+	}
+	
+	function detailSave(){
+		var detailQr = document.querySelectorAll(".detailQr")
+		var detailDate = document.querySelectorAll(".detailDate");
+		var detailPos = document.querySelectorAll(".detailPosition");
+		
+		var arr = [];
+		
+// 		console.log(detailQr);
+		for(var i = 0; i<detailQr.length; i++){
+			var obj = "";
+			var qr = detailQr[i].value;
+			var date = detailDate[i].value;
+			var position = detailPos[i].value;
+			
+			obj += '{"productQr" : "' + qr + '"';
+			obj += ', "productDate" : "' + date + '"';
+			obj += ', "productPosition" : "' + position + '"}';
+			  
+			arr.push(obj);
+		}
+		console.log(JSON.parse(JSON.stringify(arr))); 
+		$.ajax({
+			url:"update.do",
+			data:JSON.stringify(arr),
+			contentType : "application/json",
+			type:"post",
+			success:function(res){
+				alert('수정 되었습니다.');
+			},
+			error:function(){
+				alert('수정 실패했습니다.');
+			}
+		});
+		
+		$('.detailDate').attr("disabled", true);
+		$('.detailPosition').attr("disabled", true);
+	}
+	
+	function detailClose(){
+		window.close();
+	}
+	
+</script>

@@ -1,0 +1,110 @@
+package kr.or.annapharm.controller;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.jxls.common.Context;
+import org.jxls.util.JxlsHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import kr.or.annapharm.command.SalesAnalysisCommand;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.RegistBillVO;
+import kr.or.annapharm.dto.SalesAnalysisDetailVO;
+import kr.or.annapharm.dto.SalesAnalysisExcelVO;
+import kr.or.annapharm.service.SalesAnalysisService;
+
+@RestController
+@RequestMapping("/sales_analysis")
+public class SalesAnalysisRestController {
+
+	@Autowired
+	private SalesAnalysisService salesAnalysisService;
+
+	@RequestMapping("/read")
+	public ResponseEntity<List<SalesAnalysisDetailVO>> readPrescription(String psCode) throws Exception{
+		ResponseEntity<List<SalesAnalysisDetailVO>> entity = null;
+
+		List<SalesAnalysisDetailVO> voList = salesAnalysisService.getSalesAnalyssisDetail(psCode);
+
+		entity = new ResponseEntity<List<SalesAnalysisDetailVO>>(voList, HttpStatus.OK);
+
+		return entity;
+	}
+
+	@RequestMapping("/readLoginPharmacy")
+	public ResponseEntity<RegistBillVO> readLoginPharmacy(String loginId) throws Exception{
+		ResponseEntity<RegistBillVO> entity = null;
+
+		RegistBillVO vo = salesAnalysisService.getPharmacyInfo(loginId);
+
+		System.out.println("vo : " +vo);
+
+		entity = new ResponseEntity<RegistBillVO>(vo, HttpStatus.OK);
+
+		return entity;
+	}
+
+	// 개요 : excel 저장시 사용되는 controller
+	// 작성자 : 이병진
+	@RequestMapping(value="/excel")
+	public void excel(HttpServletResponse response, SearchCriteria cri, @RequestBody List<SalesAnalysisExcelVO> saList) throws Exception {
+		// , @RequestBody List<SalesAnalysisExcelVO> saList
+		// 데이터를 넣을 객체
+		List<SalesAnalysisCommand> salesAnalysisList = salesAnalysisService.getSearchAnalysisList(cri);
+		String fileName = "요양급여신청내역_"; // 파일 이름
+		String title = "요양급여 신청내역"; // 제목 셀 이름
+		Date day = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+		String today = format.format(day); // 오늘 날짜 생성
+
+		ClassPathResource classPathResource = new ClassPathResource("/kr/or/annapharm/excel/salesAnalysis2.xls");
+
+		System.out.println("salesAnalysisList" + salesAnalysisList);
+		System.out.println("saList" + saList);
+
+		System.out.println("통과1");
+		try (InputStream is = new BufferedInputStream(classPathResource.getInputStream())){
+			System.out.println("통과2");
+			response.setHeader("Content-Disposition","attachment; filename=" + URLEncoder.encode(fileName, "UTF-8") + today +".xlsx");
+			OutputStream os = response.getOutputStream();
+
+			Context context = new Context();
+			context.putVar("salesAnalysisList", salesAnalysisList);
+			context.putVar("test", title);
+			context.putVar("date", today);
+
+			JxlsHelper.getInstance().processTemplate(is, os, context);
+			os.close();
+			System.out.println("통과3");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("통과4");
+	}
+
+	@RequestMapping(value="/printAndSave", method = RequestMethod.POST)
+	public void printAndSave(@RequestParam(value="prescriptArr[]")List<String> prescriptArr, String chemistName, String pharmacyCode, int count) {
+		System.out.println("prescriptArr : " + prescriptArr);
+		System.out.println("chemistName : " + chemistName);
+		System.out.println("pharmacyCode : " + pharmacyCode);
+		System.out.println("count : " + count);
+	}
+
+}

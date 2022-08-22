@@ -1,0 +1,86 @@
+package kr.or.annapharm.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.CompareMedicineVO;
+import kr.or.annapharm.service.BusinessService;
+
+@Controller
+@RequestMapping("/expert/business")
+public class BusinessController {
+	
+	@Autowired
+	BusinessService service;  
+	
+	@RequestMapping("/visitor")
+	public String visitor() throws Exception {
+		String url = "/expert/business_management/visitor_analysis";
+		return url;
+	}
+	
+	@RequestMapping("/compare")
+	public String compare() throws Exception {
+		String url = "/expert/business_management/company_compare";
+		return url;
+	}
+	
+	@RequestMapping(value = "/compare/mdsearch/{keyword}/{page}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> searchMedicine(@PathVariable("keyword")String keyword,@PathVariable("page")int page) throws Exception {
+		
+		SearchCriteria cri = new SearchCriteria();
+		cri.setKeyword(keyword);
+		cri.setPage(page);
+		
+		Map<String, Object> dataMap = service.searchMedicineList(cri);
+		
+		ResponseEntity<Map<String, Object>> entity = null;
+		
+		entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	@RequestMapping(value = "/compare/basearch/{keyword}/{page}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> searchBasis(@PathVariable("keyword")String keyword,@PathVariable("page")int page) throws Exception {
+		
+		SearchCriteria cri = new SearchCriteria();
+		cri.setKeyword(keyword);
+		cri.setPage(page);
+		
+		Map<String, Object> dataMap = service.searchBasisList(cri);
+		
+		ResponseEntity<Map<String, Object>> entity = null;
+		
+		entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.OK);
+		
+		return entity;
+	}
+
+	
+	@RequestMapping(value = "/compare/list/{miMaincode}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<List<CompareMedicineVO>> compareList(@PathVariable("miMaincode")String miMaincode) throws Exception{
+		
+		List<CompareMedicineVO> compareList = service.getCompareList(miMaincode);
+		
+		ResponseEntity<List<CompareMedicineVO>> entity = null;
+		
+		entity = new ResponseEntity<List<CompareMedicineVO>>(compareList, HttpStatus.OK);
+		
+		return entity;
+		
+	}
+}

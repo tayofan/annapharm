@@ -1,0 +1,25 @@
+package kr.or.annapharm.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public class ExpertDashBoardDAOImpl implements ExpertDashBoardDAO {
+	
+	private SqlSession session;
+	
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+	
+	@Override
+	public List<Map<String, String>> selectExpertDashBoardList() throws Exception {
+		return session.selectList("ExpertDashBoard-Mapper.runtimeSelectPatientList");
+	}
+
+
+}

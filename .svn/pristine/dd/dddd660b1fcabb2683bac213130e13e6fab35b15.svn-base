@@ -1,0 +1,62 @@
+package kr.or.annapharm.command;
+
+import java.util.Date;
+
+public class PastPrescriptionCommand {
+	private int psCode;
+	private String doctorCode;
+	private String patientCode;
+	private String chemistCode;
+	private Date psDate;
+	private String phmacyCode;
+	private String PiDutyname;
+
+	public int getPsCode() {
+		return psCode;
+	}
+	public void setPsCode(int psCode) {
+		this.psCode = psCode;
+	}
+	public String getDoctorCode() {
+		return doctorCode;
+	}
+	public void setDoctorCode(String doctorCode) {
+		this.doctorCode = doctorCode;
+	}
+	public String getPatientCode() {
+		return patientCode;
+	}
+	public void setPatientCode(String patientCode) {
+		this.patientCode = patientCode;
+	}
+	public String getChemistCode() {
+		return chemistCode;
+	}
+	public void setChemistCode(String chemistCode) {
+		this.chemistCode = chemistCode;
+	}
+	public Date getPsDate() {
+		return psDate;
+	}
+	public void setPsDate(Date psDate) {
+		this.psDate = psDate;
+	}
+	public String getPhmacyCode() {
+		return phmacyCode;
+	}
+	public void setPhmacyCode(String phmacyCode) {
+		this.phmacyCode = phmacyCode;
+	}
+	public String getPiDutyname() {
+		return PiDutyname;
+	}
+	public void setPiDutyname(String piDutyname) {
+		PiDutyname = piDutyname;
+	}
+	@Override
+	public String toString() {
+		return "PastPrescriptionCommand [psCode=" + psCode + ", doctorCode=" + doctorCode + ", patientCode="
+				+ patientCode + ", chemistCode=" + chemistCode + ", psDate=" + psDate + ", phmacyCode=" + phmacyCode
+				+ ", PiDutyname=" + PiDutyname + "]";
+	}
+}

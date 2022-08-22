@@ -1,0 +1,15 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+
+public interface SalesAnalysisService {
+
+	/**
+	 * @param loginUserPharmacyCode : 로그인한 유저의 약국 코드
+	 * @return : 같은 약국에 등록되어있는 약사들의 목록
+	 * @throws Exception
+	 * 	개요 : 로그인한 유저와 같은 약국에 등록되어있는 약사들의 목록을 가져오는 메서드
+	 * 	작성자 : 이병진
+	 */
+	public List<String> getChemistsName(String loginUserPharmacyCode) throws Exception;
+}

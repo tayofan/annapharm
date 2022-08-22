@@ -1,0 +1,82 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.command.PageMaker;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dao.MedicineDAO;
+import kr.or.annapharm.dao.MedicineInfoDAO;
+import kr.or.annapharm.dao.ProductDAO;
+import kr.or.annapharm.dto.ProductVO;
+
+
+public class ProductServiceImpl implements ProductService {
+	
+	Date now = new Date();
+	
+	
+	private ProductDAO productDAO;
+	private MedicineDAO medicineDAO;
+	private MedicineInfoDAO medicineInfoDAO;
+	
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
+
+	public void setMedicineDAO(MedicineDAO medicineDAO) {
+		this.medicineDAO = medicineDAO;
+	}
+
+	public void setMedicineInfoDAO(MedicineInfoDAO medicineInfoDAO) {
+		this.medicineInfoDAO = medicineInfoDAO;
+	}
+	
+	@Override
+	public Map<String, Object> getProductList(SearchCriteria cri) throws SQLException {
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		// 현재 page 번호에 맞는 리스트를 perPageNum 개수 만큼 가져오기.
+		List<ProductVO> productList = productDAO.selectProductCriteria(cri);
+		// 전체 board 개수
+		for(ProductVO pro : productList) {
+			pro.setMd_name(medicineDAO.selectMedicineName(pro.getMd_no()));
+			pro.setMd_class(medicineDAO.selectMedicineClass(pro.getMd_no()).substring(0,2)); 
+			pro.setMd_type(medicineInfoDAO.selectMedicineInfoType(medicineDAO.selectMedicineType(pro.getMd_no())));
+			pro.setDateOver(now.compareTo(pro.getProduct_date()));
+			if(now.compareTo(pro.getProduct_date()) >= 0 || pro.getProduct_ownnum_standard() >= pro.getProduct_ownnum()) {
+				pro.setWarnMark("Y");
+			}else {
+				pro.setWarnMark("N");
+			}
+//			System.out.println(now.compareTo(pro.getProduct_date()));
+		}
+		int totalCount = productDAO.selectProductCriteriaTotalCount(cri);
+		// PageMaker 생성.
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+		
+		dataMap.put("productList", productList);
+		dataMap.put("pageMaker", pageMaker);
+		return dataMap;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+

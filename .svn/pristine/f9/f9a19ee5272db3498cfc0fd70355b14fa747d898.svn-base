@@ -1,0 +1,15 @@
+package kr.or.annapharm.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/expert/business")
+public class BusinessController {
+	
+	@RequestMapping("/visitor")
+	public String visitor() throws Exception {
+		String url = "/expert/business_management/visitor_analysis";
+		return url;
+	}
+}

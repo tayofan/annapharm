@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<head></head>
+
+<title></title>
+
+<body>
+	<div class="row m-0 border">
+		012
+	</div>
+	<div class="row m-0">
+		<div class="col-8 border">
+			123
+		</div>
+		<div class="col-4 border">
+			456
+		</div>
+	</div>
+</body>

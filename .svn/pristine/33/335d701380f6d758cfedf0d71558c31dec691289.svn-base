@@ -1,0 +1,82 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class PrescriptionVO {
+
+	private String psCode;
+	private String doctorCode;
+	private String patientCode;
+	private String chemistCode;
+	private Date psDate;
+	private Date psLastdate;
+	private String psModifyReq;
+	private Date psCompleteDate;
+	private String psStatus;
+	private Date chDate;
+	public String getPsCode() {
+		return psCode;
+	}
+	public void setPsCode(String psCode) {
+		this.psCode = psCode;
+	}
+	public String getDoctorCode() {
+		return doctorCode;
+	}
+	public void setDoctorCode(String doctorCode) {
+		this.doctorCode = doctorCode;
+	}
+	public String getPatientCode() {
+		return patientCode;
+	}
+	public void setPatientCode(String patientCode) {
+		this.patientCode = patientCode;
+	}
+	public String getChemistCode() {
+		return chemistCode;
+	}
+	public void setChemistCode(String chemistCode) {
+		this.chemistCode = chemistCode;
+	}
+	public Date getPsDate() {
+		return psDate;
+	}
+	public void setPsDate(Date psDate) {
+		this.psDate = psDate;
+	}
+	public Date getPsLastdate() {
+		return psLastdate;
+	}
+	public void setPsLastdate(Date psLastdate) {
+		this.psLastdate = psLastdate;
+	}
+	public String getPsModifyReq() {
+		return psModifyReq;
+	}
+	public void setPsModifyReq(String psModifyReq) {
+		this.psModifyReq = psModifyReq;
+	}
+	public Date getPsCompleteDate() {
+		return psCompleteDate;
+	}
+	public void setPsCompleteDate(Date psCompleteDate) {
+		this.psCompleteDate = psCompleteDate;
+	}
+	public String getPsStatus() {
+		return psStatus;
+	}
+	public void setPsStatus(String psStatus) {
+		this.psStatus = psStatus;
+	}
+	public Date getChDate() {
+		return chDate;
+	}
+	public void setChDate(Date chDate) {
+		this.chDate = chDate;
+	}
+	
+
+	
+	
+	
+}

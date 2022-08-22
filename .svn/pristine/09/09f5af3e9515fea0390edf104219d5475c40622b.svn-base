@@ -1,0 +1,78 @@
+package kr.or.annapharm.dto;
+
+public class AddMedicineListVO {
+	public String mdClass;	// 구분
+	public String miCode;	// 약코드
+	public String miType;	// 분류코드
+	public String miUse;	// 복용법
+	public String mdName;	// 약명
+	public String mdDrug;	// 마약
+	public String mdNo;		// 약번호
+	public String miCompany; // 거래처
+	public String miUnit; // 단위
+	public int miPrice; // 가격
+	
+	public String getMiCompany() {
+		return miCompany;
+	}
+	public void setMiCompany(String miCompany) {
+		this.miCompany = miCompany;
+	}
+	public String getMiUnit() {
+		return miUnit;
+	}
+	public void setMiUnit(String miUnit) {
+		this.miUnit = miUnit;
+	}
+	public int getMiPrice() {
+		return miPrice;
+	}
+	public void setMiPrice(int miPrice) {
+		this.miPrice = miPrice;
+	}
+	public String getMdNo() {
+		return mdNo;
+	}
+	public void setMdNo(String mdNo) {
+		this.mdNo = mdNo;
+	}
+	public String getMdClass() {
+		return mdClass;
+	}
+	public void setMdClass(String mdClass) {
+		this.mdClass = mdClass;
+	}
+	public String getMiCode() {
+		return miCode;
+	}
+	public void setMiCode(String miCode) {
+		this.miCode = miCode;
+	}
+	public String getMiType() {
+		return miType;
+	}
+	public void setMiType(String miType) {
+		this.miType = miType;
+	}
+	public String getMiUse() {
+		return miUse;
+	}
+	public void setMiUse(String miUse) {
+		this.miUse = miUse;
+	}
+	public String getMdName() {
+		return mdName;
+	}
+	public void setMdName(String mdName) {
+		this.mdName = mdName;
+	}
+	public String getMdDrug() {
+		return mdDrug;
+	}
+	public void setMdDrug(String mdDrug) {
+		this.mdDrug = mdDrug;
+	}
+	
+	
+	
+}

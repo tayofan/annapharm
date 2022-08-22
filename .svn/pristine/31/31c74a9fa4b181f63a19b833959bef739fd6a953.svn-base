@@ -1,0 +1,81 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class AnnapharmInVO {
+	
+	
+	private int chemist_in_code;
+	private String patient_code;
+	private String chemist_code;
+	private String chemist_in_title;
+	private int chemist_in_reply_cnt;
+	private Date chemist_in_date;
+	private String chemist_in_content;
+	private int chemist_in_viewcnt;
+	private String chemist_in_type;
+	
+	
+	
+	public int getChemist_in_code() {
+		return chemist_in_code;
+	}
+	public void setChemist_in_code(int chemist_in_code) {
+		this.chemist_in_code = chemist_in_code;
+	}
+	public String getPatient_code() {
+		return patient_code;
+	}
+	public void setPatient_code(String patient_code) {
+		this.patient_code = patient_code;
+	}
+	public String getChemist_code() {
+		return chemist_code;
+	}
+	public void setChemist_code(String chemist_code) {
+		this.chemist_code = chemist_code;
+	}
+	public String getChemist_in_title() {
+		return chemist_in_title;
+	}
+	public void setChemist_in_title(String chemist_in_title) {
+		this.chemist_in_title = chemist_in_title;
+	}
+	public int getChemist_in_reply_cnt() {
+		return chemist_in_reply_cnt;
+	}
+	public void setChemist_in_reply_cnt(int chemist_in_reply_cnt) {
+		this.chemist_in_reply_cnt = chemist_in_reply_cnt;
+	}
+	public Date getChemist_in_date() {
+		return chemist_in_date;
+	}
+	public void setChemist_in_date(Date chemist_in_date) {
+		this.chemist_in_date = chemist_in_date;
+	}
+	public String getChemist_in_content() {
+		return chemist_in_content;
+	}
+	public void setChemist_in_content(String chemist_in_content) {
+		this.chemist_in_content = chemist_in_content;
+	}
+	public int getChemist_in_viewcnt() {
+		return chemist_in_viewcnt;
+	}
+	public void setChemist_in_viewcnt(int chemist_in_viewcnt) {
+		this.chemist_in_viewcnt = chemist_in_viewcnt;
+	}
+	public String getChemist_in_type() {
+		return chemist_in_type;
+	}
+	public void setChemist_in_type(String chemist_in_type) {
+		this.chemist_in_type = chemist_in_type;
+	}
+	
+	
+	
+	
+	
+	
+	
+}

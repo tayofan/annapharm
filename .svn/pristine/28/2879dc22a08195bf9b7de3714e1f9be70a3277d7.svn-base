@@ -1,0 +1,174 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<head>
+<style>
+input[type="date"] {
+	width: 130px;
+	height: 30px;
+	/* 	font-size: em; */
+}
+
+.table td, .table th {
+	padding: 5px;
+	vertical-align: top;
+	border-top: 1px solid #dee2e6;
+}
+</style>
+</head>
+
+<body>
+	<div class="content-wrapper">
+		<div class="row border m-0">
+			<div class="col-6 border">
+				<div class="row border">
+					<div class="card m-0" style="width: 640px; height: 410px;">
+						<div class="card-header">
+							<input type="date" value="2022-01-01" id="startDate"> <span>~</span>
+							<input type="date" value="2022-01-31" id="endDate"> <select
+								id="type" name="type" style="height: 30px;">
+								<option value="receive">입고장</option>
+								<option value="order">발주서</option>
+							</select> <input type="text" style="width: 150px; height: 30px;">
+							<input type="button" value="검색"
+								style="width: 50px; height: 30px;">
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body m-0">
+							<a>입고/발주 검색목록</a>
+							<div id="example2_wrapper"
+								class="dataTables_wrapper dt-bootstrap4">
+								<div class="row">
+									<div class="col-sm-12 col-md-6"></div>
+									<div class="col-sm-12 col-md-6"></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 p-0">
+										<table id="example2"
+											class="table table-bordered table-hover dataTable dtr-inline"
+											aria-describedby="example2_info">
+											<thead>
+												<tr>
+													<th class="sorting sorting_asc" tabindex="0"
+														aria-controls="example2" rowspan="1" colspan="1"
+														aria-sort="ascending">No</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">구분</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">제목</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">작성일</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">작성자</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="odd">
+													<td class="dtr-control sorting_1" tabindex="0">1</td>
+													<td>입고장</td>
+													<td>2022.07.01 입고장</td>
+													<td>2022.07.01</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="dtr-control sorting_1" tabindex="0">2</td>
+													<td>입고장</td>
+													<td>2022.06.24 입고장</td>
+													<td>2022.06.24</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="dtr-control sorting_1" tabindex="0">3</td>
+													<td>입고장</td>
+													<td>2022.06.17 입고장</td>
+													<td>2022.06.17</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="dtr-control sorting_1" tabindex="0">4</td>
+													<td>입고장</td>
+													<td>2022.06.10 입고장</td>
+													<td>2022.06.10</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="sorting_1 dtr-control">5</td>
+													<td>입고장</td>
+													<td>2022.06.03 입고장</td>
+													<td>2022.06.03</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="sorting_1 dtr-control">6</td>
+													<td>입고장</td>
+													<td>2022.05.27 입고장</td>
+													<td>2022.05.27</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="sorting_1 dtr-control">7</td>
+													<td>입고장</td>
+													<td>2022.05.20 입고장</td>
+													<td>2022.05.20</td>
+													<td>김동글</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-5">
+										<div class="dataTables_paginate paging_simple_numbers"
+											id="example2_paginate">
+											<ul class="pagination">
+												<li class="paginate_button page-item previous disabled"
+													id="example2_previous"><a href="#"
+													aria-controls="example2" data-dt-idx="0" tabindex="0"
+													class="page-link">&lt;</a></li>
+												<li class="paginate_button page-item active"><a
+													href="#" aria-controls="example2" data-dt-idx="1"
+													tabindex="0" class="page-link">1</a></li>
+												<li class="paginate_button page-item "><a href="#"
+													aria-controls="example2" data-dt-idx="2" tabindex="0"
+													class="page-link">2</a></li>
+												<li class="paginate_button page-item "><a href="#"
+													aria-controls="example2" data-dt-idx="3" tabindex="0"
+													class="page-link">3</a></li>
+												<li class="paginate_button page-item "><a href="#"
+													aria-controls="example2" data-dt-idx="4" tabindex="0"
+													class="page-link">4</a></li>
+												<li class="paginate_button page-item "><a href="#"
+													aria-controls="example2" data-dt-idx="5" tabindex="0"
+													class="page-link">5</a></li>
+												<li class="paginate_button page-item "><a href="#"
+													aria-controls="example2" data-dt-idx="6" tabindex="0"
+													class="page-link">6</a></li>
+												<li class="paginate_button page-item next"
+													id="example2_next"><a href="#"
+													aria-controls="example2" data-dt-idx="7" tabindex="0"
+													class="page-link">&gt;</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row border">
+			<input type="button" value="입고서작성" style="float: right;"> <input
+				type="button" value="발주서작성" style="float: right;">
+		</div>
+
+		<div class="row border">123</div>
+				<!-- /.card-body -->
+			</div>
+				<div class="col-6 border">오른쪽에 나와야해;;</div>
+		</div>
+
+
+		
+	</div>
+
+
+
+</body>

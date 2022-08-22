@@ -1,0 +1,270 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="test" value="50"/>
+<head>
+<style type="text/css">
+.hover:hover{
+	background-color: #efefef;
+	cursor: pointer;
+}
+
+.table td, .table th {
+	padding: 0.75rem;
+	vertical-align: top;
+	border-top: 1px solid #dee2e6;
+	font-size: 12px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.table th {
+	align-content: center;
+}
+
+.card-body {
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	min-height: 1px;
+	padding: 0.5rem;
+	padding-top: 0px;
+}
+
+.card-header {
+	margin-bottom: 0.5rem;
+}
+
+ul {
+	margin-bottom: 0;
+}
+
+table {
+	table-layout: fixed;
+}
+
+
+
+
+.card-footer {
+	padding: 0.5rem 1.25rem;
+	background-color: rgba(0, 0, 0, .03);
+	border-top: 0solidrgba(0, 0, 0, .125);
+}
+</style>
+</head>
+
+<title>제약사별 매입가 비교</title>
+
+<body>
+	<div class="content-wrapper">
+		<div class="row m-0">
+			<div class="col-lg-6 border" style="height: 960px;">
+				<div class="row-6 m-0">
+					<div class="card">
+						<div class="card-header">
+							<h3 id="mdName" class="card-title">약이름 검색</h3>
+						</div>
+
+						<div class="card-body" style="height: 361px;">
+							<div class="row m-0 pb-2">
+								<input id="nameKeyword" name="keyword" class="form-control form-control-sm col-3 mr-2"
+									style="display: inline;" />
+								<button class="btn btn-sm btn-default" onclick="getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',1);">검색하기</button>
+							</div>
+							<table class="table table-hover table-bordered"
+								style="border-top: 1px solid #dee2e6;">
+								<colgroup>
+									<col width="45%" />
+									<col width="29%" />
+									<col width="10%" />
+									<col width="16%" />
+									<col width="20%" />
+								</colgroup>
+								<thead class="text-center">
+									<tr>
+										<th>약이름</th>
+										<th>성분명</th>
+										<th>구분</th>
+										<th>함량/단위</th>
+										<th>주성분코드</th>
+									</tr>
+								</thead>
+								<tbody id="searchMedicineList" class="text-left">
+									
+								</tbody>
+							</table>
+
+
+						</div>
+						<div id="test3561" class="card-footer searchMedicine" style="height: 47px;">
+							
+						</div>
+
+					</div>
+				</div>
+
+				<div class="row-6 m-0">
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">주성분 검색</h3>
+						</div>
+
+						<div class="card-body table-responsive" style="height: 361px;">
+							<div class="row m-0 pb-2">
+								<input id="basisKeyword" class="form-control form-control-sm col-3 mr-2"
+									style="display: inline;" />
+								<button class="btn btn-sm btn-default" onclick="getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',1);">검색하기</button >
+							</div>
+							<table class="table table-hover table-bordered text-nowrap"
+								style="border-top: 1px solid #dee2e6;">
+								<colgroup>
+									<col width="10%" />
+									<col width="40%" />
+									<col width="20%" />
+									<col width="15%" />
+									<col width="15%" />
+								</colgroup>
+								<thead class="text-center">
+									<tr>
+										<th>분류</th>
+										<th>성분명</th>
+										<th>주성분코드</th>
+										<th>함량/단위</th>
+										<th>투여방법</th>
+									</tr>
+								</thead>
+								<tbody id="searchBasisList" class="text-left">
+									
+								</tbody>
+							</table>
+						</div>
+						<div id="basis3561" class="card-footer" style="height: 47px;">
+							
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-lg-6 border" style="height: 960px;">
+				<div class="card">
+					<div class="card-header form-inline">
+						<h3 class="card-title">제조사별 매입가 비교</h3>
+						<button class="btn btn-sm btn-default mb-0 ml-2 float-right">비교하기</button>
+
+					</div>
+
+					<div class="card-body table-responsive" style="height: 500px;">
+						
+						<table class="table table-bordered table-head-fixed text-nowrap">
+							<colgroup>
+								<col width="9%" />
+								<col width="58%" />
+								<col width="17%" />
+								<col width="12%" />
+								<col width="25%" />
+								<col width="9%" />
+							</colgroup>
+							<thead class="text-center" style="font-size: 14px;">
+								<tr>
+									<th><i class='fas fa-star'></i></th>
+									<th>약명</th>
+									<th>제약사</th>
+									<th>구분</th>
+									<th>금액</th>
+									<th></th>
+									<th>box</th>
+								</tr>
+							</thead>
+							<tbody id="compareList" class="text-center" style="font-size: 14px;">
+								
+
+							</tbody>
+						</table>
+					</div>
+
+
+
+				</div>
+				
+				<div class="card">
+					<div class="card-header form-inline">
+						<h3 class="card-title">선택한 약 목록</h3>
+						<button class="btn btn-sm btn-default mb-0 ml-2 float-right">발주하기</button>
+					</div>
+
+					<div class="card-body table-responsive" style="height: 300px;">
+						
+						<table class="table table-bordered table-head-fixed text-nowrap">
+							<colgroup>
+								<col width="9%"/>
+								<col width="58%"/>
+								<col width="17%"/>
+								<col width="12%"/>
+								<col width="25%"/>
+							</colgroup>
+							<thead class="text-center" style="font-size: 14px;">
+								<tr>
+									<th><i class='fas fa-star'></i></th>
+									<th>약명</th>
+									<th>제약사</th>
+									<th>구분</th>
+									<th>금액</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody class="text-center" style="font-size: 14px;">
+								<tr>
+									<td class="text-left"><i class='fas fa-star'></i></td>
+									<td class="text-left">타이레놀8시간이알서방정타이레놀8시간이알서방정타이레놀8시간이알서방정</td>
+									<td class="text-left">한국얀센</td>
+									<td>일반</td>
+									<td class="text-right">51</td>
+								</tr>
+								
+								<tr>
+									<td class="text-left"><i class='fas fa-star'></i></td>
+									<td class="text-left">씨스펜8시간이알서방정</td>
+									<td class="text-left">한미약품</td>
+									<td>일반</td>
+									<td class="text-right">50</td>
+								</tr>
+								<tr>
+									<td class="text-left"><i class='fas fa-star'></i></td>
+									<td class="text-left">트라몰서방정650밀리그람</td>
+									<td class="text-left">코오롱제약</td>
+									<td>일반</td>
+									<td class="text-right">51</td>
+								</tr>
+								<tr>
+									<td class="text-left"><i class='fas fa-star'></i></td>
+									<td class="text-left">펜잘이알서방정</td>
+									<td class="text-left">종근당</td>
+									<td>일반</td>
+									<td class="text-right">51</td>
+								</tr>
+								<tr>
+									<td class="text-left"><i class='fas fa-star'></i></td>
+									<td class="text-left">타미스펜이알서방정</td>
+									<td class="text-left">한국글로벌제약</td>
+									<td>일반</td>
+									<td class="text-right">51</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+
+
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" ></script>	
+
+</body>

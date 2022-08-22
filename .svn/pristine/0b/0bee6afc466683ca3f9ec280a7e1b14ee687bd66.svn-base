@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<decorators defaultdir="/WEB-INF/decorator">
+
+	<!-- 일반사용자 화면 -->
+	<decorator name="main" page="main_decorator.jsp">
+	<pattern>/main/*.do</pattern>
+	<pattern>/index.do</pattern></decorator>
+
+	<!-- 일반사용자 마이페이지 화면 -->
+	<decorator name="mainAside" page="main_aside_decorator.jsp"> <pattern>/mainAside/*</pattern> </decorator>
+
+	<!-- 전문가 사용자 화면 -->
+  	<decorator name="expert" page="expert_decorator.jsp">
+  		<pattern>/product/*.do</pattern>
+  		<pattern>/expert/*/*</pattern>
+  		<pattern>/expert/*.do</pattern>
+  	</decorator>
+
+	<!-- 전문가 사용자 마이페이지 화면 -->
+ 	<decorator name="expertAside" page="expert_aside_decorator.jsp"> <pattern>/expertAside/*.do</pattern> </decorator>
+
+	<!-- 관리자 작업 화면 -->
+	<decorator name="managerAside" page="manager_aside_decorator.jsp"> <pattern>/manager/*.do</pattern></decorator>
+
+
+	<!-- none 화면 -->
+	<decorator name="none" page="none_decorator.jsp">
+		<pattern>/*</pattern>
+		<pattern>/main/common/*.do</pattern>
+		<pattern>/expert/viewT/*.do</pattern><!-- 메인 인클루드 -->
+		<pattern>/manager/viewT/*.do</pattern>
+		<!-- <pattern>*.do</pattern> -->
+	</decorator>
+
+	<excludes>
+		<pattern>/expert/business_management/bill/*</pattern>
+		<pattern>/expert/product/order/*</pattern>
+		<pattern>/expert/product/receive/*</pattern>
+		<pattern>/resources/*</pattern>
+		
+	</excludes>
+
+</decorators>

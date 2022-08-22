@@ -1,0 +1,850 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<head>
+<style>
+input[type="date"] {
+	width: 130px;
+	height: 22px;   
+	/* 	font-size: em; */ 
+}
+table {
+	table-layout: fixed;	
+}	  
+td { 		
+	vertical-align: middle; 		
+	padding:5px;		
+	overflow:hidden;		
+	white-space : nowrap;		
+	text-overflow: ellipsis;	 
+}
+
+.table td, .table th {
+	padding: 5px;
+	vertical-align: top;
+	border-top: 1px solid #dee2e6;
+}
+.table td, .pagination{
+	font-size:12px;
+}
+.table th{ 
+	font-size:14px; 
+	text-align:center;  
+}
+ 
+.btn-block+.btn-block{
+	margin-top:0px;
+}
+.btn {
+	width: 110px;
+}
+.btn-lg{
+	font-size:16px;
+}
+.card-body11{
+	padding:0px;
+}
+.card-body.p-0 .table tbody>tr>td:first-of-type, .card-body.p-0 .table tbody>tr>th:first-of-type, .card-body.p-0 .table tfoot>tr>td:first-of-type, .card-body.p-0 .table tfoot>tr>th:first-of-type, .card-body.p-0 .table thead>tr>td:first-of-type, .card-body.p-0 .table thead>tr>th:first-of-type {
+    padding-left:0;
+}
+.card-body.p-0 .table thead>tr>th:last-of-type{
+	padding-right:0;
+}
+.tableNum{
+	text-align:right; 
+}
+</style>
+</head>
+<body>
+	<div class="content-wrapper">
+		<div class="row m-0">
+			<div class="col-6">
+				<div class="row">
+					<div class="card m-0" style="width: 640px; height: 350px;">
+						<div class="card-header" style="height:40px;"> 
+							<input type="date" value="2022-01-01" id="startDate"> <span>~</span>
+							<input type="date" value="2022-01-31" id="endDate"> <select
+								id="type" name="type" style="height: 23px;">
+								<option value="receive">입고장</option>
+								<option value="order">발주서</option>
+							</select> <input type="text" style="width: 150px; height: 22px;">
+							<input type="button" value="검색"
+								style="width: 50px; height: 23px;">  
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body m-0">
+							<a style="background: lightgray;">입고/발주 검색목록</a>
+							<div id="example2_wrapper"
+								class="dataTables_wrapper dt-bootstrap4">
+								<div class="row">
+									<div class="col-sm-12 col-md-6"></div>
+									<div class="col-sm-12 col-md-6"></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 p-0">
+										<table id="example2" class="table table-bordered table-hover dataTable dtr-inline"
+											aria-describedby="example2_info">
+											<thead class="text-center">
+												<tr>
+													<th class="sorting sorting_asc" tabindex="0"
+														aria-controls="example2" rowspan="1" colspan="1"
+														aria-sort="ascending">No</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">구분</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">제목</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">작성일</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">작성자</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="odd">
+													<td class="tableNum">1</td>
+													<td>입고장</td>
+													<td>2022.07.01 입고장</td>
+													<td>2022.07.01</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="tableNum">2</td>
+													<td>입고장</td>
+													<td>2022.06.24 입고장</td>
+													<td>2022.06.24</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="tableNum">3</td>
+													<td>입고장</td>
+													<td>2022.06.17 입고장</td>
+													<td>2022.06.17</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="tableNum">4</td>
+													<td>입고장</td>
+													<td>2022.06.10 입고장</td>
+													<td>2022.06.10</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="tableNum">5</td>
+													<td>입고장</td>
+													<td>2022.06.03 입고장</td>
+													<td>2022.06.03</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="tableNum">6</td>
+													<td>입고장</td>
+													<td>2022.05.27 입고장</td>
+													<td>2022.05.27</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="tableNum">7</td>
+													<td>입고장</td>
+													<td>2022.05.20 입고장</td>
+													<td>2022.05.20</td>
+													<td>김동글</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-5" style="margin-left: 160px;">
+										<div class="dataTables_paginate paging_simple_numbers"
+											id="example2_paginate">
+											<ul class="pagination">
+												<li class="paginate_button page-item previous disabled"id="example2_previous">
+												<a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">&lt;</a></li>
+												<li class="paginate_button page-item active">
+												<a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
+												<li class="paginate_button page-item next" id="example2_next">
+												<a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">&gt;</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin: 5px;">
+							<a style="color:red;">※임시저장된 발주서가 있습니다.</a> 
+					<button type="button" class="btn btn-block btn-success"  
+										  style="float: right;width: 92px; margin-left: 187px; margin-right:5px;height: 30px;font-size: 14px;font-weight:bold;"
+										  onclick="window.open('./receive/addMedicinalDoctor.jsp','window_name','width=800,height=950,left=600,top=600,location=no,status=no,scrollbars=yes,resizable=no');">입고장작성</button>
+					<button type="button" class="btn btn-block btn-info" 
+										  style="margin-top: 0px;width: 92px;height: 30px;font-size: 14px;font-weight:bold;"
+										  onclick="window.open('./receive/receive.jsp','window_name','width=850,height=950,left=600,top=600,location=no,status=no,scrollbars=yes,resizable=no');">발주서작성</button>   
+				</div> 
+  
+				<div class="row border">
+					<div class="card m-0">
+						<div class="card-body" style="width: 640px; height: 500px;"> 
+							<span style="background: lightgray;">입고/발주 상세내용</span>
+							<div class="border" style="width: 600px; height: 450px;">
+								<div class="card" style="margin-bottom:7px;">
+									<div class="card-header">
+										<h1 class="card-title" style="margin-left: 183px;font-size: 25px;font-weight: bold;">2022.05.08 입고장</h1>
+									</div>
+ 
+									<div class="card-body table-responsive p-0"  
+										style="height: 346px;"> 
+										<table class="table table-head-fixed">
+											<thead class="text-center">
+												<tr>
+													<th style="width: 50px;">NO</th>
+													<th style="width: 74px;">분류코드</th>
+													<th>약명</th>
+													<th>제조일</th>
+													<th style="width: 42px;">수량</th>
+													<th style="width: 51px;">단위</th>
+													<th style="width: 90px;">금액(원)</th>
+												</tr>
+											</thead>
+											<tbody class="text-center">  
+												<tr>
+													<td>1</td> 
+													<td>112</td>
+													<td class="mediName">포크랄시럽(포수클로랄)_(9.5g/95mL)</td>
+													<td>2022.05.06</td>
+													<td>6</td>
+													<td>병</td>
+													<td>1200</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>112</td>
+													<td class="mediName">독세정3밀리그램(독세핀염산염)_(3.39mg/1정)</td>
+													<td>2022.05.04</td>
+													<td>8</td>
+													<td>정</td>
+													<td>2200</td>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td>112</td>
+													<td class="mediName">리치나잇정6밀리그램(독세핀염산염)_(6.78mg/1정)</td>
+													<td>2022.05.05</td>
+													<td>20</td>
+													<td>정</td>
+													<td>10200</td>
+												</tr>
+												<tr>
+													<td>4</td>
+													<td>112</td>
+													<td class="mediName">루나팜정(플루니트라제팜)_(1mg/1정)</td>
+													<td>2022.05.01</td>
+													<td>11</td>
+													<td>정</td>
+													<td>6800</td>
+												</tr>
+												<tr>
+													<td>5</td>
+													<td>112</td>
+													<td class="mediName">할시온정0.125밀리그램(트리아졸람)_(0.125mg/1정)</td>
+													<td>2022.05.03</td>
+													<td>8</td>
+													<td>정</td>
+													<td>6800</td>
+												</tr>
+												<tr>
+													<td>6</td>
+													<td>113</td>
+													<td class="mediName">테그레톨씨알정200밀리그램(카르바마제핀)_(0.2g/1정)</td>
+													<td>2022.05.06</td>
+													<td>10</td>
+													<td>정</td>
+													<td>8100</td>
+												</tr>
+												<tr>
+													<td>7</td>
+													<td>113</td>
+													<td class="mediName">가바텍스캡슐100밀리그램(가바펜틴)_(0.1g/1캡슐)</td>
+													<td>2022.05.04</td>
+													<td>6</td>
+													<td>캡슐</td>
+													<td>7650</td>
+												</tr>
+												<tr>
+													<td>8</td>
+													<td>113</td>
+													<td class="mediName">유니토파정(토피라메이트)_(0.1g/1정)</td>
+													<td>2022.05.06</td>
+													<td>3</td>
+													<td>정</td>
+													<td>800</td>
+												</tr>
+												<tr>
+													<td>9</td>
+													<td>114</td>
+													<td class="mediName">에이펙스정(아세클로페낙)_(0.1g/1정)</td>
+													<td>2022.05.06</td>
+													<td>12</td>
+													<td>정</td>
+													<td>4200</td>
+												</tr>
+												<tr>
+													<td>10</td>
+													<td>114</td>
+													<td class="mediName">이지엔6애니연질캡슐(이부프로펜)_(0.2g/1캡슐)</td>
+													<td>2022.05.03</td>
+													<td>8</td>
+													<td>캡슐</td>
+													<td>4300</td>
+												</tr>
+												<tr>
+													<td>11</td>
+													<td>218</td>
+													<td class="mediName">삼성로수바스타틴정20밀리그램(로수바스타틴칼슘)_(20.8mg/1정)</td>
+													<td>2022.05.04</td>
+													<td>2</td>
+													<td>정</td>
+													<td>1200</td>
+												</tr>
+												<tr>
+													<td>12</td>
+													<td>222</td>
+													<td class="mediName">에르도캡슐300밀리그램(에르도스테인)_(0.3g/1캡슐)</td>
+													<td>2022.05.02</td>
+													<td>4</td>
+													<td>캡슐</td>
+													<td>3200</td>
+												</tr>
+												<tr>
+													<td>13</td>
+													<td>396</td>
+													<td class="mediName">피오스크정15밀리그램(피오글리타존염산염)_(16.53mg/1정)</td>
+													<td>2022.05.05</td>
+													<td>9</td>
+													<td>정</td>
+													<td>2800</td>
+												</tr>
+												<tr>
+													<td>14</td>
+													<td>618</td>
+													<td class="mediName">미래세파드록실캡슐(수출명: MERIXIL CAP.)_(0.5g/1캡슐)</td>
+													<td>2022.05.06</td>
+													<td>30</td>
+													<td>캡슐</td>
+													<td>13500</td>
+												</tr>
+												<tr>
+													<td>15</td>
+													<td>629</td>
+													<td class="mediName">조이록신정400밀리그램(목시플록사신염산염)_(0.4368g/1정)</td>
+													<td>2022.04.28</td>
+													<td>11</td>
+													<td>정</td>
+													<td>6800</td>
+												</tr>
+												<tr>
+													<td>16</td>
+													<td>112</td>
+													<td class="mediName">나카인주사(로피바카인염산염수화물)_(0.158g/20mL)</td>
+													<td>2022.05.06</td>
+													<td>10</td>
+													<td>앰플</td>
+													<td>104000</td>
+												</tr>
+												<tr>
+													<td>17</td>
+													<td>112</td>
+													<td class="mediName">플렌뷰산_(1000mL)</td>
+													<td>2022.05.03</td>
+													<td>6</td>
+													<td>통</td>
+													<td>74000</td>
+												</tr>
+												<tr>
+													<td>18</td>
+													<td>721</td>
+													<td class="mediName">하프렙산_(2000mL)</td>
+													<td>2022.05.03</td>
+													<td>5</td>
+													<td>통</td>
+													<td>47000</td>
+												</tr>
+												<tr>
+													<td>19</td>
+													<td>641</td>
+													<td class="mediName">알나졸정400밀리그람(알벤다졸)_(0.4g/1정)</td>
+													<td>2022.04.28</td>
+													<td>10</td>
+													<td>정</td>
+													<td>5400</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+								</div>
+								<div class="border" style="width: 315px; height: 32px; float: left;
+								                           text-align: center;font-size: 24px; font-weight: bold;"> 
+									<a>입고 합계 금액 : 310,150원</a>
+								</div>
+								<button type="button" class="btn btn-block btn-dark"
+								        style="margin-left: 9px; float: left; width: 87px; height: 32px; font-weight: bold; ">QR출력</button>
+								<button type="button" class="btn btn-block btn-primary"
+									style="float: left; margin-left: 5px; margin-right: 5px; width: 87px; height: 32px;  font-weight: bold;">수정하기</button> 
+								<button type="button" class="btn btn-block btn-danger"
+									style="float: left; width: 87px; height: 32px;  font-weight: bold;">삭제하기</button>   
+ 
+							</div>
+						</div>
+						<!-- /.card-body -->
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<div class="col-6">
+				<div class="card m-0">
+					<div class="card-header" style="height: 95px;">
+						<h2 style="text-align: center; font-weight: bold;">-똥글똥글약국 재고현황-</h2>
+						<button type="button" class="btn btn-block btn-danger btn-sm"
+							style="font-weight: bold;float: left;">부족품신청</button>
+						<select id="type" name="type"
+							style="height: 23px; margin-left: 75px;">
+							<option value="all">전체</option>
+							<option value="ETC">전문</option>
+							<option value="OTC">일반</option>
+						</select> 
+						<input list="classification-code" id="ice-cream-choice"
+							name="ice-cream-choice" value="분류코드입력"
+							style="width: 122px; height: 24px;">
+						<datalist id="classification-code">
+							<option value="100">신경계 감각기관용 의약품</option>
+							<option value="110">중추신경계용 약</option>
+							<option value="111">전신마취제</option>
+							<option value="112">최면진정제</option>
+							<option value="113">항전간제</option>
+							<option value="114">해열,진통,소염제</option>
+							<option value="115">각성제,흥분제</option>
+							<option value="116">진훈제</option>
+							<option value="117">정신신경용제</option>
+							<option value="119">기타의 중추신경용 약</option>
+							<option value="120">말초신경계용 약</option>
+							<option value="121">국소마취제</option>
+							<option value="122">골격근이완제</option>
+						</datalist>
+						<input type="text" style="width: 150px; height: 24px;"> <input
+							type="button" value="검색" style="width: 48px; height: 24px;">  
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body11" style="height: 791px;"> 
+						<div class="card">					
+							<div class="card-body p-0" style="width:606px; height:791x;"> 
+								<div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4" style="width:626px;">
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="example2" class="table table-bordered table-hover dataTable dtr-inline"
+												style="height:731px;">
+												<thead>
+													<tr>
+														<th style="width:30px;">No</th> 
+														<th style="width:77px;">약코드</th>
+														<th style="width:38px;">구분</th>
+														<th style="width:64px;">분류코드</th>
+														<th style="width:148px;">약명</th>
+														<th style="width:38px;">수량</th>
+														<th style="width:38px;">단위</th>
+														<th style="width:64px;">적정재고</th>
+														<th style="width:77px;">유통기한</th>
+														<th style="width:51px;">약위치</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr class="odd" style="background:skyblue;" >
+														<td class="tableNum">1</td>
+														<td class="tableNum">645302132</td>
+														<td>전문</td>
+														<td class="tableNum">112</td>
+														<td class="mediName">포크랄시럽(포수클로랄)_(9.5g/95mL)</td>  
+														<td class="tableNum" style="background: #e74c3c;">36</td>
+														<td>병</td>
+														<td class="tableNum">45</td>
+														<td>2022.09.09</td>
+														<td>A7</td>
+													</tr>
+													<tr class="odd" style="background:skyblue;">
+														<td class="tableNum">2</td>
+														<td class="tableNum">651904420</td>
+														<td>전문</td>
+														<td class="tableNum">112</td>
+														<td class="mediName">명세핀정3밀리그램(독세핀염산염)_(3.39mg/1정)</td>
+														<td class="tableNum">42</td>
+														<td>정</td>
+														<td class="tableNum">30</td>
+														<td style="background: #e74c3c;">2022.06.29</td>
+														<td>A7</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">3</td>
+														<td class="tableNum">651300660</td>
+														<td>전문</td>
+														<td class="tableNum">112</td>
+														<td class="mediName">뉴론텍캡슐100밀리그램(가바펜틴)_(0.1g/1캡슐)</td>
+														<td class="tableNum">66</td>
+														<td>캡슐</td>
+														<td class="tableNum">50</td>
+														<td>2023.08.17</td>
+														<td>A7</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">4</td>
+														<td class="tableNum">643300020</td>
+														<td>전문</td>
+														<td class="tableNum">112</td>
+														<td class="mediName">가바렙정800밀리그람(가바펜틴)_(0.8g/1정)</td>
+														<td class="tableNum">41</td>
+														<td>정</td>
+														<td class="tableNum">30</td>
+														<td>2023.02.12</td>
+														<td>A7</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">5</td>
+														<td class="tableNum">053300900</td>
+														<td>전문</td>
+														<td class="tableNum">113</td>
+														<td class="mediName">듀얼셋세미서방정_(1정)</td>
+														<td class="tableNum">79</td>
+														<td>정</td>
+														<td class="tableNum">60</td>
+														<td>2022.12.24</td>
+														<td>A7</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">6</td>  
+														<td class="tableNum">642506840</td>
+														<td>전문</td>
+														<td class="tableNum">113</td>
+														<td class="mediName">케피람정250밀리그램(레비티라세탐)_(0.25g/1정)</td>
+														<td class="tableNum">48</td>
+														<td>정</td>
+														<td class="tableNum">40</td>
+														<td>2022.10.19</td>
+														<td>A8</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">7</td>
+														<td class="tableNum">644703920</td>
+														<td>전문</td>
+														<td class="tableNum">113</td>
+														<td class="mediName">에피스크정250밀리그램(레비티라세탐)_(0.25g/1정)</td>
+														<td class="tableNum">41</td>
+														<td>정</td>
+														<td class="tableNum">35</td>
+														<td>2023.02.05</td>
+														<td>A8</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">8</td>
+														<td class="tableNum">645304520</td>
+														<td>전문</td>
+														<td class="tableNum">113</td>
+														<td class="mediName">렙필정1000밀리그램(레비티라세탐)_(1g/1정)</td>
+														<td class="tableNum">12</td>
+														<td>정</td>
+														<td class="tableNum">5</td>
+														<td>2023.02.21</td>
+														<td>A8</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">9</td>
+														<td class="tableNum">654100870</td>
+														<td>전문</td>
+														<td class="tableNum">113</td>
+														<td class="mediName">케프라엑스알서방정750밀리그램(레비티라세탐)_(0.75g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">20</td>
+														<td>2023.02.05</td>
+														<td>A8</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">10</td>
+														<td class="tableNum">678600670</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">세크로낙정100밀리그램(아세클로페낙)_(0.1g/1정)</td>
+														<td class="tableNum">66</td>
+														<td>정</td>
+														<td class="tableNum">50</td>
+														<td>2023.04.02</td>
+														<td>A8</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">11</td>
+														<td class="tableNum">625500270</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">셀페낙정(아세클로페낙)_(0.1g/1정)</td>
+														<td class="tableNum">15</td>
+														<td>정</td>
+														<td class="tableNum">10</td>
+														<td>2023.03.19</td>
+														<td>A8</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">12</td>
+														<td class="tableNum">641704880</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아리탈정(아세클로페낙)_(0.1g/1정)</td>
+														<td class="tableNum">24</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2023.01.29</td>
+														<td>A8</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">13</td>
+														<td class="tableNum">649502440</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">유니세탈정(아세클로페낙)_(0.1g/1정)</td>
+														<td class="tableNum">19</td>
+														<td>정</td>
+														<td class="tableNum">10</td>
+														<td>2023.08.22</td>
+														<td>A9</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">14</td>
+														<td class="tableNum">649701520</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">지엘아세클로페낙정100밀리그램_(0.1g/1정)</td>
+														<td class="tableNum">49</td>
+														<td>정</td>
+														<td class="tableNum">35</td>
+														<td>2024.01.29</td>
+														<td>A9</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">15</td>
+														<td class="tableNum">663300870</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">에스노펜정(아세클로페낙)_(0.1g/1정)</td>
+														<td class="tableNum">28</td>
+														<td>정</td>
+														<td class="tableNum">20</td>
+														<td>2022.09.09</td>
+														<td>A9</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">16</td>
+														<td class="tableNum">053500180</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">오스템아세클로페낙정_(0.1g/1정)</td>
+														<td class="tableNum">54</td>
+														<td>정</td>
+														<td class="tableNum">40</td>
+														<td>2024.03.14</td>
+														<td>A9</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">17</td>
+														<td class="tableNum">645905970</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세롱CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">37</td>
+														<td>정</td>
+														<td class="tableNum">25</td>
+														<td>2023.02.09</td>
+														<td>A9</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">19</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>
+													<tr class="odd">
+														<td class="tableNum">20</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">21</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">22</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">23</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">24</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">25</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td>아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">26</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName" >아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">27</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td>아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">28</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>	
+													<tr class="odd">
+														<td class="tableNum">29</td>
+														<td class="tableNum">664901750</td>
+														<td>전문</td>
+														<td class="tableNum">114</td>
+														<td class="mediName">아세날CR정(아세클로페낙)_(0.2g/1정)</td>
+														<td class="tableNum">25</td>
+														<td>정</td>
+														<td class="tableNum">15</td>
+														<td>2024.02.09</td>
+														<td>A9</td>
+													</tr>
+												</tbody> 
+											</table>  
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-5">										
+										<div class="col-sm-12 col-md-7">
+											<div class="dataTables_paginate paging_simple_numbers"id="example2_paginate"
+											     style="margin-left: 160px;">
+												<ul class="pagination">
+													<li class="paginate_button page-item previous disabled" id="example2_previous">
+													<a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">&lt;</a></li> 
+													<li class="paginate_button page-item active">
+													<a href="#" aria-controls="example2" data-dt-idx="1"tabindex="0" class="page-link">1</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#"aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#"aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
+													<li class="paginate_button page-item next"id="example2_next">
+													<a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">&gt;</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+			</div>
+		</div>
+	</div>
+	</div>
+</body>

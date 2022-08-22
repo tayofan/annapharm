@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+  <configuration>
+   <settings>
+       <!-- 자동으로 카멜케이스 규칙으로 변환 -->
+       <setting name="mapUnderscoreToCamelCase" value="true"/>
+       <!--파라미터에 null값이 있을 경우 에러 처리 -->
+       <setting name="jdbcTypeForNull" value="VARCHAR" />
+   </settings>
+
+	<typeAliases>
+		<typeAlias type="java.util.Map" alias="map" />
+
+		<typeAlias type="kr.or.annapharm.dto.ProductVO" alias="product" />
+		<typeAlias type="kr.or.annapharm.dto.ProductCommandVO" alias="productCommand" />
+		<typeAlias type="kr.or.annapharm.dto.ReceiveVO" alias="receive" />
+		<typeAlias type="kr.or.annapharm.dto.BoardVO" alias="board" />
+		<typeAlias type="kr.or.annapharm.dto.PatientVO" alias="patient" />
+		<typeAlias type="kr.or.annapharm.dto.PrescriptionVO" alias="prescription" />
+		<typeAlias type="kr.or.annapharm.dto.ClassficationVO" alias="classfication" />
+		<typeAlias type="kr.or.annapharm.dto.MenuVO" alias="menu" />
+		<typeAlias type="kr.or.annapharm.dto.AnnapharmInVO" alias="annapharmIn" />
+		<typeAlias type="kr.or.annapharm.dto.MemberVO" alias="member" />
+		<typeAlias type="kr.or.annapharm.dto.HospitalVO" alias="hospital" />
+		<typeAlias type="kr.or.annapharm.dto.ReplyVO" alias="reply" />
+		<typeAlias type="kr.or.annapharm.dto.PrescriptionHistoryVO" alias="prescriptionHistory" />
+		<typeAlias type="kr.or.annapharm.dto.PrescriptionDetailVO" alias="prescriptionDetail" />
+		<typeAlias type="kr.or.annapharm.dto.PrescriptionLogVO" alias="prescriptionLog" />
+		<typeAlias type="kr.or.annapharm.dto.PharmacyVO" alias="pharmacy" />
+		<typeAlias type="kr.or.annapharm.dto.ReadMedicineInfoVO" alias="readMedicineInfo" />
+		<typeAlias type="kr.or.annapharm.dto.MedicienBillVO" alias="medicienBill" />
+
+		<typeAlias type="kr.or.annapharm.dto.DoctorVO" alias="doctor" />
+		<typeAlias type="kr.or.annapharm.dto.ChemistVO" alias="chemist" />
+		<typeAlias type="kr.or.annapharm.dto.AddMedicineListVO" alias="addMedicineList" />
+	</typeAliases>
+
+
+	<!-- sql Mapper -->
+<!-- 	<mappers>
+		<mapper resource="mappings/board-mapping.xml" />
+	</mappers>
+ -->
+
+
+
+</configuration>
+

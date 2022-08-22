@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 이름과 생년월일로 조회된 회원을 출력하는 기능 -->
+
+<script>
+function detailGo(){
+	alert($('.proListTr').val());
+	
+}
+</script>
+<script  type="text/x-handlebars-template"  id="productDetail-list-template">
+
+
+
+</script>

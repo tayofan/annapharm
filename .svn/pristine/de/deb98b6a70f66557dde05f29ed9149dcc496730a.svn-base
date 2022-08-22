@@ -1,0 +1,76 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.ProductVO;
+import kr.or.annapharm.service.ClassficationService;
+import kr.or.annapharm.service.ProductService;
+@Controller
+@RequestMapping("/expert/product")
+public class ProductController {
+	
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private ClassficationService classficationService;
+	
+	@RequestMapping("/product")
+	public ModelAndView list(SearchCriteria cri, ModelAndView mnv) throws Exception{
+		String url = "expert/product/product";
+		
+		Map<String, Object>dataMap = productService.getProductList(cri);
+		
+		Map<String, Object> dataMap2 = classficationService.getClassficationList(cri);
+		
+		mnv.addObject("dataMap", dataMap);
+		mnv.addObject("dataMap2", dataMap2);
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+	@RequestMapping("/product_detail")
+	public ModelAndView detail(int mdNo, String from, ModelAndView mnv) throws SQLException{
+		String url ="expert/product/product_detail";
+		
+		List<ProductVO> dataMap = null;
+		if(from != null && from.equals("product")) {
+			dataMap = productService.getProductDetail(mdNo);
+			url="redirect:/expert/product/product_detail.do?mdNo=" + mdNo;
+		}else {
+		}
+		
+		mnv.addObject("productDetailList", dataMap);
+		mnv.setViewName(url);
+		
+		return mnv;
+		
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

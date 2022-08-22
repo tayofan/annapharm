@@ -1,0 +1,50 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<head>
+<style>
+.btn-block+.btn-block {
+	margin-top: 0px;
+}
+</style>
+</head>
+<body>
+		<div class="card card-primary  card-outline tableScroll" style="margin: 1rem; min-height: 930px;">
+			<div class="card-header" style="text-align: center; height: 80px;">
+				<span style="font-size: 20px; font-weight: bold;">${receiveCartList[0].receiveDate} 입고장</span><br>
+				<div class="buttons" style="height: 50px;">
+					<span
+						style="font-size: 16px; font-weight: bold; margin-left: 190px;">- QR태그 출력 -</span>
+					<button type="button" class="btn btn-block btn-danger"
+						style="width: 90px; float: right; margin-left: 10px;" onclick="closePage();">취소</button>
+					<button type="button" class="btn btn-block btn-info"
+						style="width: 90px; float: right;">출력하기</button>
+				</div>
+			</div>
+			<div class="card-body" style="height: 835px;">
+				<c:forEach items="${receiveCartList}" var="receiveList" >
+					<p>${receiveList.mdNo}</p>				
+				</c:forEach>
+			</div>
+		</div>
+
+	
+	<script>
+	function closePage(){
+		if(confirm("QR태그 출력을 취소하시겠습니까?") == true){
+			self.close();
+		}
+	}
+	
+	</script>
+</body>
+
+
+
+
+
+
+
+
+
+

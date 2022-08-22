@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 처방전 상세내역 출력 핸들바스 -->
+<script  type="text/x-handlebars-template"  id="SA-prescription-list-template">
+	{{#each .}}
+		<tr class="SA-PrescriptionTr">
+			<td class="dtr-control sorting_1 stringType" tabindex="0" data-toggle="tooltip" title="{{mdName}}">
+				{{mdName}}
+			</td>
+			<td>{{miCompany}}</td>
+			<td>{{miUse}}</td>
+			<td>{{insurance}}</td>
+			<td class="number">{{preDrugNum}}</td>
+			<td class="number">{{preDrugCount}}</td>
+			<td class="number">{{preDrugDay}}</td>
+			<td class="number">{{miPrice}}</td>
+			<td class="number">{{total}}</td>
+		</tr>
+	{{/each}}
+</script>
+
+<!-- 토글 생성 -->
+<script>
+	window.onload = function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	}
+</script>
+
+<script>
+	function salesAnalysisDetail(psCode){
+		$.ajax({
+			url:"read",
+			type:"get",
+			data:{"psCode":psCode},
+			success:function(res){
+				// 핸들바스 생성
+				printSAPrescription(res,$('#SA-PrescriptionTbody'),$('#SA-prescription-list-template'))
+
+				var totalFee = res[0].prescriptTotalFee + '(￦)';
+				// 합계 금액 계산
+				$('#totalFee').html(totalFee);
+			},
+			error:function(error){
+				alert("처방전 조회에 실패하였습니다.");
+			}
+		});
+	}
+
+</script>
+
+<script>
+// 처방전 상세내역 출력 핸들바스 생성
+function printSAPrescription(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.SA-PrescriptionTr').remove();
+	target.append(html);
+}
+</script>

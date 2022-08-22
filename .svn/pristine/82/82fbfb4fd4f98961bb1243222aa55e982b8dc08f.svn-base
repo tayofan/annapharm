@@ -1,0 +1,63 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class BoardVO {
+	String board_code;
+	String mem_id_manager;
+	String board_title;
+	String board_content;
+	Date board_date;
+	int board_viewcount;
+	String board_type;
+	Date board_lastdate;
+
+	public String getBoard_code() {
+		return board_code;
+	}
+	public void setBoard_code(String board_code) {
+		this.board_code = board_code;
+	}
+	public String getMem_id_manager() {
+		return mem_id_manager;
+	}
+	public void setMem_id_manager(String mem_id_manager) {
+		this.mem_id_manager = mem_id_manager;
+	}
+	public String getBoard_title() {
+		return board_title;
+	}
+	public void setBoard_title(String board_title) {
+		this.board_title = board_title;
+	}
+	public String getBoard_content() {
+		return board_content;
+	}
+	public void setBoard_content(String board_content) {
+		this.board_content = board_content;
+	}
+	public Date getBoard_date() {
+		return board_date;
+	}
+	public void setBoard_date(Date board_date) {
+		this.board_date = board_date;
+	}
+	public int getBoard_viewcount() {
+		return board_viewcount;
+	}
+	public void setBoard_viewcount(int board_viewcount) {
+		this.board_viewcount = board_viewcount;
+	}
+	public String getBoard_type() {
+		return board_type;
+	}
+	public void setBoard_type(String board_type) {
+		this.board_type = board_type;
+	}
+	public Date getBoard_lastdate() {
+		return board_lastdate;
+	}
+	public void setBoard_lastdate(Date board_lastdate) {
+		this.board_lastdate = board_lastdate;
+	}
+}

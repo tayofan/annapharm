@@ -1,0 +1,17 @@
+package kr.or.annapharm.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public interface ExpertDashBoardDAO {
+	
+	List<Map<String, String>> selectExpertDashBoardList() throws Exception;
+	
+	List<Map<String, String>> selectPharmacistINList() throws Exception;
+	
+	List<Map<String, String>> selectCumulativeStockList() throws Exception;
+
+}

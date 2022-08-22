@@ -1,0 +1,11 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.annapharm.dto.HospitalVO;
+import kr.or.annapharm.dto.PharmacyVO;
+
+public interface PharmacyService {
+	public List<PharmacyVO> getPharmacyName() throws SQLException;
+}

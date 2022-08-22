@@ -1,0 +1,291 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+#box1, #box2{
+	width: 620px;
+	height: 280px;
+/* 	border: 1px solid black;  */
+}
+#box1-2, #box1-3, #box2-2, #box2-3, #box3-3{
+	width: 300px;
+	height: 280px;
+/* 	border: 1px solid black; */
+}
+#box3, #box3-2{
+	width: 415px;
+	height: 280px;
+/* 	border: 1px solid black; */
+}
+.container2{
+	margin-left: 100px;
+}
+.accent{
+	color: red;
+}
+.pointer{
+	cursor: pointer;
+}
+.rightSort{
+	text-align: right;
+	font-size: 0.7em;
+	padding: 3px;
+}
+
+.mainTitle{
+	font-weight: bold;
+}
+.card-header{
+	padding: 8px;
+}
+.btn-date{
+	width: 50px;
+	height: 30px;
+}
+.nav-link{
+	font-size: 14px;
+	padding: 5px;
+}
+.col-lg-3, .col-lg-6{  
+	padding-right:5px;
+}
+.col-lg-6{
+	display:contents;
+}
+</style>
+</head>
+<body>
+	<div class="content-wrapper">
+		<div class="container" style="max-width: 1280px;">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card card-outline"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<!-- 실시간 처방 내역 -->
+					<div id="box1">
+						<div class="card">
+							<div class="card-header">
+
+							</div>
+							<div class="card-body">
+							
+								<!-- 처방이력 시작 -->
+								<div>
+									<%@ include file="../viewT/prescription.jsp" %>
+								</div>
+								<!-- 처방이력 마침 -->
+								<div>
+								
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<!-- 매출액 통계 -->
+					<div id="box1-2">
+						<div class="card">
+							<div class="card-header">
+								<div class="row">
+									<div class="col-lg-6">
+										<span class="cardTitle mainTitle">매출액 통계</span> 
+										<i class="fa-solid fa-arrow-right-to-bracket accent pointer"></i>
+									</div>
+									<div class="col-lg-6 rightSort"></div>
+								</div>
+							</div>
+							<div class="card card-primary card-tabs">
+								<div class="card-header p-0 pt-1">
+									<ul class="nav nav-tabs" id="custom-tabs-one-tab"
+										role="tablist">
+										<li class="nav-item"><a class="nav-link"
+											id="custom-tabs-one-home-tab" data-toggle="pill"
+											href="#custom-tabs-one-home" role="tab"
+											aria-controls="custom-tabs-one-home" aria-selected="false">한달</a>
+										</li>
+										<li class="nav-item"><a class="nav-link"
+											id="custom-tabs-one-profile-tab" data-toggle="pill"
+											href="#custom-tabs-one-profile" role="tab"
+											aria-controls="custom-tabs-one-profile" aria-selected="false">일주일</a>
+										</li>
+										<li class="nav-item"><a class="nav-link"
+											id="custom-tabs-one-messages-tab" data-toggle="pill"
+											href="#custom-tabs-one-messages" role="tab"
+											aria-controls="custom-tabs-one-messages"
+											aria-selected="false">어제</a></li>
+										<li class="nav-item"><a class="nav-link active"
+											id="custom-tabs-one-settings-tab" data-toggle="pill"
+											href="#custom-tabs-one-settings" role="tab"
+											aria-controls="custom-tabs-one-settings" aria-selected="true">오늘</a>
+										</li>
+									</ul>
+								</div>
+								<div class="card-body">
+									<div class="tab-content" id="custom-tabs-one-tabContent">
+										<div class="tab-pane fade" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+											1
+										</div>
+										<div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+											2
+										</div>
+										<div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+											3
+										</div>
+										<div class="tab-pane fade active show" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+											4
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<!-- 최근누적 재고 -->
+					<div id="box1-3">
+						<div class="card">
+							<div class="card-header">
+								<div class="row">
+									<div class="col-lg-6">
+										<span class="cardTitle mainTitle">최근누적 재고</span> 
+										<i class="fa-solid fa-arrow-right-to-bracket accent pointer"></i>
+									</div>
+									<div class="col-lg-6 rightSort">
+										<span class="cardTitle"><span class="accent">1일</span>마다 실시간 업데이트</span> 
+										<i class="fa-solid fa-gear pointer"></i>
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div>
+									<h1>include</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<!-- 실시간 처방 환자 분석 통계 -->
+					<div id="box2">
+						<div class="card">
+							<div class="card-header">
+								<div class="row">
+									<div class="col-lg-6">
+										<span class="cardTitle mainTitle">실시간 처방 환자 분석 통계</span> 
+										<i class="fa-solid fa-arrow-right-to-bracket accent pointer"></i>
+									</div>
+									<div class="col-lg-6 rightSort">
+										<span class="cardTitle"><span class="accent">30초</span>마다 실시간 업데이트</span> 
+										<i class="fa-solid fa-gear pointer"></i>
+									</div>
+								</div>
+							</div>
+							<div class="card-body" > 
+								<div>
+								<!-- 실시간 처방 환자 분석 통계시작 -->
+								<div>
+									<%@ include file="../viewT/analysisPrescription.jsp" %>
+									<%@ include file="../viewT/analysisMedicine.jsp" %> 
+								</div>
+								<!-- 실시간 처방 환자 분석 통계 마침 -->
+								<span style="font-weight:bold;">최저 방문 연령의 추천약품은 해당 연령에서 가장 많이 판매된 약품을 추천합니다.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<!-- 최다 판매 약품 -->
+					<div id="box2-2">
+						<div class="card card-secondary card-tabs">
+							<div class="card-header p-0 pt-1">
+								<ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+									<li class="pt-2 px-3">
+										<span class="cardTitle mainTitle">최다 판매 약품</span> 
+										<i class="fa-solid fa-arrow-right-to-bracket accent pointer"></i>
+									</li>
+									<li class="nav-item"><a class="nav-link active"
+										id="custom-tabs-two-home-tab" data-toggle="pill"
+										href="#custom-tabs-two-home" role="tab"
+										aria-controls="custom-tabs-two-home" aria-selected="true">한달</a>
+									</li>
+									<li class="nav-item"><a class="nav-link"
+										id="custom-tabs-two-profile-tab" data-toggle="pill"
+										href="#custom-tabs-two-profile" role="tab"
+										aria-controls="custom-tabs-two-profile" aria-selected="false">일주일</a>
+									</li>
+									<li class="nav-item"><a class="nav-link"
+										id="custom-tabs-two-messages-tab" data-toggle="pill"
+										href="#custom-tabs-two-messages" role="tab"
+										aria-controls="custom-tabs-two-messages" aria-selected="false">어제</a>
+									</li>
+									<li class="nav-item"><a class="nav-link"
+										id="custom-tabs-two-settings-tab" data-toggle="pill"
+										href="#custom-tabs-two-settings" role="tab"
+										aria-controls="custom-tabs-two-settings" aria-selected="false">오늘</a>
+									</li>
+								</ul>
+							</div>
+							<div class="card-body">
+								<div class="tab-content" id="custom-tabs-two-tabContent">
+									<div class="tab-pane fade show active"
+										id="custom-tabs-two-home" role="tabpanel"
+										aria-labelledby="custom-tabs-two-home-tab">1</div>
+									<div class="tab-pane fade" id="custom-tabs-two-profile"
+										role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+										2</div>
+									<div class="tab-pane fade" id="custom-tabs-two-messages"
+										role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
+										3</div>
+									<div class="tab-pane fade" id="custom-tabs-two-settings"
+										role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
+										4</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<!-- 재고 유통기한 임박 -->
+					<div id="box2-3">
+						<h1>test6</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container2" style="max-width: 1280px;">
+			<div class="row">
+				<div class="col-lg-4" style="margin-right: 35px;">
+					<!-- 공지사항 -->
+					<div id="box3">
+						<h1>test7</h1>
+					</div>
+				</div>
+				<div class="col-lg-4" style="margin-right: 36px;">
+					<!-- 약사in -->
+					<div id="box3-2">
+						<h1>test8</h1>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<!-- 재고부족 -->
+					<div id="box3-3">
+						<h1>test9</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

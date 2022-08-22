@@ -1,0 +1,27 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.annapharm.command.Criteria;
+import kr.or.annapharm.dto.MedicineVO;
+import kr.or.annapharm.dto.SearchMedicineVO;
+
+public interface MedicineDAO {
+	public String selectMedicineClass(int md_no) throws SQLException;
+	
+	public int selectMedicineType(int md_no) throws SQLException;
+	
+	public String selectMedicineName(int md_no) throws SQLException;
+	
+	// 약 데이터 전체 가져오기
+	public MedicineVO selectMedicineAll(int md_no) throws SQLException;
+	
+	// 약명 가져오기
+	public List<String> selectMedicineNameList(String patientCode) throws SQLException;
+	
+	// 약 검색결과 리스트 가져오기
+	public List<SearchMedicineVO> selectSearchMedicine(Criteria cri) throws SQLException;
+	
+	public int selectSearchMedicineCount(String keyword) throws SQLException;
+}

@@ -1,0 +1,47 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.dao.ExpertDashBoardDAO;
+import kr.or.annapharm.dao.PrescriptionDAO;
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public class ExpertDashBoardServiceImpl implements ExpertDashBoardService {
+	
+	private ExpertDashBoardDAO expertDashBoardDAO;
+	
+	public void setExpertDashBoardDAO(ExpertDashBoardDAO expertDashBoardDAO) {
+		this.expertDashBoardDAO = expertDashBoardDAO;
+	}
+
+	@Override
+	public List<Map<String, String>> getExpertDashBoardList() throws Exception {
+		List<Map<String, String>> ExpertDashBoardList = null;
+		
+		ExpertDashBoardList = expertDashBoardDAO.selectExpertDashBoardList();
+		
+		return ExpertDashBoardList;
+	}
+
+	@Override
+	public List<Map<String, String>> getPharmacistINList() throws Exception {
+		List<Map<String, String>> PharmacistINList = null;
+		PharmacistINList = expertDashBoardDAO.selectPharmacistINList();
+		
+		return PharmacistINList;
+	}
+
+	@Override
+	public List<Map<String, String>> getCumulativeStockList() throws Exception {
+		List<Map<String, String>> CumulativeStockList = null;
+		CumulativeStockList = expertDashBoardDAO.selectCumulativeStockList();
+		
+		return CumulativeStockList;
+	}
+	
+	
+	
+	
+}

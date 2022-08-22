@@ -1,0 +1,54 @@
+package kr.or.annapharm.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import kr.or.annapharm.dto.ProductVO;
+import kr.or.annapharm.service.ClassficationService;
+import kr.or.annapharm.service.MedicineInfoService;
+import kr.or.annapharm.service.MedicineService;
+import kr.or.annapharm.service.ProductService;
+
+@RestController
+@RequestMapping("/expert/product")
+
+public class ProductRestController {
+	
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private MedicineService medicineService;
+	
+	@Autowired MedicineInfoService medicineInfoService;
+	
+	@RequestMapping(value="/productDetail", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> productDetail(int mdNo) throws Exception{
+		ResponseEntity<Map<String, Object>> entity = null;
+		
+		System.out.println("하  " + mdNo);
+		
+		List<ProductVO> detail = productService.getProductDetail(mdNo);
+		
+		for(ProductVO pro : detail) {
+			pro.setMdName(medicineService.getMedicineName(mdNo));
+			pro.setMdClass(medicineService.getMedicineClass(pro.getMdNo()).substring(0,2)); 
+			pro.setMdType(medicineInfoService.getMedicineInfoType(medicineService.getMedicineType(mdNo)));
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("detail", detail);
+		
+		entity = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		
+		return entity;
+	}
+}

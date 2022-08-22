@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+  <configuration>
+
+
+	<typeAliases>
+		<typeAlias type="java.util.Map" alias="map" />
+
+		<typeAlias type="kr.or.annapharm.dto.ProductVO" alias="product" />
+		<typeAlias type="kr.or.annapharm.dto.BoardVO" alias="board" />
+		<typeAlias type="kr.or.annapharm.dto.PatientVO" alias="patient" />
+		<typeAlias type="kr.or.annapharm.dto.PrescriptionVO" alias="prescription" />
+		<typeAlias type="kr.or.annapharm.dto.ClassficationVO" alias="classfication" />
+		<typeAlias type="kr.or.annapharm.dto.MenuVO" alias="menu" />
+	</typeAliases>
+
+</configuration>

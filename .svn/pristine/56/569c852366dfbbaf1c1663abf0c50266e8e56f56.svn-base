@@ -1,0 +1,100 @@
+package kr.or.annapharm.dto;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+/**
+ * @author PC-09
+ *	개요 : 약국매출현황 페이지 매출목록에 출력될 데이터들을 담는 VO
+ *	작성자 : 이병진
+ */
+@SuppressWarnings("serial")
+public class SalesAnalysisVO implements Serializable{
+	private Date psDate;			// 날짜
+	private String psType;			// 처방전 구분
+	private String patientName;		// 환자명
+	private String chemistName;		// 조제약사
+	private String mdDrug;			// 마약류 구분
+	private double totalMedicienBill;// 약제비
+	private double charge;			// 청구액
+	private double patientCharge;	// 본인부담금
+	private double deposit;			// 입금액
+	private double compoundingFee;	// 조제료
+	private double medicienBill;	// 약가 합산
+
+	public String getMdDrug() {
+		return mdDrug;
+	}
+	public void setMdDrug(String mdDrug) {
+		this.mdDrug = mdDrug;
+	}
+	public Date getPsDate() {
+		return psDate;
+	}
+	public void setPsDate(Date psDate) {
+		this.psDate = psDate;
+	}
+	public String getPsType() {
+		return psType;
+	}
+	public void setPsType(String psType) {
+		this.psType = psType;
+	}
+	public String getPatientName() {
+		return patientName;
+	}
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
+	public String getChemistName() {
+		return chemistName;
+	}
+	public void setChemistName(String chemistName) {
+		this.chemistName = chemistName;
+	}
+	public double getTotalMedicienBill() {
+		return totalMedicienBill;
+	}
+	public void setTotalMedicienBill(double totalMedicienBill) {
+		this.totalMedicienBill = totalMedicienBill;
+	}
+	public double getCharge() {
+		return charge;
+	}
+	public void setCharge(double charge) {
+		this.charge = charge;
+	}
+	public double getPatientCharge() {
+		return patientCharge;
+	}
+	public void setPatientCharge(double patientCharge) {
+		this.patientCharge = patientCharge;
+	}
+	public double getDeposit() {
+		return deposit;
+	}
+	public void setDeposit(double deposit) {
+		this.deposit = deposit;
+	}
+	public double getCompoundingFee() {
+		return compoundingFee;
+	}
+	public void setCompoundingFee(double compoundingFee) {
+		this.compoundingFee = compoundingFee;
+	}
+	public double getMedicienBill() {
+		return medicienBill;
+	}
+	public void setMedicienBill(double medicienBill) {
+		this.medicienBill = medicienBill;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+	}
+
+}

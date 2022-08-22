@@ -1,0 +1,112 @@
+package kr.or.annapharm.dto;
+
+public class DoctorVO extends MemberVO{
+
+	private String id;
+	private String pwd;
+	private String name;
+	private String regnum;
+	private String email;
+	private String tel;
+	private String addr1;
+	private String addr2;
+	private String zipCode;
+	
+	private String doctorNum;
+	private String hospitalCode;
+	private String hospitalName;
+	
+	private String authority = "일반";
+	
+	
+	
+	public String getAuthority() {
+		return authority;
+	}
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+	
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getRegnum() {
+		return regnum;
+	}
+	public void setRegnum(String regnum) {
+		this.regnum = regnum;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getAddr1() {
+		return addr1;
+	}
+	public void setAddr1(String addr1) {
+		this.addr1 = addr1;
+	}
+	public String getAddr2() {
+		return addr2;
+	}
+	public void setAddr2(String addr2) {
+		this.addr2 = addr2;
+	}
+	public String getZipCode() {
+		return zipCode;
+	}
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+	public String getDoctorNum() {
+		return doctorNum;
+	}
+	public void setDoctorNum(String doctorNum) {
+		this.doctorNum = doctorNum;
+	}
+	public String getHospitalCode() {
+		return hospitalCode;
+	}
+	public void setHospitalCode(String hospitalCode) {
+		this.hospitalCode = hospitalCode;
+	}
+	public String getHospitalName() {
+		return hospitalName;
+	}
+	public void setHospitalName(String hospitalName) {
+		this.hospitalName = hospitalName;
+	}
+	@Override
+	public String toString() {
+		return "DoctorVO [id=" + id + ", pwd=" + pwd + ", name=" + name + ", regnum=" + regnum + ", email=" + email
+				+ ", tel=" + tel + ", addr1=" + addr1 + ", addr2=" + addr2 + ", zipCode=" + zipCode + ", doctorNum="
+				+ doctorNum + ", hospitalCode=" + hospitalCode + ", hospitalName=" + hospitalName + "]";
+	}
+	
+	
+	
+}

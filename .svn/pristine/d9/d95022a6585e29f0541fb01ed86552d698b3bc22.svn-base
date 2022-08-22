@@ -1,0 +1,16 @@
+package kr.or.annapharm.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/searchPharmacy")
+public class FindPharmacyController {
+//	/annapharm/searchPharmacy/main.do
+	
+	@RequestMapping("/main")
+	public String main() throws Exception {
+		String url = "/main/find_pharmacy/findpharmacy";
+		return url;
+	}
+}

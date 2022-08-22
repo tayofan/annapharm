@@ -1,0 +1,108 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+public class AnnapharmInVO {
+
+	private String chemistInCode;
+	private String patientCode;
+	private String chemistInTitle;
+	private int chemistInReplyCnt;
+	private String chemistInDate;
+	private String chemistInContent;
+	private int chemistInViewcnt;
+	private String chemistInType;
+	private String chemistInWriter;
+	private String ansDate;
+	public String chemistInAdopt;
+	
+	
+	
+	public String getChemistInAdopt() {
+		return chemistInAdopt;
+	}
+	public void setChemistInAdopt(String chemistInAdopt) {
+		this.chemistInAdopt = chemistInAdopt;
+	}
+
+	public String getChemistInCode() {
+		return chemistInCode;
+	}
+
+	public void setChemistInCode(String chemistInCode) {
+		this.chemistInCode = chemistInCode;
+	}
+
+	public String getPatientCode() {
+		return patientCode;
+	}
+
+	public void setPatientCode(String patientCode) {
+		this.patientCode = patientCode;
+	}
+
+	public String getChemistInTitle() {
+		return chemistInTitle;
+	}
+
+	public void setChemistInTitle(String chemistInTitle) {
+		this.chemistInTitle = chemistInTitle;
+	}
+
+	public int getChemistInReplyCnt() {
+		return chemistInReplyCnt;
+	}
+
+	public void setChemistInReplyCnt(int chemistInReplyCnt) {
+		this.chemistInReplyCnt = chemistInReplyCnt;
+	}
+
+	public String getChemistInDate() {
+		return chemistInDate;
+	}
+
+	public void setChemistInDate(String chemistInDate) {
+		this.chemistInDate = chemistInDate;
+	}
+
+	public String getChemistInContent() {
+		return chemistInContent;
+	}
+
+	public void setChemistInContent(String chemistInContent) {
+		this.chemistInContent = chemistInContent;
+	}
+
+	public int getChemistInViewcnt() {
+		return chemistInViewcnt;
+	}
+
+	public void setChemistInViewcnt(int chemistInViewcnt) {
+		this.chemistInViewcnt = chemistInViewcnt;
+	}
+
+	public String getChemistInType() {
+		return chemistInType;
+	}
+
+	public void setChemistInType(String chemistInType) {
+		this.chemistInType = chemistInType;
+	}
+
+	public String getChemistInWriter() {
+		return chemistInWriter;
+	}
+
+	public void setChemistInWriter(String chemistInWriter) {
+		this.chemistInWriter = chemistInWriter;
+	}
+
+	public String getAnsDate() {
+		return ansDate;
+	}
+
+	public void setAnsDate(String ansDate) {
+		this.ansDate = ansDate;
+	}
+
+}

@@ -1,0 +1,122 @@
+package kr.or.annapharm.dto;
+
+import java.util.Date;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+public class ProductVO {
+	String productQr;
+	String pharmacyCode;
+	String productUnit;
+	String productPosition;
+	String mdName;
+	String mdClass;
+	String mdType;
+	String warnMark;
+	int mdNo;
+	int productOwnnum;
+	int productOwnnumStandard;
+	int dateOver;
+	int distinctNum = 1;
+	Date productDate;
+	
+	public String getProductQr() {
+		return productQr;
+	}
+	public void setProductQr(String productQr) {
+		this.productQr = productQr;
+	}
+	public String getPharmacyCode() {
+		return pharmacyCode;
+	}
+	public void setPharmacyCode(String pharmacyCode) {
+		this.pharmacyCode = pharmacyCode;
+	}
+	public String getProductUnit() {
+		return productUnit;
+	}
+	public void setProductUnit(String productUnit) {
+		this.productUnit = productUnit;
+	}
+	public String getProductPosition() {
+		return productPosition;
+	}
+	public void setProductPosition(String productPosition) {
+		this.productPosition = productPosition;
+	}
+	public String getMdName() {
+		return mdName;
+	}
+	public void setMdName(String mdName) {
+		this.mdName = mdName;
+	}
+	public String getMdClass() {
+		return mdClass;
+	}
+	public void setMdClass(String mdClass) {
+		this.mdClass = mdClass;
+	}
+	public String getMdType() {
+		return mdType;
+	}
+	public void setMdType(String mdType) {
+		this.mdType = mdType;
+	}
+	public String getWarnMark() {
+//		if(new Date().compareTo(this.getProductDate()) >= 0){
+//			this.setWarnMark("Y");
+//		}
+		return warnMark;
+	}
+	public void setWarnMark(String warnMark) {
+		this.warnMark = warnMark;
+	}
+	public int getMdNo() {
+		return mdNo;
+	}
+	public void setMdNo(int mdNo) {
+		this.mdNo = mdNo;
+	}
+	public int getProductOwnnum() {
+		return productOwnnum;
+	}
+	public void setProductOwnnum(int productOwnnum) {
+		this.productOwnnum = productOwnnum;
+	}
+	public int getProductOwnnumStandard() {
+		return productOwnnumStandard;
+	}
+	public void setProductOwnnumStandard(int productOwnnumStandard) {
+		this.productOwnnumStandard = productOwnnumStandard;
+	}
+	public int getDateOver() {
+		return dateOver;
+	}
+	public void setDateOver(int dateOver) {
+		this.dateOver = dateOver;
+	}
+	public int getDistinctNum() {
+		return distinctNum;
+	}
+	public void setDistinctNum(int distinctNum) {
+		this.distinctNum = distinctNum;
+	}
+	public Date getProductDate() {
+		return productDate;
+	}
+	public void setProductDate(Date productDate) {
+		this.productDate = productDate;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+	}
+	
+	
+	
+	
+	
+	
+}

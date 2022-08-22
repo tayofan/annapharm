@@ -1,0 +1,78 @@
+package kr.or.annapharm.dto;
+
+public class SalesByAgeVO {
+	private int age;
+	private String sex;
+	private String type;
+	private int countPs;
+	private int sumPrice;
+	/**
+	 * @return the age
+	 */
+	public int getAge() {
+		return age;
+	}
+	/**
+	 * @param age the age to set
+	 */
+	public void setAge(int age) {
+		this.age = age;
+	}
+	/**
+	 * @return the sex
+	 */
+	public String getSex() {
+		return sex;
+	}
+	/**
+	 * @param sex the sex to set
+	 */
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+	/**
+	 * @return the countPs
+	 */
+	public int getCountPs() {
+		return countPs;
+	}
+	/**
+	 * @param countPs the countPs to set
+	 */
+	public void setCountPs(int countPs) {
+		this.countPs = countPs;
+	}
+	/**
+	 * @return the sumPrice
+	 */
+	public int getSumPrice() {
+		return sumPrice;
+	}
+	/**
+	 * @param sumPrice the sumPrice to set
+	 */
+	public void setSumPrice(int sumPrice) {
+		this.sumPrice = sumPrice;
+	}
+	
+	@Override
+	public String toString() {
+		return "SalesByAgeVO [age=" + age + ", sex=" + sex + ", type=" + type + ", countPs=" + countPs + ", sumPrice="
+				+ sumPrice + "]";
+	}
+	public String sexAndAge() {
+		return this.sex + "," + this.age;
+	}
+}

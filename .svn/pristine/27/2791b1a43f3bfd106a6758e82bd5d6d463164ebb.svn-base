@@ -1,0 +1,39 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+
+import kr.or.annapharm.command.SalesAnalysisCommand;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.SalesAnalysisDetailVO;
+import kr.or.annapharm.dto.SalesAnalysisVO;
+
+public interface SalesAnalysisService {
+
+	/**
+	 * @param loginUserPharmacyCode : 로그인한 유저의 약국 코드
+	 * @return : 같은 약국에 등록되어있는 약사들의 목록
+	 * @throws Exception
+	 * 	개요 : 로그인한 유저와 같은 약국에 등록되어있는 약사들의 목록을 가져오는 메서드
+	 * 	작성자 : 이병진
+	 */
+	public List<String> getChemistsName(String loginUserPharmacyCode) throws Exception;
+
+	/**
+	 * @param cri : 약사/기간 조건을 가져오기 위한 파라미터
+	 * @return	: 목록 출력에 필요한 데이터를 가져오는 VO
+	 * @throws Exception
+	 * 	개요 : 약사/기간 조건에 따라 매출 목록의 데이터를 출력하기 위한 메서드
+	 * 	작성자 : 이병진
+	 */
+	public List<SalesAnalysisCommand> getSearchAnalysisList(SearchCriteria cri) throws Exception;
+
+	/**
+	 * @param psCode : 처방전 코드
+	 * @return : 파라미터로 받은 처방전의 상세내역 정보
+	 * @throws Exception
+	 * 	개요 : 처방전 코드를 받아 해당 처방전의 약품을 검색하는 메서드
+	 *	작성자 : 이병진
+	 */
+	public List<SalesAnalysisDetailVO> getSalesAnalyssisDetail(String psCode) throws Exception;
+
+}

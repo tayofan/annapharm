@@ -1,0 +1,106 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.jsp.exception.InvalidPasswordException;
+import com.jsp.exception.NotFoundIdException;
+
+import kr.or.annapharm.dao.MemberDAO;
+import kr.or.annapharm.dto.ChemistVO;
+import kr.or.annapharm.dto.DoctorVO;
+import kr.or.annapharm.dto.MemberVO;
+import kr.or.annapharm.dto.PatientVO;
+
+public class MemberServiceImpl implements MemberService {
+
+	private MemberDAO memberDAO;
+
+	public void setMemberDAO(MemberDAO memberDAO) {
+		this.memberDAO = memberDAO;
+	}
+
+	@Override
+	public List<MemberVO> getMemberList() throws Exception {
+		return null;
+	}
+
+	@Override
+	public int insertMember(MemberVO member) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.insertMember(member);
+	}
+
+	@Override
+	public int insertMember(DoctorVO member) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.insertMember(member);
+	}
+
+	@Override
+	public int insertDoctor(DoctorVO doctor) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.insertDoctor(doctor);
+	}
+
+	@Override
+	public int insertMember(ChemistVO member) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.insertMember(member);
+	}
+
+	@Override
+	public int insertChemist(ChemistVO chemist) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.insertChemist(chemist);
+	}
+
+	@Override
+	public int getCountSameId(String memId) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.selectSameId(memId);
+	}
+
+	@Override
+	public MemberVO getMember(String memId) throws Exception {
+
+		return memberDAO.selectMemberById(memId);
+	}
+
+	@Override
+	public void login(String memId, String memPwd) throws NotFoundIdException, InvalidPasswordException, SQLException {
+
+		MemberVO member = memberDAO.selectMemberById(memId);
+		if (member == null)
+			throw new NotFoundIdException();
+		if (!memPwd.equals(member.getMemPwd()))
+			throw new InvalidPasswordException();
+	}
+
+	@Override
+	public int isPatient(String memRegnum) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.isPatient(memRegnum);
+	}
+
+	@Override
+	public int updateMemId(MemberVO member) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.updateMemId(member);
+	}
+
+	@Override
+	public int insertPatient(PatientVO patient) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.insertPatient(patient);
+	}
+
+	@Override
+	public int updateLoginDate(String memId) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDAO.updateLoginDate(memId);
+	}
+
+}

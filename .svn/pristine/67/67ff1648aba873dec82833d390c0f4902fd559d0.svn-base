@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AnnapharmIn-Mapper">
+
+<!-- 	<sql id="search">
+		<if test="searchType == 'A'.toString()">
+			and (
+			board_type = 'A'
+			or
+			board_type = 'P'
+			or
+			board_type = 'D'
+			or
+			board_type = 'T'
+			)
+		</if>
+		<if test="searchType == 'P'.toString()">
+			and board_type = 'P'
+		</if>
+		<if test="searchType == 'D'.toString()">
+			and board_type = 'D'
+		</if>
+		<if test="searchType == 'T'.toString()">
+			and board_type = 'T'
+		</if>
+	</sql>
+	<sql id="searchText">
+
+	</sql> -->
+
+	<select id="selectSearchAnnapharmInList"	resultType="annapharmIn">
+		SELECT
+		
+			 CHEMIST_IN_CODE
+			,PATIENT_CODE
+			,CHEMIST_IN_TITLE
+			,CHEMIST_IN_REPLY_CNT
+			,CHEMIST_IN_DATE
+			,CHEMIST_IN_CONTENT
+			,CHEMIST_IN_VIEWCNT
+			,CHEMIST_IN_TYPE
+			,CHEMIST_IN_WRITER
+		FROM
+	    	che_in
+<!-- 		<include refid="search" /> -->
+		<!-- <include refid="searchTest" /> -->
+		order by chemist_in_date desc
+	</select>
+
+	<select id="selectSearchAnnapharmInListCount" resultType="int">
+		select
+		count(*)
+		from
+		che_in
+<!-- 		<include refid="search" /> -->
+		<!-- <include refid="searchTest" /> -->
+		order by chemist_in_date desc
+	</select>
+
+
+
+
+
+
+<!-- 	<select id="selectBoardByImage" resultType="board">
+		select
+		*
+		from board
+		where content like '%'||#{imageFile}||'%'
+	</select> -->
+	
+	
+
+	<select id="selectAnnapharmInByBno"  resultType="annapharmIn">
+		select *
+		from che_in
+		where chemist_in_code=#{chemist_in_code}
+	</select>
+
+	<update id="insertAnnapharmIn" parameterType="annapharmIn">
+		insert
+		into
+		che_in(
+			 CHEMIST_IN_CODE
+			,PATIENT_CODE
+			,CHEMIST_IN_TITLE
+			,CHEMIST_IN_REPLY_CNT
+			,CHEMIST_IN_DATE
+			,CHEMIST_IN_CONTENT
+			,CHEMIST_IN_VIEWCNT
+			,CHEMIST_IN_TYPE
+			,CHEMIST_IN_WRITER)
+		values
+		(#{chemist_in_code},#{title},#{writer},#{chemist_in_content})
+	</update>
+
+	<update id="updateAnnapharmIn" parameterType="AnnapharmIn">
+		update
+		che_in
+		set
+		chemist_in_title=#{chemist_in_title}, chemist_in_content=#{chemist_in_content}
+		where chemist_in_code=#{chemist_in_code}
+	</update>
+
+	<update id="deleteAnnapharmIn" parameterType="int">
+		delete
+		from che_in
+		where chemist_in_code=#{chemist_in_code}
+	</update>
+
+	<update id="increaseViewCnt" parameterType="int">
+		update
+		che_in
+		set
+		chemist_in_viewcnt=chemist_in_viewcnt+1
+		where chemist_in_code=#{chemist_in_code}
+	</update>
+
+	<select id="selectAnnapharmInSeqNext" resultType="int">
+		select annapharmin_num_seq.nextval as chemist_in_code from dual
+	</select>
+
+</mapper>
+
+

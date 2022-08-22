@@ -1,0 +1,788 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script type="text/x-handlebars-template"  id="longPrescriptionDetail-list-template" >
+{{#each .}}
+<tr class="longPrescriptionDetail hover" data-psCode="{{psCode}}">
+	<td class="text-center"><i style="color:#FFA500" onclick="addSelectList(this,{{mdNo}})" id="{{mdNo}}" class='{{selectMd}}'></i></td>
+	<td class="text-center">{{inc @index}}</td>
+	<td class="text-center">{{classFilter mdClass}}</td>
+	<td class="text-left">{{mdNo}}</td>
+	<td class="text-left">{{mdName}}</td>
+	<td class="text-right">{{preDrugCount}}</td>
+	<td class="text-right">{{preDrugDay}}</td>
+	<td class="text-right">
+	{{#eq ownNumCheck '부족'}}
+		{{ownNum}}<span class="badge badge-pill badge-danger">부족</span>
+	{{else}}
+		{{ownNum}}
+	{{/eq}}
+	</td>
+</tr>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="longPrescription-list-template" >
+{{#each .}}
+<tr class="longPrescription hover" onclick="longPrescriptionDetail(this)" data-psCode="{{psCode}}">
+	<td class="text-center">{{prettifyDateCompare psCompleteDate}}</td>
+	<td class="text-center">{{patientName}}</td>
+	<td class="text-right">{{preDrugDay}}</td>
+	<td class="text-left">{{hospitalName}}</td>
+	<td class="text-center">{{doctorName}}</td>
+	<td class="text-center">{{chemistName}}</td>
+	<td class="text-center">
+	{{#eq ownNumCheck '부족'}}
+		<span class="badge badge-pill badge-danger">부족</span>
+	{{else}}
+		{{ownNumCheck}}
+	{{/eq}}
+	</td>
+</tr>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="longPrescription-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getPreferMedicineList(0,1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getPreferMedicineList(0,{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getPreferMedicineList(0,{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getPreferMedicineList(0,{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getPreferMedicineList(0,{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<!-- 선호 약/건강기능식품 상세 재고 현황 -->
+<script type="text/x-handlebars-template"  id="preferProductDetail-list-template" >
+{{#each .}}
+<tr class="preferProductDetail hover" onclick="preferProductDetail(this)" data-mdNo="{{mdNo}}" data-sex="{{sex}}" data-age="{{age}}">
+	<td class="text-center">{{inc @index}}</td>
+	<td class="text-left">{{mdName}}</td>
+	<td class="text-left">{{miCompany}}</td>
+	<td class="text-center">{{mdClass}}</td>
+	<td class="text-right">{{productOwnnum}}</td>
+	<td class="text-center">{{prettifyDateCompare productDate}}</td>
+</tr>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="preferMedicineCompany-list-template" >
+<datalist id="companylist">
+{{#each .}}
+	<option class="preferMedicineCompany">{{this}}</option>
+{{/each}}
+</datalist>
+</script>
+
+
+<script type="text/x-handlebars-template"  id="preferMedicine-list-template" >
+{{#each .}}
+<tr class="preferMedicineList hover" onclick="preferProductDetail(this)" data-mdNo="{{mdNo}}" data-sex="{{sex}}" data-age="{{age}}">
+	<td class="text-center"><i style="color:#FFA500" onclick="addSelectList(this,{{mdNo}})" id="{{mdNo}}" class='{{selectMd}}'></i></td>
+	<td class="text-center">{{inc @index}}</td>
+	<td class="text-left">{{mdName}}</td>
+	<td class="text-left">{{miCompany}}</td>
+	<td class="text-center">{{classFilter mdClass}}</td>
+	<td class="text-right">{{num}}</td>
+	<td class="text-right">{{numToComma price}}</td>
+	<td class="text-right">{{ownNum}}</td>
+</tr>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="preferMedicine-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getPreferMedicineList(0,1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getPreferMedicineList(0,{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getPreferMedicineList(0,{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getPreferMedicineList(0,{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getPreferMedicineList(0,{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="ageBySexList-list-template" >
+{{#each .}}
+<tr class="ageBySexList hover" onclick="getPreferMedicineList(this);">
+	<td class="text-center">{{ageRange age}}</td>
+	<td>{{sex}}</td>
+	<td class="text-right">{{count}}</td>
+	<td class="text-right">{{numToComma price}}</td>
+	<td class="text-right">{{biCount}}</td>
+	<td class="text-right">{{numToComma biPrice}}</td>
+	<td class="text-right">{{totalCount}}</td>
+	<td class="text-right">{{numToComma totalPrice}}</td>
+</tr>
+{{/each}}
+</script>
+						
+<script type="text/x-handlebars-template"  id="ageBySexList-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor(1,0,'{{sortTarget}}','{{sortType}}');" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor({{#if prev}}{{prevPageNum}}{{else}}1{{/if}},{{this}},0,'{{sortTarget}}','{{sortType}}');" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:searchDateOfVisitor({{this}},0,'{{../sortTarget}}','{{../sortType}}');" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:searchDateOfVisitor({{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}},0,'{{sortTarget}}','{{sortType}}');" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor({{realEndPage}},0,'{{sortTarget}}','{{sortType}}');" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="searchMedicine-list-template" >
+{{#each .}}
+<tr class="mdList hover" onclick="goCompare('<%=request.getContextPath()%>/expert/business/compare/list/F00001/',this)">
+	<td title="{{mdName}}">{{mdName}}</td>
+	<td data-toggle="tooltip" title="{{componentFilter mdComponent}}">{{componentFilter mdComponent}}</td>
+	<td class="text-center">{{classFilter mdClass}}</td>
+	<td data-toggle="tooltip" title="{{unitFilter unit}}">{{unitFilter unit}}</td>
+	<td class="text-center">{{miMaincode}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="searchMedicine-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="basis-list-template" >
+{{#each .}}
+<tr class="basisList hover" onclick="goCompare('<%=request.getContextPath()%>/expert/business/compare/list/F00001/',this)">
+	<td class="text-center">{{miType}}</td>
+	<td data-toggle="tooltip" title="{{componentFilter mdComponent}}">{{componentFilter mdComponent}}</td>
+	<td class="text-center">{{miMaincode}}</td>
+	<td data-toggle="tooltip" title="{{unitFilter unit}}">{{unitFilter unit}}</td>
+	<td class="text-center">{{miUse}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="basis-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="compare-list-template" >
+{{#each .}}
+<tr class="compareList" >
+	<td class="text-center"><i style="color:#FFA500" onclick="addSelectList(this,{{mdNo}})" id="{{mdNo}}" class='{{selectMd}}'></i></td>
+	<td data-toggle="tooltip" title="{{mdName}}"><a  href="javascript:OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+{{mdNo}},'{{mdName}}','상세보기',800,700);">{{mdName}}</a></td>
+	<td data-toggle="tooltip" title="{{miCompany}}">{{miCompany}}</td>
+	<td class="text-center">{{classFilter mdClass}}</td>
+	<td class="text-right">{{numToComma miPrice}}</td>
+	<td class="text-center"><input class="compareCheck" value="{{mdNo}}" type="checkbox"/></td>
+</tr>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="select-list-template" >
+{{#each .}}
+<tr class="selectList" >
+	<td class="text-center"><i style="color:#FFA500" onclick="addSelectList(this,{{mdNo}})" data-mdNo="{{mdNo}}" class='fa-star fas'></i></td>
+	<td data-toggle="tooltip" title="{{mdName}}"><a href="javascript:OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+{{mdNo}},'{{mdName}}','상세보기',800,700);">{{mdName}}</a></td>
+	<td data-toggle="tooltip" title="{{miCompany}}">{{miCompany}}</td>
+	<td>{{classFilter mdClass}}</td>
+	<td>{{numToComma miPrice}}</td>
+	<td class="text-center"><input class="compareCheck" value="{{mdNo}}" type="checkbox"/></td>
+</tr>
+{{/each}}
+</script>
+
+<script>
+$(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
+	addSelectList();
+});
+
+// $(document).on('hover','[data-toggle="tooltip"]',function(e){
+// 	e.tooltip();
+// })
+
+
+function addSelectListAll(){
+	var selectLists = $('.selectList').find('i');
+	
+	$.each(selectLists, function(index, el){
+		addSelectList(el,$(el).attr('data-mdNo'))
+	})
+}
+
+function OpenWindows(UrlStr,mdName, WinTitle, WinWidth, WinHeight) {
+	winleft = (screen.width - WinWidth) / 2;
+	wintop = (screen.height - WinHeight) / 2;
+	title = mdName + WinTitle
+	var win = window.open(UrlStr , title , "scrollbars=yes,width="+ WinWidth +", "
+							+"height="+ WinHeight +", top="+ wintop +", left="
+							+ winleft +", resizable=yes, status=yes"  );
+}
+
+function toggleStar(mdNo) {
+	var target = $('#'+mdNo)[0];
+	if(target){
+		if(target.className == 'fa-star far'){
+			target.classList.remove('far');
+			target.classList.add('fas');	
+		}else {
+			target.classList.remove('fas');
+			target.classList.add('far');	
+		}
+	}
+}
+
+function addSelectList(target,mdNo){
+	var chemistCode = 'F00001';
+	var selectMd;
+	if(!mdNo) mdNo = 0;
+	if(!target){
+		selectMd = "no";
+	}else{
+		selectMd = target.className;
+	}
+	
+	var data={
+		"mdNo":mdNo,
+		"chemistCode":chemistCode,
+		"selectMd":selectMd
+	}
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/compare/addselectlsit.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+			printData(data,$('#selectList'),$('#select-list-template'),"selectList");
+			toggleStar(mdNo);
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+	
+}
+</script>	
+
+	
+<script type="text/javascript">
+var nowPage=1;
+var sortTarget = 'totalcount';
+var sortType = 'desc';
+function doCompare() {
+	
+	$('.compareCheck:checked').each(function(index,obj){
+		var mdNo = $(obj).val();
+		OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+mdNo,mdNo,'상세보기',800,700);
+	})	
+}
+
+$(document).delegate('.compareCheck','change',function(){
+	
+	var checkeds = $('.compareCheck:checked');
+	var uncheckeds = $('.compareCheck:not(.compareCheck:checked)');
+	
+// 	console.log(checkeds)
+// 	console.log(uncheckeds)
+	if(checkeds.length >= 4){
+		uncheckeds.attr('disabled',true);
+	}else{
+		uncheckeds.attr('disabled',false);
+	}
+
+});
+
+
+function goCompare(pageInfo,target){
+	var mainCode;
+	if($(target).attr('class') == "mdList hover"){
+		mainCode = $(target).children(':last').text();
+	}else {
+		mainCode = $(target).children(':eq(2)').text();
+	}
+	pageInfo += mainCode;
+	$.getJSON(pageInfo,function(data){
+		printData(data,$('#compareList'),$('#compare-list-template'),"compareList");
+	});
+// 	console.log(mainCode);
+}
+
+function getSearchMedicinePage(pageInfo,page,keyword){
+	if(page) nowPage = page;
+	if(!keyword) keyword = $("#nameKeyword").val();
+	pageInfo += keyword + '/' + nowPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchMedicineList,$('#searchMedicineList'),$('#searchMedicine-list-template'),"medicineSearch");
+		printPagination(data.pageMaker,$('#test3561'),$('#searchMedicine-pagination-template'));
+	});
+}
+function getSearchBasisPage(pageInfo,page,keyword){
+	if(page) nowPage = page;
+	if(!keyword) keyword = $("#basisKeyword").val();
+// 	console.log(keyword);
+	pageInfo += keyword + '/' + nowPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchBasisList,$('#searchBasisList'),$('#basis-list-template'),"basisSearch");
+		printPagination(data.pageMaker,$('#basis3561'),$('#basis-pagination-template'));
+	});
+}
+
+// 검색 엔터
+function enterCheckName(){
+	if(event.keyCode == 13){
+		getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',1);
+	}
+}
+
+//검색 엔터
+function enterCheckBasis(){
+	if(event.keyCode == 13){
+		getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',1);
+	}
+}
+
+function toggleSort(target){
+	if(target.className == 'non'){
+		allNon();
+		target.className = 'asc';
+		sortUp(target)
+		searchDateOfVisitor(1,target);
+	}else if(target.className == 'desc') {
+		target.className = 'asc';
+		sortUp(target)
+		searchDateOfVisitor(1,target);
+	}else if(target.className == 'asc'){
+		target.className = 'desc';
+		sortDown(target)
+		searchDateOfVisitor(1,target);
+	}
+}
+
+function allNon(){
+	var test = document.querySelectorAll('#allth div');
+	test.forEach(function(e){
+		e.className = 'non';
+		sortNon(e)
+	});
+}
+
+function sortUp(target){
+	var up = target.childNodes[1];
+	var down = target.childNodes[3];
+	
+	up.style.color = "black";
+	down.style.color = '#8080806b';
+}
+
+function sortDown(target){
+	var up = target.childNodes[1];
+	var down = target.childNodes[3];
+	
+	up.style.color = "#8080806b";
+	down.style.color = 'black';
+}
+
+function sortNon(target){
+	var up = target.childNodes[1];
+	var down = target.childNodes[3];
+	
+	up.style.color = "#8080806b";
+	down.style.color = '#8080806b';
+}
+
+function toggleStar(mdNo) {
+	var target = $('#'+mdNo)[0];
+	if(target){
+		if(target.className == 'fa-star far'){
+			target.classList.remove('far');
+			target.classList.add('fas');	
+		}else {
+			target.classList.remove('fas');
+			target.classList.add('far');	
+		}
+	}
+}
+
+
+//2.내방환자 분석
+//연령별/성별 매출현황
+function searchDateOfVisitor(page,target,sortTarget,sortType){
+	if(page) nowPage = page;
+	if(!target){
+		target = document.querySelector('#maintarget');
+		sortNon(target)
+	}
+	
+	var searchType2 = 'desc';
+	var searchType = target.parentNode.id;
+	if(target.className == 'non') searchType2 = 'desc';
+	else if(target.className == 'asc') searchType2 = 'desc';
+	else if(target.className == 'desc') searchType2 = 'asc';
+	
+	if(sortType) searchType2 = sortType;
+	if(sortTarget) searchType = sortTarget;
+	
+	
+	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	var data = {
+		"startDate" : startDate,
+		"endDate" : endDate,
+		"page" : nowPage,
+		"searchType" : searchType,
+		"searchType2" : searchType2
+	}
+	
+// 	console.log(sortTarget);
+// 	console.log(sortType);
+// 	console.log(target.parentNode.id)
+
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/visitor/agebysex.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+// 			console.log(data);
+			printData(data.salesByAgeList,$('#ageBySexList'),$('#ageBySexList-list-template'),"ageBySexList");
+			printPagination(data.pageMaker,$('#ageBySexPagination'),$('#ageBySexList-pagination-template'));
+// 			console.log(data.pageMaker)
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+}
+
+
+// 선호 약/건강기능 식품 ajax
+function getPreferMedicineList(target,page,filter){
+	if(page) nowPage = page;
+	var miCompany = ''
+	var mdClass = 'ALL'
+	if(filter){
+		miCompany = document.querySelector('#company').value
+		mdClass = document.querySelector('#gubun').value
+	}
+	var sex;
+	var age;
+	if(target == 0){
+		var element = document.querySelector('.preferMedicineList');
+		sex = element.getAttribute("data-sex");
+		age = element.getAttribute("data-age");
+	}else{
+		var str = target.childNodes;
+		age = str[1].innerText.substring(0, 1)*10;
+		sex = str[3].innerText;
+	}
+	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	var data = {
+		"startDate" : startDate,
+		"endDate" : endDate,
+		"page" : nowPage,
+		"age" : age,
+		"sex" : sex,
+		"miCompany" : miCompany,
+		"mdClass" : mdClass
+	}
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/visitor/prefermedicine.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+// 			console.log(data);
+			printData(data.preferMedicineList,$('#preferMedicineList'),$('#preferMedicine-list-template'),"preferMedicineList");
+			printData(data.companyList,$('#company'),$('#preferMedicineCompany-list-template'),"preferMedicineCompany");
+			printPagination(data.pageMaker,$('#preferMedicinePagination'),$('#preferMedicine-pagination-template'));
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+}
+
+// 선호 약/건강기능식품 상세재고현황
+function preferProductDetail(target){
+	var mdNo = target.getAttribute('data-mdNo');
+// 	console.log(mdNo);
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/product/productDetail.do",
+		type:"post",
+		data:{"mdNo" : mdNo},	
+		success:function(data){
+// 			console.log(data.detail);
+			printData(data.detail,$('#preferProductDetail'),$('#preferProductDetail-list-template'),"preferProductDetail");
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+}
+
+// private String psCode;
+// private String piHpid;
+// private int preDrugDay;
+
+// 장기조제환자 현황
+function longPrescriptionList(preDrugDay,piHpid){
+// 	console.log(preDrugDay);
+// 	console.log(piHpid);
+	var data = {
+		"preDrugDay" : preDrugDay,
+		"piHpid" : piHpid
+	}
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/visitor/longPrescription.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			printData(data.longList,$('#longPrescription'),$('#longPrescription-list-template'),"longPrescription");
+			printPagination(data.pageMaker,$('#longPrescriptionPagination'),$('#longPrescription-pagination-template'));
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+}
+
+function longPrescriptionDetail(target){
+	var psCode = target.getAttribute('data-psCode');
+	var tdList = target.querySelectorAll('td');
+	document.getElementById("longPsCode").innerText = psCode;
+	document.getElementById("longPsDate").innerText = tdList[0].innerText;
+	document.getElementById("longPsHos").innerText = tdList[3].innerText;
+	document.getElementById("longPsDoctor").innerText = tdList[4].innerText;
+	document.getElementById("longPsChemist").innerText = tdList[5].innerText;
+	
+	var data = {
+			"psCode" : psCode
+	}
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/visitor/longPrescriptionDetail.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			printData(data,$('#longPrescriptionDetail'),$('#longPrescriptionDetail-list-template'),"longPrescriptionDetail");
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+	// console.log(tdList);
+	// console.log(psCode);
+}
+
+// Handlebars 필터함수 및 필터
+Handlebars.registerHelper({
+	"unitFilter" : function(unit){
+		var newUnit = unit.slice(0,-1).substr(1);
+		return newUnit;
+	},
+	"componentFilter" : function(component){
+		return component.replace(/\[(.*?)\]/gm,'').replaceAll('|',',');
+	},
+	"signActive" : function(pageNum){
+		if(pageNum == nowPage) return 'active';
+	},
+	"classFilter": function(className){
+		return className.replace("의약품","");
+	},
+	"startNum":function(page){
+		return page*5-4;
+	},
+	"endNum":function(page){
+		return page*5;
+	},
+	"ageRange":function(age){
+		var range = age + "~" + (age + 9);
+		return range;
+	},
+	"numToComma":function(num){
+		var comma = num.toLocaleString('ko-KR');
+		return comma;
+	},
+	"prettifyDateCompare":function(timeValue){ //Handlbars에 날짜출력함수 등록
+		var dateObj=new Date(timeValue);
+		var year=dateObj.getFullYear();
+		var month=dateObj.getMonth()+1;
+		if(month < 10) month = '0' + month;
+		var date=dateObj.getDate();
+		if(date < 10) date = '0' + date;
+		return year+"."+month+"."+date;
+	},
+	"inc":function(index){
+		return index + 1;
+	},
+	"eq":function(arg1, arg2, options) {
+		 return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+	}
+	
+// 	"starCheck": function(selectMd){
+// 		if(select)
+// 		return null;
+// 	}
+});
+
+function printData(replyArr,target,templateObject,targetName){
+	var template=Handlebars.compile(templateObject.html());
+	var html = template(replyArr);
+	if(targetName == "medicineSearch") $('.mdList').remove();
+	if(targetName == "basisSearch") $('.basisList').remove();
+	if(targetName == "compareList") $('.compareList').remove();
+	if(targetName == "selectList") $('.selectList').remove();
+	if(targetName == "ageBySexList") $('.ageBySexList').remove();
+	if(targetName == "preferMedicineList") $('.preferMedicineList').remove();
+	if(targetName == "preferMedicineCompany") $('#companylist').remove();
+	if(targetName == "preferProductDetail") $('.preferProductDetail').remove();
+	if(targetName == "longPrescription") $('.longPrescription').remove();
+	if(targetName == "longPrescriptionDetail") $('.longPrescriptionDetail').remove();
+	target.after(html);
+}
+
+/* pagination */
+function printPagination(pageMaker,target,templateObject){
+	var pageNumArray = new Array(pageMaker.endPage-pageMaker.startPage+1);
+	for(var i=0;i<pageMaker.endPage-pageMaker.startPage+1;i++){
+		pageNumArray[i]=pageMaker.startPage+i;
+	}	
+	pageMaker.pageNum=pageNumArray;  
+	pageMaker.prevPageNum=pageMaker.startPage-1;
+	pageMaker.nextPageNum=pageMaker.endPage+1;
+	
+	var template=Handlebars.compile(templateObject.html());	
+	var html = template(pageMaker);	
+	target.html("").html(html);
+}
+
+</script>

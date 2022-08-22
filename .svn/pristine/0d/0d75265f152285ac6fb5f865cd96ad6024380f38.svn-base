@@ -1,0 +1,50 @@
+package kr.or.annapharm.dto;
+
+public class AddMedicineListVO {
+	public String mdClass;	// 구분
+	public String miCode;	// 약코드
+	public String miType;	// 분류코드
+	public String miUse;	// 복용법
+	public String mdName;	// 약명
+	public String mdDrug;	// 마약
+	
+	public String getMdClass() {
+		return mdClass;
+	}
+	public void setMdClass(String mdClass) {
+		this.mdClass = mdClass;
+	}
+	public String getMiCode() {
+		return miCode;
+	}
+	public void setMiCode(String miCode) {
+		this.miCode = miCode;
+	}
+	public String getMiType() {
+		return miType;
+	}
+	public void setMiType(String miType) {
+		this.miType = miType;
+	}
+	public String getMiUse() {
+		return miUse;
+	}
+	public void setMiUse(String miUse) {
+		this.miUse = miUse;
+	}
+	public String getMdName() {
+		return mdName;
+	}
+	public void setMdName(String mdName) {
+		this.mdName = mdName;
+	}
+	public String getMdDrug() {
+		return mdDrug;
+	}
+	public void setMdDrug(String mdDrug) {
+		this.mdDrug = mdDrug;
+	}
+	
+	
+	
+}

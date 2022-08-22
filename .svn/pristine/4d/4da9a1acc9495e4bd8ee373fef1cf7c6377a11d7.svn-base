@@ -1,0 +1,25 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.annapharm.dao.HospitalDAO;
+import kr.or.annapharm.dao.PharmacyDAO;
+import kr.or.annapharm.dto.HospitalVO;
+import kr.or.annapharm.dto.PharmacyVO;
+
+public class PharmacyServiceImpl implements PharmacyService{
+
+	private PharmacyDAO pharmacyDAO;
+	public void setPharmacyDAO(PharmacyDAO pharmacyDAO) {
+		this.pharmacyDAO = pharmacyDAO;
+	}
+
+	@Override
+	public List<PharmacyVO> getPharmacyName() throws SQLException {
+		List<PharmacyVO> pharmacyNameList = null;
+		pharmacyNameList = pharmacyDAO.selectPharmacyName();
+		return pharmacyNameList;
+	}
+
+}

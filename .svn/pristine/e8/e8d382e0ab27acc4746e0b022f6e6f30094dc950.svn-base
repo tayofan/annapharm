@@ -1,0 +1,40 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 이름과 생년월일로 조회된 회원을 출력하는 기능 -->
+
+<script>
+	function detailGo(mdNo){
+	console.log(mdNo);
+	$.ajax({
+		url:"productDetail.do",
+		data:{"mdNo" : mdNo},
+		type:"post",
+		success:function(res){
+			console.log(res);
+			OpenWindow('product_detail.do?from=product&mdNo='+mdNo,'상세보기',1000,800);
+		},
+		error:function(){
+			alert('응애!!');
+		}
+	});	
+}
+	function detailModify(){
+		$('.detailDate').attr("disabled", false);
+		$('.detailPosition').attr("disabled", false);
+	}
+	
+// 	function detailSave(){
+// 		var detailDate = $('.detailDate').val();
+// 		var detailPos = $('.detailPosition').val();
+// 		console.log(detailDate, detailPos);
+		
+// 	}
+	
+	function detailClose(){
+		window.close();
+	}
+	
+</script>

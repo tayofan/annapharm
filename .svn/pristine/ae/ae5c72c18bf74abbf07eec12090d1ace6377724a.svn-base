@@ -1,0 +1,14 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import kr.or.annapharm.command.Criteria;
+import kr.or.annapharm.command.SearchCriteria;
+
+public interface ProductService {
+	
+	public Map<String, Object> getProductList(SearchCriteria cri) throws SQLException;
+	
+//	public Map<String, Object> getDistinctProductMdNo() throws SQLException;
+}

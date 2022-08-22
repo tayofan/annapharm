@@ -1,0 +1,50 @@
+package kr.or.annapharm.dto;
+
+public class PatientVO {
+	private String patient_code;
+	private String mem_id;
+	private String patient_name;
+	private String patient_regnum;
+	private String patient_phone;
+	private String patient_addr;
+	
+	public String getPatient_code() {
+		return patient_code;
+	}
+	public void setPatient_code(String patient_code) {
+		this.patient_code = patient_code;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
+	}
+	public String getPatient_name() {
+		return patient_name;
+	}
+	public void setPatient_name(String patient_name) {
+		this.patient_name = patient_name;
+	}
+	public String getPatient_regnum() {
+		return patient_regnum;
+	}
+	public void setPatient_regnum(String patient_regnum) {
+		this.patient_regnum = patient_regnum;
+	}
+	public String getPatient_phone() {
+		return patient_phone;
+	}
+	public void setPatient_phone(String patient_phone) {
+		this.patient_phone = patient_phone;
+	}
+	public String getPatient_addr() {
+		return patient_addr;
+	}
+	public void setPatient_addr(String patient_addr) {
+		this.patient_addr = patient_addr;
+	}
+	
+	
+	
+}

@@ -1,0 +1,36 @@
+package kr.or.annapharm.dto;
+
+public class CompareMedicineVO {
+	private String md_name;
+	private String mi_company;
+	private String md_class;
+	private int mi_price;
+
+	public String getMd_name() {
+		return md_name;
+	}
+	public void setMd_name(String md_name) {
+		this.md_name = md_name;
+	}
+
+	public String getMi_company() {
+		return mi_company;
+	}
+	public void setMi_company(String mi_company) {
+		this.mi_company = mi_company;
+	}
+
+	public String getMd_class() {
+		return md_class;
+	}
+	public void setMd_class(String md_class) {
+		this.md_class = md_class;
+	}
+
+	public int getMi_price() {
+		return mi_price;
+	}
+	public void setMi_price(int mi_price) {
+		this.mi_price = mi_price;
+	}
+}

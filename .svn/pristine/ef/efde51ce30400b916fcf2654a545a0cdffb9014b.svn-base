@@ -1,0 +1,20 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+
+import kr.or.annapharm.dao.SalesAnalysisDAO;
+
+public class SalesAnalysisServiceImpl implements SalesAnalysisService {
+
+	private SalesAnalysisDAO salesAnalysisDAO;
+
+	public void setSalesAnalysisDAO(SalesAnalysisDAO salesAnalysisDAO) {
+		this.salesAnalysisDAO = salesAnalysisDAO;
+	}
+
+	@Override
+	public List<String> getChemistsName(String loginUserPharmacyCode) throws Exception {
+		return salesAnalysisDAO.selectChemistsName(loginUserPharmacyCode);
+	}
+
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SalesAnalysis-Mapper">
+
+	<sql id="search">
+		<if test="searchType == O.toString">
+			and chemist_code == #{searchType}
+		</if>
+	</sql>
+
+	<!-- 병진 : 로그인한 약사의 약국에 해당하는 모든 약사를 가져오는 SQL -->
+	<select id="selectChemistsName" resultType="String">
+		SELECT
+		    B.mem_name
+		  FROM chemist A, member B
+		 where pharmacy_code = #{loginUserPharmacyCode}
+		   and A.mem_id = B.mem_id
+	</select>
+
+	<!-- 병진 기간이나 약사에 따라 처방전을 가져오는 sql문 -->
+	<select id="selectSearchAnalysisList" resultType="salesAnalysis">
+		SELECT
+		    A.ps_complete_date			<!-- 처방 완료 일자 -->
+		   ,A.ps_type           		<!-- 구분(처방/비처방) -->
+		   ,C.mem_name as chemistName   <!-- 조제약사 -->
+		   ,F.mem_name as patientName   <!-- 환자이름 -->
+		   ,A.ps_code          			<!-- 처방전 코드 -->
+		  FROM prescription A, chemist B, member C, patient D, member F
+		 where ps_status = '조제완료'
+		   <!-- and A.ps_complete_date between to_date(20220501,'YYYYMMDD') and to_date(20220801,'YYYYMMDD') 동적쿼리로 대체-->
+		   <!-- and A.chemist_code = 'F00001' 동적쿼리로 대체-->
+		   and A.chemist_code = B.chemist_code
+		   and B.mem_id = C.mem_id
+		   and A.patient_code = D.patient_code
+		   and D.mem_id = F.mem_id
+		   order by A.ps_complete_date desc
+	</select>
+
+	<select id="selectSearchAnalysisListMedicienData" resultType="MedicienCalculat">
+		SELECT
+		    A.ps_code     		<!-- 처방전 코드 -->
+		   , A.md_no           	<!-- 약품 번호 -->
+		   , A.pre_drug_day    	<!-- 조제일수 -->
+		   , A.pre_drug_num  	<!-- 약 총 개수 -->
+		   , B.md_drug         	<!-- 마약류 구분 -->
+		   , C.mi_price			<!-- 약 가격 -->
+		  FROM pre_drug A, medicine B, medicine_info C
+		 where ps_code = #{psCode}
+		   and A.md_no = B.md_no
+		   and B.mi_code = C.mi_code
+	</select>
+
+</mapper>

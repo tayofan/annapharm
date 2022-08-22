@@ -1,0 +1,165 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import kr.or.annapharm.command.Criteria;
+import kr.or.annapharm.command.PageMaker;
+import kr.or.annapharm.command.SalesByAgeCommand;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dao.BusinessDAO;
+import kr.or.annapharm.dto.CompareMedicineVO;
+import kr.or.annapharm.dto.SalesByAgeVO;
+import kr.or.annapharm.dto.SearchMedicineVO;
+import kr.or.annapharm.dto.SelectListVO;
+
+public class BusinessServiceImpl implements BusinessService {
+
+	private BusinessDAO businessDAO;
+	public void setBusinessDAO(BusinessDAO businessDAO) {
+		this.businessDAO = businessDAO;
+	}
+	@Override
+	public Map<String, Object> getSalesByAgeList(SearchCriteria cri) throws SQLException {
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		
+		// DB에서 검색결과 가져오기
+		List<SalesByAgeVO> list = businessDAO.salesByAgeList(cri);
+		
+		// 데이터가 들어갈 전체 command 리스트
+		List<SalesByAgeCommand> commandList = new ArrayList<SalesByAgeCommand>();
+		
+		// 잘라서 보여줄 리스트
+		List<SalesByAgeCommand> displayCommandList = new ArrayList<SalesByAgeCommand>();
+		
+		for(int i = 0; i < 9; i++) {
+			SalesByAgeCommand manCommand = new SalesByAgeCommand();
+			SalesByAgeCommand girlCommand = new SalesByAgeCommand();
+			manCommand.setAge(10 * i);
+			manCommand.setSex("남성");
+			commandList.add(manCommand);
+			
+			girlCommand.setAge(10 * i);
+			girlCommand.setSex("여성");
+			commandList.add(girlCommand);
+		}
+		
+		int totalCount = 18;
+		
+		cri.setPerPageNum(5);
+		// PageMaker 생성.
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+		pageMaker.setDisplayPageNum(5);
+		
+		// DB데이터를 commandList에 넣기
+		for(SalesByAgeVO vo : list) {
+			for(SalesByAgeCommand command : commandList) {
+				if(vo.getAge() == command.getAge() && vo.getSex().equals(command.getSex())) {
+					if(vo.getType().equals("비처방")) {
+						command.setCountNoPs(vo.getCountPs());
+						command.setSumNoPrice(vo.getSumPrice());
+					}else {
+						command.setCountPs(vo.getCountPs());
+						command.setSumPrice(vo.getSumPrice());
+					}
+				}
+			}
+		}
+		
+		Collections.sort(commandList);
+		
+		for (int i = cri.getStartRowNum(); i < cri.getStartRowNum() + cri.getPerPageNum(); i++) {
+			if(commandList.size() <= i) {
+				break;
+			}
+			displayCommandList.add(commandList.get(i));
+		}
+		
+		dataMap.put("displayCommandList", displayCommandList);
+		dataMap.put("pageMaker", pageMaker);
+		
+		return dataMap;
+	}
+
+	@Override
+	public Map<String, Object> searchMedicineList(Criteria cri) throws SQLException {
+		SearchCriteria searchCri = (SearchCriteria)cri;
+
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		List<SearchMedicineVO> searchMedicineList = businessDAO.selectSearchMedicine(cri);
+
+		int totalCount = businessDAO.selectSearchMedicineCount(searchCri.getKeyword());
+
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+
+		dataMap.put("searchMedicineList", searchMedicineList);
+		dataMap.put("pageMaker", pageMaker);
+
+		return dataMap;
+	}
+
+	@Override
+	public Map<String, Object> searchBasisList(Criteria cri) throws SQLException {
+		SearchCriteria searchCri = (SearchCriteria)cri;
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		
+		List<SearchMedicineVO> searchBasisList = businessDAO.selectSearchBasis(cri);
+		
+		int totalCount = businessDAO.selectSearchBasisCount(searchCri.getKeyword());
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+
+		dataMap.put("searchBasisList", searchBasisList);
+		dataMap.put("pageMaker", pageMaker);
+		
+		return dataMap;
+	}
+
+	@Override
+	public List<CompareMedicineVO> getCompareList(String miMaincode) throws SQLException {
+		List<CompareMedicineVO> compareList = null;
+		
+		compareList = businessDAO.selectCompareMedicine(miMaincode);
+		
+		return compareList;
+	}
+
+	@Override
+	public void selectListAddDel(SelectListVO selectListVO) throws SQLException {
+		
+		if(selectListVO.getSelectMd().equals("fa-star far")) {
+			businessDAO.insertSelectList(selectListVO);
+		}else {
+			businessDAO.deleteSelectList(selectListVO);
+		}
+	}
+
+	@Override
+	public List<SelectListVO> getSelectList(String chemistCode) throws SQLException {
+		List<SelectListVO> selectList = null;
+		
+		selectList = businessDAO.selectList(chemistCode);
+		
+		return selectList;
+	}
+}
+
+
+
+
+

@@ -1,0 +1,145 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+
+<!-- 환자 선택 후 해당 환자 정보 출력 -->
+<script>
+function patientClick(code){
+	$.ajax({
+		url:"readCode.do",
+		data : {"code":code},
+		type:"post",
+		success:function(res){
+// 			선택 환자 정보
+// 			console.log(res.preInfo);
+// 			console.log(res.preInfo.patient_name);
+// 			console.log(res.preInfo.patient_birth);
+// 			console.log(res.preInfo.patient_phone);
+// 			console.log(res.preInfo.patient_addr);
+			$('#patient_name').attr('value', res.info.patient_name);
+			$('#patient_birth').attr('value', res.info.patient_birth);
+			$('#patient_phone').attr('value', res.info.patient_phone);
+			$('#patient_addr').attr('value', res.info.patient_addr);
+
+			console.log('res : ',res);
+
+			//console.log('preinfo : ', res.preInfo);
+
+			// 하나의 처방전의 약 갯수 세기
+			//console.log(res.medicineName.length);
+
+			// 하나의 처방전에 약 명 출력하기
+			console.log(1, res.medicineName);
+			
+			//과거 처방 이력 목록
+			/* printData2(res.preInfo,$('#prescriptionList'),$('#prescription-list-template')) */
+			
+			printData2(res.preInfo,$('#prescriptionList'),$('#prescription-list-template'))
+			
+		},
+		error:function(){
+			alert("오류입니다.");
+		}
+	});
+}
+</script>
+<!-- 헤지 : 과거 처방 이력에서 처방전 하나 선택 -> 처방 상세 내역 출력 -->
+<script>
+	function preClick(psCode, psStatus){
+ 		console.log(psCode);
+ 		console.log(psStatus);
+		
+		$.ajax({
+			url:"readPre.do",
+			data : {"psCode":psCode,
+				    "psStatus":psStatus},
+			type:"post",
+			success:function(res){
+				printData3(res.detailInfo,$('#prescriptionDetail'),$('#prescriptionDetail-list-template'))
+				
+				if(res.psStatus == "조제대기" || res.psStatus == "수정요청"){
+					$('#abc').removeClass("preDetailBtn");
+					$('#abc').addClass("btnBlueGreen");
+					$('#abc').attr("href", "#");
+				}else{
+					$('#abc').removeClass("btnBlueGreen");
+					$('#abc').addClass("preDetailBtn");
+					$('#abc').attr("href", "#");
+				}
+				
+			},
+			error:function(){
+				alert("오류입니다.");
+			}
+		});
+	}
+	
+	function updateBtn(psCode, psStatus){
+		alert("예에에에에에에");
+	}
+</script>
+
+<!-- 선택환자 처방전 출력하는 기능 -->
+<script  type="text/x-handlebars-template"  id="prescription-list-template">
+	{{#each .}}
+	<tbody class="prescription_tboy" id="prescription_tboy">
+		<tr id="{{ps_code}}" onClick="preClick({{ps_code}}, '{{ps_status}}')">
+			<td>{{inc @index}}</td>	
+			<td>{{ps_code}}</td>
+			<td>{{prettifyDate ps_date}}</td>
+			<td>{{medicineName}}</td>
+			<td>{{hospital_name}}</td>
+			<td>{{mem_name}}</td>
+			{{#ifhj01 ps_status }}
+				<td class="statusEnd">{{ps_status}}</td>
+			{{else}}
+				{{#ifhj02 ps_status }}
+					<td class="statusReady">{{ps_status}}</td>
+				{{else}}
+					<td class="statusUpdate">{{ps_status}}</td>
+				{{/ifhj02}}
+			{{/ifhj01}}
+			
+		</tr>
+	</tbody>
+	{{/each}}
+</script>
+
+<script>
+Handlebars.registerHelper('ifhj01', function(v1, options) {
+	  if(v1 == '조제완료') {
+	    return options.fn(this);
+	  }
+	  return options.inverse(this);
+});
+Handlebars.registerHelper('ifhj02', function(v1, options) {
+	  if(v1 == '조제대기') {
+	    return options.fn(this);
+	  }
+	  return options.inverse(this);
+});
+</script>
+
+
+<script>
+
+/* 해당 환자의  과거 처방 이력 출력 */
+function printData2(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.prescription_tboy').remove();
+	target.after(html);
+}
+
+/* 과거처방이력에서 처방전 선택 -> 해당 처방전의 상세 내역 출력 */
+function printData3(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.prescriptionDetail_tboy').remove();
+	target.after(html);
+}
+</script>
+
+
+

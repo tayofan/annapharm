@@ -1,0 +1,10 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import kr.or.annapharm.command.Criteria;
+
+public interface BusinessService {
+	public Map<String, Object> searchMedicineList(Criteria cri) throws SQLException;
+}

@@ -1,0 +1,101 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script type="text/x-handlebars-template"  id="reply-list-template" >
+{{#each .}}
+<tr class="mdList">
+	<td>{{md_name}}</td>
+	<td>{{componentFilter md_component}}</td>
+	<td>{{md_class}}</td>
+	<td>{{unitFilter unit}}</td>
+	<td>{{mi_maincode}}</td>
+</tr>
+{{/each}}
+</script>
+
+	
+<script type="text/x-handlebars-template"  id="reply-pagination-template" >
+<ul id="pagination" class="pagination justify-content-center m-0" >
+								
+<li class="paginate_button page-item">
+	<a href="1" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+		<i class='fas fa-angle-double-left'></i>
+	</a>
+</li>
+<li class="paginate_button page-item">
+	<a href="{{#if prev}}{{prevPageNum}}{{/if}}" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+		<i class='fas fa-angle-left'></i>
+	</a>
+</li>
+{{#each pageNum}}
+<li class="paginate_button page-item {{signActive this}}">
+	<a href="javascript:getPage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/50/{{this}}',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+		{{this}}
+	</a>
+</li>
+{{/each}}
+
+<li class="paginate_button page-item ">
+	<a href="{{#if next}}{{nextPageNum}}{{/if}}" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+		<i class='fas fa-angle-right'></i>
+	</a>
+</li>
+<li class="paginate_button page-item">
+	<a href="{{realEndPage}}" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+		<i class='fas fa-angle-double-right'></i>
+	</a>
+</li>	
+</ul>
+</script>	
+	
+	<script type="text/javascript">
+	var replyPage=1;
+
+	window.onload=function(){
+		getPage("<%=request.getContextPath()%>/expert/business/compare/mdsearch/50/"+replyPage);
+	}
+	function getPage(pageInfo,page){
+		if(page) replyPage = page;
+		$.getJSON(pageInfo,function(data){
+			printData(data.searchMedicineList,$('#searchMedicineList'),$('#reply-list-template'));
+			printPagination(data.pageMaker,$('#test3561'),$('#reply-pagination-template'));
+		});
+	}
+	
+	Handlebars.registerHelper({
+		"unitFilter" : function(unit){
+			var newUnit = unit.slice(0,-1).substr(1);
+			return newUnit;
+		},
+		"componentFilter" : function(component){
+			return component.replace(/\[(.*?)\]/gm,'').replaceAll('|',',');
+		},
+		"signActive" : function(pageNum){
+			if(pageNum == replyPage) return 'active';
+		}
+	});
+
+	function printData(replyArr,target,templateObject){
+		var template=Handlebars.compile(templateObject.html());
+		var html = template(replyArr);	
+		$('.mdList').remove();
+		target.after(html);
+	}
+	
+	/* pagination */
+	function printPagination(pageMaker,target,templateObject){
+		var pageNumArray = new Array(pageMaker.endPage-pageMaker.startPage+1);
+		for(var i=0;i<pageMaker.endPage-pageMaker.startPage+1;i++){
+			pageNumArray[i]=pageMaker.startPage+i;
+		}	
+		pageMaker.pageNum=pageNumArray;  
+		pageMaker.prevPageNum=pageMaker.startPage-1;
+		pageMaker.nextPageNum=pageMaker.endPage+1;
+		
+		var template=Handlebars.compile(templateObject.html());	
+		var html = template(pageMaker);	
+		target.html("").html(html);
+	}
+	
+	</script>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Business-Mapper">  
+	<select id="selectSearchMedicine" resultType="kr.or.annapharm.dto.SearchMedicineVO">
+		select
+			 a.md_name as md_name
+			,a.md_component as md_component
+			,a.md_class as md_class
+			,substr(b.mi_name,instr(b.mi_name,'_' )+1) as unit
+			,b.mi_maincode as mi_maincode
+		  from medicine a, medicine_info b
+		 where a.mi_code = b.mi_code
+		   and a.md_name like '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="selectSearchMedicineCount" resultType="int">
+		select count(*)
+		from medicine
+		where md_name like '%'||#{keyword}||'%'
+	</select>
+
+</mapper>
+

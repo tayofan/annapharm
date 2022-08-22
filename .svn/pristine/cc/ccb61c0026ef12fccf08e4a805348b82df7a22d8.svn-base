@@ -1,0 +1,130 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.ProductCommandVO;
+import kr.or.annapharm.dto.ProductVO;
+import kr.or.annapharm.service.ClassficationService;
+import kr.or.annapharm.service.ProductService;
+import kr.or.annapharm.service.ReceiveService;
+@Controller
+@RequestMapping("/expert/product")
+public class ProductController {
+	
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private ReceiveService receiveService;
+	
+	@Autowired
+	private ClassficationService classficationService;
+	
+	@RequestMapping("/product") // 재고관리 목록의 재고현황 리스트 출력
+	public ModelAndView receiveOrderlist(SearchCriteria cri, ModelAndView mnv) throws Exception{
+		String url = "expert/product/product";
+		Map<String, Object> receiveOrder = receiveService.getReceiveList(cri);
+		System.out.println("크립니다."+cri);
+		mnv.addObject("receiveOrder", receiveOrder);
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+	@RequestMapping("/ownList") // 재고관리 목록의 재고현황 리스트 출력
+	public ModelAndView ownList(SearchCriteria cri, ModelAndView mnv) throws Exception{
+		String url = "expert/product/ownList";
+		Map<String, Object> product = productService.getProductList(cri);
+		Map<String, Object> productClass = classficationService.getClassficationList(cri);
+		
+		mnv.addObject("product", product);
+		mnv.addObject("productClass", productClass);
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+	@RequestMapping("/product_detail") // 약 상세정보를 새창을 띄워 보여줌
+	public ModelAndView detail(int mdNo, String from, ModelAndView mnv) throws SQLException{
+		String url ="expert/product/product_detail";
+		
+		List<ProductVO> dataMap = null;
+		
+		dataMap = productService.getProductDetail(mdNo);
+		
+		mnv.addObject("productDetailList", dataMap);
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+
+//	@RequestMapping("/receive") 
+//	public ModelAndView receiveOrderList(SearchCriteria cri, ModelAndView mnv) throws Exception{
+//		String url = "expert/product/product";
+//		
+//		Map<String, Object> dataMap = receiveService.getReceiveList(cri);
+//		
+//	}
+	
+	@ResponseBody
+	@RequestMapping(value="/update",method=RequestMethod.POST) // 약 상세정보를 수정하도록 해줌
+	public String modify(@RequestBody String detail ) throws Exception{
+		String url = "redirect:/expert/product/product_detail.do";
+		
+		ProductCommandVO pro = new ProductCommandVO();
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		List<String> detailList = objectMapper.readValue(detail, new TypeReference<List>() {}); // JSON 데이터를 List에 저장
+		System.out.println("123" + detailList.size());
+		int count = 1;
+		for(int i = 0; i< detailList.size(); i++) {
+			System.out.println("나는 카운트 " + count);
+			Map<String,String> detailMap = objectMapper.readValue(detailList.get(i), new TypeReference<Map<String,String>>() {}); // JSON 데이터를 한번 더 Map에 저장
+			String proQr = (String)detailMap.get("productQr"); // String 타입으로 변환해서 넣어주기.
+			String proDate = (String)detailMap.get("productDate");
+			String proPos = (String)detailMap.get("productPosition");
+			
+			pro.setProductQr(proQr);
+			pro.setProductDate(proDate);
+			pro.setProductPosition(proPos);
+			
+			productService.updateProductDetail(pro);
+			count++;
+		}
+		System.out.println("내가 나와야해");
+		return url;
+	}
+		
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,24 @@
+package kr.or.annapharm.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/retrieve")
+public class RetrieveController {
+
+
+	//회수하는 페이지 이동
+	@RequestMapping("/main")
+	public String retrieveMain() {
+		String url ="/expert/recallRequest/RecallRequest";
+
+
+
+		return url;
+	}
+
+
+	//회수내역확인 페이지 이동
+
+}

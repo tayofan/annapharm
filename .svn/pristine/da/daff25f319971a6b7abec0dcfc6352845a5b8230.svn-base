@@ -1,0 +1,192 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+
+<script>
+	
+
+
+	function receiveGo(){
+		window.open('receiveOrderWrite.do','약등록','width=748,height=950,left=600,top=600,location=no,status=no,scrollbars=yes');
+	}
+	
+	function detailGo(mdNo){
+	console.log(mdNo);
+	$.ajax({
+		url:"productDetail.do",
+		data:{"mdNo" : mdNo},
+		type:"post",
+		success:function(res){
+			console.log(res);
+			OpenWindow('product_detail.do?from=product&mdNo='+mdNo,'상세보기',1000,800);
+		},
+		error:function(){
+			alert('응애!!');
+		}
+	});	
+}
+	function detailModify(){
+		$('.detailDate').attr("disabled", false);
+		$('.detailPosition').attr("disabled", false);
+	}
+	
+	function detailSave(){
+		var detailQr = document.querySelectorAll(".detailQr")
+		var detailDate = document.querySelectorAll(".detailDate");
+		var detailPos = document.querySelectorAll(".detailPosition");
+		
+		var arr = [];
+		
+// 		console.log(detailQr);
+		for(var i = 0; i<detailQr.length; i++){
+			var obj = "";
+			var qr = detailQr[i].value;
+			var date = detailDate[i].value;
+			var position = detailPos[i].value;
+			
+			obj += '{"productQr" : "' + qr + '"';
+			obj += ', "productDate" : "' + date + '"';
+			obj += ', "productPosition" : "' + position + '"}';
+			  
+			arr.push(obj);
+		}
+		console.log(JSON.parse(JSON.stringify(arr))); 
+		$.ajax({
+			url:"update.do",
+			data:JSON.stringify(arr),
+			contentType : "application/json",
+			type:"post",
+			success:function(res){
+				alert('수정 되었습니다.');
+			},
+			error:function(){
+				alert('수정 실패했습니다.');
+			}
+		});
+		
+		$('.detailDate').attr("disabled", true);
+		$('.detailPosition').attr("disabled", true);
+	}
+	
+	function detailClose(){
+		window.close();
+	}
+	
+	function receiveOrderDetail(no){
+		var type = $('#searchType').val();
+		console.log("no",no);
+		$.ajax({
+			url:"receiveOrderDetail.do",
+			data:{"no":no,
+				  "type":type	
+			},
+			type:"post",
+			success:function(res){
+				if(type =='receive'){
+				printReceiveOrderCart(res, $('.receiveOrderCartList'),$('#receiveCart-list-template'))
+				printReceiveOrderCartRes(res[0], $('#receiveOrderCartResult'),$('#receiveCart-result-template'))
+				}else{
+				printReceiveOrderCart(res, $('.receiveOrderCartList'),$('#orderCart-list-template'))
+				printReceiveOrderCartRes(res[0], $('#receiveOrderCartResult'),$('#orderCart-result-template'))	
+				}
+			},
+			error:function(){
+				alert("오류에유..");
+			}
+		});
+	}
+	
+	function printReceiveOrderCart(receiveOrderCart, target, templateObject) {
+	   var template = Handlebars.compile(templateObject.html());
+	   var html = template(receiveOrderCart);
+	   if(template != templateObject){
+	   $('.receiveOrderCart').remove();
+	   }
+	   target.append(html);
+	}
+	
+	function printReceiveOrderCartRes(receiveOrderCart, target, templateObject) {
+		   var template = Handlebars.compile(templateObject.html());
+		   var html = template(receiveOrderCart);
+		   if(template != templateObject){
+		   $('#receiveOrderCartResPrice').remove();
+		   $('#receiveOrderCartResDate').remove();
+		   }
+		   target.append(html);
+		}
+	
+// 	Handlebars.registerHelper(
+// 			"printRes", function (searchType, date) {
+// 		  if (searchType == 'receive') return `<span>${date} 입고장</span>`;
+// 		  return `<span>${date} 발주서</span>`;
+// 		}
+</script>
+
+<script type="text/x-handlebars-template"  id="receiveCart-list-template">
+	{{#each .}}
+		<tr class="receiveOrderCart">
+			<td>{{inc @index}}</td> 
+			<td>{{miType}}</td>
+			<td>{{miCompany}}</td>
+			<td class="mediName" data-toggle="tooltip" title={{mdName}}>{{mdName}}</td>
+			<td>{{prettifyDate receiveShelfLife}}</td>
+			<td>{{receiveCartNum}}</td>
+			<td>{{miUnit}}</td>
+			<td>{{receiveCartPrice}}</td>
+		</tr>
+	{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="receiveCart-result-template">
+	<div class="col-sm-6" style="float: right; display: flex;" id="receiveOrderCartResDate">
+		<span>{{prettifyDate receiveDate}} 입고장</span>
+	</div>
+	<div class="col-sm-6" id="receiveOrderCartResPrice">
+		<span>입고 합계 금액 : 310,150원</span>
+	</div>
+</script>
+
+<script type="text/x-handlebars-template"  id="orderCart-list-template">
+	{{#each .}}
+		<tr class="receiveOrderCart">
+			<td>{{inc @index}}</td> 
+			<td>{{miType}}</td>
+			<td data-toggle="tooltip" title={{miCompany}}>{{miCompany}}</td>
+			<td class="mediName" data-toggle="tooltip" title={{mdName}}>{{mdName}}</td>
+			<td>-</td>
+			<td>{{orderCartNum}}</td>
+			<td>{{miUnit}}</td>
+			<td>{{orderCartPrice}}</td>
+		</tr>
+	{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="orderCart-result-template">
+	<div class="col-sm-6" style="float: right; display: flex;" id="receiveOrderCartResDate">
+		<span>{{prettifyDate orderDate}} 발주서</span>
+	</div>
+	<div class="col-sm-6" id="receiveOrderCartResPrice">
+		<span>입고 합계 금액 : 310,150원</span>
+	</div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

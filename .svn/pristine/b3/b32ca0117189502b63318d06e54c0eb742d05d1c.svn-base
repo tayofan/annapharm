@@ -1,0 +1,314 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>최근 처방전 조회하기</title>
+
+<style>
+
+
+.button {
+	width: 55px;
+	height: 25px;
+	padding: 0;
+	/* margin: 10px 20px 10px 0; */
+	font-weight: 600;
+	text-align: center;
+	line-height: 25px;
+	color: #FFF;
+	border-radius: 5px;
+	border: 0px;
+	transition: all 0.2s;
+}
+
+
+/* 처방전상세내역버튼(추가, 저장, 취소) */
+.btnBlueGreen {
+	background: #1E82FF;
+}
+
+.btnFade.btnBlueGreen:hover {
+	background: #0A6EFF;
+}
+
+/* 괄호안 문자 span태그 */
+.titleSpan{
+	font-size: 12px;
+}
+
+th{
+	background-color: #E8F5FF;
+	font-size: 12px;
+	height: 25px;
+}
+td{
+	font-size: 12px;
+	height: 25px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.scrolltbody, .scrolltbody2{
+    display: block;
+}
+
+/* 처방전이 출력되는 테이블 tbody */
+.scrolltbody tbody{
+	display: block;
+    height: 126px;
+    max-height: 126px;
+    overflow: auto;
+}
+
+/* 처방전 상세내역이 출력되는 테이블 tbody */
+.scrolltbody2 tbody{
+	display: block;
+    height: 150px;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.scrolltbody th:nth-of-type(1), .scrolltbody td:nth-of-type(1) { width: 60px; }
+.scrolltbody th:nth-of-type(2), .scrolltbody td:nth-of-type(2) { width: 100px; }
+.scrolltbody th:nth-of-type(3), .scrolltbody td:nth-of-type(3) { width: 100px; }
+.scrolltbody th:nth-of-type(4), .scrolltbody td:nth-of-type(4) { width: 100px; }
+.scrolltbody th:nth-of-type(5), .scrolltbody td:nth-of-type(5) { width: 100px; }
+.scrolltbody th:nth-of-type(1), .scrolltbody td:nth-of-type(1) { max-width: 60px; }
+.scrolltbody th:nth-of-type(2), .scrolltbody td:nth-of-type(2) { max-width: 100px; }
+.scrolltbody th:nth-of-type(3), .scrolltbody td:nth-of-type(3) { max-width: 100px; }
+.scrolltbody th:nth-of-type(4), .scrolltbody td:nth-of-type(4) { max-width: 100px; }
+.scrolltbody th:nth-of-type(5), .scrolltbody td:nth-of-type(5) { max-width: 100px; }
+
+.scrolltbody2 th:nth-of-type(1), .scrolltbody2 td:nth-of-type(1) { width: 140px; }
+.scrolltbody2 th:nth-of-type(2), .scrolltbody2 td:nth-of-type(2) { width: 80px; }
+.scrolltbody2 th:nth-of-type(3), .scrolltbody2 td:nth-of-type(3) { width: 60px; }
+.scrolltbody2 th:nth-of-type(4), .scrolltbody2 td:nth-of-type(4) { width: 60px; }
+.scrolltbody2 th:nth-of-type(5), .scrolltbody2 td:nth-of-type(5) { width: 60px; }
+.scrolltbody2 th:nth-of-type(6), .scrolltbody2 td:nth-of-type(6) { width: 60px; }
+.scrolltbody2 th:nth-of-type(1), .scrolltbody2 td:nth-of-type(1) { max-width: 140px;}
+.scrolltbody2 th:nth-of-type(2), .scrolltbody2 td:nth-of-type(2) { max-width: 80px;  }
+.scrolltbody2 th:nth-of-type(3), .scrolltbody2 td:nth-of-type(3) { max-width: 60px;  }
+.scrolltbody2 th:nth-of-type(4), .scrolltbody2 td:nth-of-type(4) { max-width: 60px;  }
+.scrolltbody2 th:nth-of-type(5), .scrolltbody2 td:nth-of-type(5) { max-width: 60px;  }
+.scrolltbody2 th:nth-of-type(6), .scrolltbody2 td:nth-of-type(6) { max-width: 60px;  }
+
+
+label{
+	margin-right: 10px;
+}
+
+</style>
+
+</head>
+<body>
+	<div class="content-wrapper">
+		<div class="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card card-outline"></div>
+					</div>
+				</div>
+				<div class="card card-primary card-outline" style="height: 220px;">
+					<div class="card-header">
+						<h5 class="card-title m-0 title">
+							<i class='far fa-address-card' style='font-size: 20px'></i> 간편 처방전 확인하기!
+						</h5>
+					</div>
+					<div class="card-body" style="text-align: center;">
+						<form method="post" action="insertMemberForPharmacist" name="registForm" id="registForm" target="_parent" style="font-size: 12px;">
+							<div class="patientInfoDetail mb-3">
+								<label for="total_salesCount" style="text-align: right;">이&emsp;&nbsp;름</label>
+								<input type="text" class="memberName" name="memName" id="total_salesCount memberName" style="width: 174px;"><br />
+							</div>
+							<div class="patientInfoDetail mb-3">
+								<label for="total_salesFee" style="text-align: right;">주민번호</label>
+								<input type="text" onkeyup=""  class="memberReg" name="memRegnum" id="memRegnum" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" style="width: 80px;">&nbsp;
+								-
+								<input type="password" onkeyup=""  class="memberReg2" name="memRegnum2" id="memRegnum2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" style="width: 80px;">&nbsp;
+							</div>
+							<div class="addViewBtn">
+								<button class="button btnFade btnBlueGreen addBtn" type="button"
+									onclick="prescriptionRead()"class="insertMemberForPharmacist" id="insertMemberForPharmacist"
+									style="width: 70px; margin-right: 25px;">조회</button>
+								<button onclick="window.close()" class="button btnFade btnBlueGreen viewBtn" type="button"
+									style="width: 70px;">닫기</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="card card-primary card-outline" style="height: 245px; display:none;" id="prescriptionDetailCard">
+					<div class="card-header">
+						<h5 class="card-title m-0 title">
+							<i class='far fa-address-card' style='font-size: 20px'></i> 처방전 확인하기<span class="titleSpan">(※ 간편 조회는 최근 7일내 자료만을 출력합니다.)</span>
+						</h5>
+					</div>
+					<div class="card-body" style="text-align: center;">
+						<div class="row">
+							<table id="example2" class="table-bordered dataTable dtr-inline scrolltbody" role="grid" aria-describedby="example1_info"
+									style="margin:9px; margin-top: 0px;">
+								<thead>
+									<tr role="row" style="text-align: center;">
+										<th class="inquriy_list" style="width: 60px;">구분</th>
+										<th class="inquriy_list" style="width: 100px;">처방일</th>
+										<th class="inquriy_list" style="width: 100px;">처방병원	</th>
+										<th class="inquriy_list" style="width: 100px;">
+											제조약국
+											<i class="fa-solid fa-circle-question" data-toggle="tooltip" title="처방전을 조제받지 않았을 시 약국은 출력되지 않습니다."></i>
+										</th>
+										<th class="inquriy_list" style="width: 100px;">처방전 상태</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr onclick="nonLoginPrescriptReadFixLine(this)">
+										<td style="width: 60px; " class="dtr-control sorting_1" data-toggle="tooltip" title="">5</td>
+										<td style="width: 100px; ">2022.08.04</td>
+										<td style="width: 100px; ">DDIT병원</td>
+										<td style="width: 110px;">병산약국</td>
+										<td style="width: 110px;">조제완료</td>
+									</tr>
+									<tr onclick="nonLoginPrescriptReadFixLine(this)">
+										<td class="dtr-control sorting_1" data-toggle="tooltip" title="">4</td>
+										<td>2022.08.03</td>
+										<td>DDIT병원</td>
+										<td>병산약국</td>
+										<td>조제완료</td>
+									</tr>
+									<tr onclick="nonLoginPrescriptReadFixLine(this)">
+										<td class="dtr-control sorting_1" data-toggle="tooltip" title="">3</td>
+										<td>2022.08.03</td>
+										<td>DDIT병원</td>
+										<td>병산약국</td>
+										<td>조제완료</td>
+									</tr>
+									<tr onclick="nonLoginPrescriptReadFixLine(this)">
+										<td class="dtr-control sorting_1" data-toggle="tooltip" title="">2</td>
+										<td>2022.08.02</td>
+										<td>DDIT병원</td>
+										<td>병산약국</td>
+										<td>조제완료</td>
+									</tr>
+									<tr onclick="nonLoginPrescriptReadFixLine(this)">
+										<td class="dtr-control sorting_1" data-toggle="tooltip" title="">1</td>
+										<td>2022.08.01</td>
+										<td>DDIT병원</td>
+										<td>병산약국</td>
+										<td>조제완료</td>
+									</tr>
+									<tr onclick="nonLoginPrescriptReadFixLine(this)">
+										<td class="dtr-control sorting_1" data-toggle="tooltip" title="">1</td>
+										<td>2022.08.01</td>
+										<td>DDIT병원</td>
+										<td>병산약국</td>
+										<td>조제완료</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+
+						</div>
+					</div>
+				</div>
+
+				<div class="card card-primary card-outline" style="height: 300px; display:none;" id="prescriptionDetailMedicienCard">
+					<div class="card-header">
+						<h5 class="card-title m-0 title">
+							<i class='far fa-address-card' style='font-size: 20px'></i> 처방전 상세내역 확인하기<span class="titleSpan">(※ 약명을 클릭하면 상세정보를 확인할 수 있습니다)</span>
+						</h5>
+					</div>
+					<div class="card-body" style="text-align: center;">
+						<div class="row">
+							<table id="example2" class="table-bordered dataTable dtr-inline scrolltbody2" role="grid" aria-describedby="example1_info"
+									style="margin:9px; margin-top: 0px;">
+								<thead>
+									<tr role="row" style="text-align: center;">
+										<th class="inquriy_list" style="width: 140px;">약명</th>
+										<th class="inquriy_list" style="width: 80px;">제조사</th>
+										<th class="inquriy_list" style="width: 60px;">유형</th>
+										<th class="inquriy_list" style="width: 60px;">급여</th>
+										<th class="inquriy_list" style="width: 60px;">횟수</th>
+										<th class="inquriy_list" style="width: 60px;">일수</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="width: 140px;" class="dtr-control sorting_1" data-toggle="tooltip" title="유니코프시럽(레보드로프로피진)">유니코프시럽(레보드로프로피진)</td>
+										<td style="width: 80px;" data-toggle="tooltip" title="유니메드제약(주)">유니메드제약(주)</td>
+										<td style="width: 60px;">내복</td>
+										<td style="width: 60px;">급여</td>
+										<td style="width: 60px;">1</td>
+										<td style="width: 60px;">1</td>
+									</tr>
+									<tr>
+										<td class="dtr-control sorting_1" data-toggle="tooltip" title="엔티코프캡슐300밀리그램(테오브로민)">엔티코프캡슐300밀리그램(테오브로민)</td>
+										<td data-toggle="tooltip" title="한국신텍스제약(주)">한국신텍스제약(주)</td>
+										<td >내복</td>
+										<td >급여</td>
+										<td >1</td>
+										<td >1</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		window.onload = function(){
+			$('[data-toggle="tooltip"]').tooltip();
+			findListChecked();
+		}
+	</script>
+
+	<script>
+	function prescriptionRead(){
+
+		var detailCard = document.querySelector('#prescriptionDetailCard');
+		var detailMedicienCard = document.querySelector('#prescriptionDetailMedicienCard');
+
+		if(detailCard.style.display == 'none'){
+			detailCard.style.display = 'block';
+			detailMedicienCard.style.display = 'block';
+			window.resizeTo(650,800);
+		}
+
+	}
+
+	//선택한 행 고정!!!!
+	function nonLoginPrescriptReadFixLine(target){
+		console.log(target);
+		var tr = target.parentNode.querySelectorAll('tr');
+		tr.forEach(function(obj){
+			obj.style.backgroundColor = 'white';
+			obj.style.fontWeight = 'normal';
+		});
+		target.style.backgroundColor = 'skyblue';
+		target.style.fontWeight = 'bold';
+	}
+
+
+	</script>
+
+
+	<!-- 엔터키 이벤트  -->
+	<script>
+	function patientEnter(){
+		if (window.event.keyCode == 13) {
+			insertMemberForPharmacist3();
+		}
+	}
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+package kr.or.annapharm.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.dto.PatientVO;
+
+public class PatientDAOImpl implements IPatientDAO {
+
+	private SqlSession session;
+
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+
+
+	@Override
+	public List<Map<String, String>> selectPatientList() throws Exception {
+		return session.selectList("Patient-Mapper.selectPatientList");
+	}
+
+
+	@Override
+	public int selectPatientListCount() throws Exception {
+		return session.selectOne("Patient-Mapper.selectPatientListCount");
+	}
+
+
+	@Override
+	public PatientVO selectPatientOne(String code) throws Exception {
+		System.out.println("DAO Code = " + code);
+		return session.selectOne("Patient-Mapper.selectPatientOne", code);
+	}
+
+
+	@Override
+	public List<PatientVO> selectPatientToNameRegnum(PatientVO vo) throws Exception {
+
+		System.out.println("다오 생년월일 : " + vo.getPatient_regnum());
+		System.out.println("다오 이름 : " + vo.getPatient_name());
+
+		return session.selectList("Patient-Mapper.selectPatientToNameRegnum", vo);
+	}
+
+
+
+
+}

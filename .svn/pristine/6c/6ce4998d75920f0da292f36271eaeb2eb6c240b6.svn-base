@@ -1,0 +1,283 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script type="text/x-handlebars-template"  id="searchMedicine-list-template" >
+{{#each .}}
+<tr class="mdList hover" onclick="goCompare('<%=request.getContextPath()%>/expert/business/compare/list/F00001/',this)">
+	<td data-toggle="tooltip" title="{{mdName}}">{{mdName}}</td>
+	<td data-toggle="tooltip" title="{{componentFilter mdComponent}}">{{componentFilter mdComponent}}</td>
+	<td>{{classFilter mdClass}}</td>
+	<td data-toggle="tooltip" title="{{unitFilter unit}}">{{unitFilter unit}}</td>
+	<td>{{miMaincode}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="searchMedicine-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="basis-list-template" >
+{{#each .}}
+<tr class="basisList hover" onclick="goCompare('<%=request.getContextPath()%>/expert/business/compare/list/F00001/',this)">
+	<td>{{miType}}</td>
+	<td data-toggle="tooltip" title="{{componentFilter mdComponent}}">{{componentFilter mdComponent}}</td>
+	<td>{{miMaincode}}</td>
+	<td data-toggle="tooltip" title="{{unitFilter unit}}">{{unitFilter unit}}</td>
+	<td>{{miUse}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="basis-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="compare-list-template" >
+{{#each .}}
+<tr class="compareList" >
+	<td><i onclick="addSelectList(this,{{mdNo}})" id="{{mdNo}}" class='{{selectMd}}'></i></td>
+	<td data-toggle="tooltip" title="{{mdName}}"><a  href="javascript:OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+{{mdNo}},'{{mdName}}','상세보기',800,700);">{{mdName}}</a></td>
+	<td data-toggle="tooltip" title="{{miCompany}}">{{miCompany}}</td>
+	<td>{{classFilter mdClass}}</td>
+	<td class="text-right">{{miPrice}}</td>
+	<td><input class="compareCheck" value="{{mdNo}}" type="checkbox"/></td>
+</tr>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="select-list-template" >
+{{#each .}}
+<tr class="selectList" >
+	<td><i onclick="addSelectList(this,{{mdNo}})" class='fa-star fas'></i></td>
+	<td data-toggle="tooltip" title="{{mdName}}"><a href="javascript:OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+{{mdNo}},'{{mdName}}','상세보기',800,700);">{{mdName}}</a></td>
+	<td data-toggle="tooltip" title="{{miCompany}}">{{miCompany}}</td>
+	<td>{{classFilter mdClass}}</td>
+	<td>{{miPrice}}</td>
+	<td><input class="compareCheck" value="{{mdNo}}" type="checkbox"/></td>
+</tr>
+{{/each}}
+</script>
+
+<script>
+$(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();   
+});
+
+function OpenWindows(UrlStr,mdName, WinTitle, WinWidth, WinHeight) {
+	winleft = (screen.width - WinWidth) / 2;
+	wintop = (screen.height - WinHeight) / 2;
+	title = mdName + WinTitle
+	var win = window.open(UrlStr , title , "scrollbars=yes,width="+ WinWidth +", "
+							+"height="+ WinHeight +", top="+ wintop +", left="
+							+ winleft +", resizable=yes, status=yes"  );
+}
+
+function toggleStar(mdNo) {
+	var target = $('#'+mdNo)[0];
+	if(target){
+		if(target.className == 'fa-star far'){
+			target.classList.remove('far');
+			target.classList.add('fas');	
+		}else {
+			target.classList.remove('fas');
+			target.classList.add('far');	
+		}
+	}
+}
+
+function addSelectList(target,mdNo){
+	var chemistCode = 'F00001';
+	
+	var data={
+		"mdNo":mdNo,
+		"chemistCode":chemistCode,
+		"selectMd":target.className
+	}
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/compare/addselectlsit.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			printData(data,$('#selectList'),$('#select-list-template'),"selectList");
+			toggleStar(mdNo);
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+	
+}
+</script>	
+
+	
+<script type="text/javascript">
+var replyPage=1;
+var basisPage=1;
+function doCompare() {
+	
+	$('.compareCheck:checked').each(function(index,obj){
+		var mdNo = $(obj).val();
+		OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+mdNo,mdNo,'상세보기',800,700);
+	})	
+}
+
+$(document).delegate('.compareCheck','change',function(){
+	
+	var checkeds = $('.compareCheck:checked');
+	var uncheckeds = $('.compareCheck:not(.compareCheck:checked)');
+	
+// 	console.log(checkeds)
+// 	console.log(uncheckeds)
+	if(checkeds.length >= 4){
+		uncheckeds.attr('disabled',true);
+	}else{
+		uncheckeds.attr('disabled',false);
+	}
+
+});
+
+
+function goCompare(pageInfo,target){
+	var mainCode;
+	if($(target).attr('class') == "mdList hover"){
+		mainCode = $(target).children(':last').text();
+	}else {
+		mainCode = $(target).children(':eq(2)').text();
+	}
+	pageInfo += mainCode;
+	$.getJSON(pageInfo,function(data){
+		printData(data,$('#compareList'),$('#compare-list-template'),"compareList");
+	});
+// 	console.log(mainCode);
+}
+
+function getSearchMedicinePage(pageInfo,page,keyword){
+	if(page) replyPage = page;
+	if(!keyword) keyword = $("#nameKeyword").val();
+	pageInfo += keyword + '/' + replyPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchMedicineList,$('#searchMedicineList'),$('#searchMedicine-list-template'),"medicineSearch");
+		printPagination(data.pageMaker,$('#test3561'),$('#searchMedicine-pagination-template'));
+	});
+}
+
+function getSearchBasisPage(pageInfo,page,keyword){
+	if(page) basisPage = page;
+	if(!keyword) keyword = $("#basisKeyword").val();
+	pageInfo += keyword + '/' + basisPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchBasisList,$('#searchBasisList'),$('#basis-list-template'),"basisSearch");
+		printPagination(data.pageMaker,$('#basis3561'),$('#basis-pagination-template'));
+	});
+}
+
+
+Handlebars.registerHelper({
+	"unitFilter" : function(unit){
+		var newUnit = unit.slice(0,-1).substr(1);
+		return newUnit;
+	},
+	"componentFilter" : function(component){
+		return component.replace(/\[(.*?)\]/gm,'').replaceAll('|',',');
+	},
+	"signActive" : function(pageNum){
+		if(pageNum == replyPage) return 'active';
+	},
+	"classFilter": function(className){
+		return className.replace("의약품","");
+	}
+// 	"starCheck": function(selectMd){
+// 		if(select)
+// 		return null;
+// 	}
+});
+
+function printData(replyArr,target,templateObject,targetName){
+	var template=Handlebars.compile(templateObject.html());
+	var html = template(replyArr);
+	if(targetName == "medicineSearch") $('.mdList').remove();
+	if(targetName == "basisSearch") $('.basisList').remove();
+	if(targetName == "compareList") $('.compareList').remove();
+	if(targetName == "selectList") $('.selectList').remove();
+	target.after(html);
+}
+
+/* pagination */
+function printPagination(pageMaker,target,templateObject){
+	var pageNumArray = new Array(pageMaker.endPage-pageMaker.startPage+1);
+	for(var i=0;i<pageMaker.endPage-pageMaker.startPage+1;i++){
+		pageNumArray[i]=pageMaker.startPage+i;
+	}	
+	pageMaker.pageNum=pageNumArray;  
+	pageMaker.prevPageNum=pageMaker.startPage-1;
+	pageMaker.nextPageNum=pageMaker.endPage+1;
+	
+	var template=Handlebars.compile(templateObject.html());	
+	var html = template(pageMaker);	
+	target.html("").html(html);
+}
+
+</script>

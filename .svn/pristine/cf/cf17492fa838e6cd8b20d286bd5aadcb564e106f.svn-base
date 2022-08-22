@@ -1,0 +1,19 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.annapharm.dto.MedicineVO;
+import kr.or.annapharm.dto.SearchMedicineVO;
+
+public interface MedicineDAO {
+	public String selectMedicineClass(int md_no) throws SQLException;
+	
+	public int selectMedicineType(int md_no) throws SQLException;
+	
+	public String selectMedicineName(int md_no) throws SQLException;
+	
+	public MedicineVO selectMedicineAll(int md_no) throws SQLException;
+	
+	public List<SearchMedicineVO> selsectSearchMedicine(String keyword) throws SQLException;
+}

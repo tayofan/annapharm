@@ -1,0 +1,437 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<script type="text/x-handlebars-template"  id="ageBySexList-list-template" >
+{{#each .}}
+<tr class="ageBySexList hover">
+	<td class="text-center">{{ageRange age}}</td>
+	<td>{{sex}}</td>
+	<td class="text-right">{{count}}</td>
+	<td class="text-right">{{price}}</td>
+	<td class="text-right">{{biCount}}</td>
+	<td class="text-right">{{biPrice}}</td>
+	<td class="text-right">{{totalCount}}</td>
+	<td class="text-right">{{totalPrice}}</td>
+</tr>
+{{/each}}
+</script>
+						
+<script type="text/x-handlebars-template"  id="ageBySexList-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor(1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor({{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:searchDateOfVisitor({{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:searchDateOfVisitor({{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor({{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="searchMedicine-list-template" >
+{{#each .}}
+<tr class="mdList hover" onclick="goCompare('<%=request.getContextPath()%>/expert/business/compare/list/F00001/',this)">
+	<td data-toggle="tooltip" title="{{mdName}}">{{mdName}}</td>
+	<td data-toggle="tooltip" title="{{componentFilter mdComponent}}">{{componentFilter mdComponent}}</td>
+	<td class="text-center">{{classFilter mdClass}}</td>
+	<td data-toggle="tooltip" title="{{unitFilter unit}}">{{unitFilter unit}}</td>
+	<td class="text-center">{{miMaincode}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="searchMedicine-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="basis-list-template" >
+{{#each .}}
+<tr class="basisList hover" onclick="goCompare('<%=request.getContextPath()%>/expert/business/compare/list/F00001/',this)">
+	<td class="text-center">{{miType}}</td>
+	<td data-toggle="tooltip" title="{{componentFilter mdComponent}}">{{componentFilter mdComponent}}</td>
+	<td class="text-center">{{miMaincode}}</td>
+	<td data-toggle="tooltip" title="{{unitFilter unit}}">{{unitFilter unit}}</td>
+	<td class="text-center">{{miUse}}</td>
+</tr>
+{{/each}}
+</script>
+	
+<script type="text/x-handlebars-template"  id="basis-pagination-template" >
+<ul id="pagination" class="pagination pagination-sm justify-content-center m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',{{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</script>
+
+<script type="text/x-handlebars-template"  id="compare-list-template" >
+{{#each .}}
+<tr class="compareList" >
+	<td class="text-center"><i style="color:#FFA500" onclick="addSelectList(this,{{mdNo}})" id="{{mdNo}}" class='{{selectMd}}'></i></td>
+	<td data-toggle="tooltip" title="{{mdName}}"><a  href="javascript:OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+{{mdNo}},'{{mdName}}','상세보기',800,700);">{{mdName}}</a></td>
+	<td data-toggle="tooltip" title="{{miCompany}}">{{miCompany}}</td>
+	<td class="text-center">{{classFilter mdClass}}</td>
+	<td class="text-right">{{numToComma miPrice}}</td>
+	<td class="text-center"><input class="compareCheck" value="{{mdNo}}" type="checkbox"/></td>
+</tr>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template"  id="select-list-template" >
+{{#each .}}
+<tr class="selectList" >
+	<td class="text-center"><i style="color:#FFA500" onclick="addSelectList(this,{{mdNo}})" data-mdNo="{{mdNo}}" class='fa-star fas'></i></td>
+	<td data-toggle="tooltip" title="{{mdName}}"><a href="javascript:OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+{{mdNo}},'{{mdName}}','상세보기',800,700);">{{mdName}}</a></td>
+	<td data-toggle="tooltip" title="{{miCompany}}">{{miCompany}}</td>
+	<td>{{classFilter mdClass}}</td>
+	<td>{{numToComma miPrice}}</td>
+	<td class="text-center"><input class="compareCheck" value="{{mdNo}}" type="checkbox"/></td>
+</tr>
+{{/each}}
+</script>
+
+<script>
+$(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
+	addSelectList();
+});
+
+
+
+function addSelectListAll(){
+	var selectLists = $('.selectList').find('i');
+	
+	$.each(selectLists, function(index, el){
+		addSelectList(el,$(el).attr('data-mdNo'))
+	})
+}
+
+function OpenWindows(UrlStr,mdName, WinTitle, WinWidth, WinHeight) {
+	winleft = (screen.width - WinWidth) / 2;
+	wintop = (screen.height - WinHeight) / 2;
+	title = mdName + WinTitle
+	var win = window.open(UrlStr , title , "scrollbars=yes,width="+ WinWidth +", "
+							+"height="+ WinHeight +", top="+ wintop +", left="
+							+ winleft +", resizable=yes, status=yes"  );
+}
+
+function toggleStar(mdNo) {
+	var target = $('#'+mdNo)[0];
+	if(target){
+		if(target.className == 'fa-star far'){
+			target.classList.remove('far');
+			target.classList.add('fas');	
+		}else {
+			target.classList.remove('fas');
+			target.classList.add('far');	
+		}
+	}
+}
+
+function addSelectList(target,mdNo){
+	var chemistCode = 'F00001';
+	var selectMd;
+	if(!mdNo) mdNo = 0;
+	if(!target){
+		selectMd = "no";
+	}else{
+		selectMd = target.className;
+	}
+	
+	var data={
+		"mdNo":mdNo,
+		"chemistCode":chemistCode,
+		"selectMd":selectMd
+	}
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/compare/addselectlsit.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+			printData(data,$('#selectList'),$('#select-list-template'),"selectList");
+			toggleStar(mdNo);
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+	
+}
+</script>	
+
+	
+<script type="text/javascript">
+var nowPage=1;
+var sortTarget = 'totalcount';
+var sortType = 'desc';
+function doCompare() {
+	
+	$('.compareCheck:checked').each(function(index,obj){
+		var mdNo = $(obj).val();
+		OpenWindows('<%=request.getContextPath() %>/medicinedetail.do?mdNo='+mdNo,mdNo,'상세보기',800,700);
+	})	
+}
+
+$(document).delegate('.compareCheck','change',function(){
+	
+	var checkeds = $('.compareCheck:checked');
+	var uncheckeds = $('.compareCheck:not(.compareCheck:checked)');
+	
+// 	console.log(checkeds)
+// 	console.log(uncheckeds)
+	if(checkeds.length >= 4){
+		uncheckeds.attr('disabled',true);
+	}else{
+		uncheckeds.attr('disabled',false);
+	}
+
+});
+
+
+function goCompare(pageInfo,target){
+	var mainCode;
+	if($(target).attr('class') == "mdList hover"){
+		mainCode = $(target).children(':last').text();
+	}else {
+		mainCode = $(target).children(':eq(2)').text();
+	}
+	pageInfo += mainCode;
+	$.getJSON(pageInfo,function(data){
+		printData(data,$('#compareList'),$('#compare-list-template'),"compareList");
+	});
+// 	console.log(mainCode);
+}
+
+function getSearchMedicinePage(pageInfo,page,keyword){
+	if(page) nowPage = page;
+	if(!keyword) keyword = $("#nameKeyword").val();
+	pageInfo += keyword + '/' + nowPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchMedicineList,$('#searchMedicineList'),$('#searchMedicine-list-template'),"medicineSearch");
+		printPagination(data.pageMaker,$('#test3561'),$('#searchMedicine-pagination-template'));
+	});
+}
+function getSearchBasisPage(pageInfo,page,keyword){
+	if(page) nowPage = page;
+	if(!keyword) keyword = $("#basisKeyword").val();
+	console.log(keyword);
+	pageInfo += keyword + '/' + nowPage;
+	$.getJSON(pageInfo,function(data){
+		printData(data.searchBasisList,$('#searchBasisList'),$('#basis-list-template'),"basisSearch");
+		printPagination(data.pageMaker,$('#basis3561'),$('#basis-pagination-template'));
+	});
+}
+
+function enterCheckName(){
+	if(event.keyCode == 13){
+		getSearchMedicinePage('<%=request.getContextPath()%>/expert/business/compare/mdsearch/',1);
+	}
+}
+
+function enterCheckBasis(){
+	if(event.keyCode == 13){
+		getSearchBasisPage('<%=request.getContextPath()%>/expert/business/compare/basearch/',1);
+	}
+}
+
+function toggleSort(target){
+	var sortType = target.className;
+	console.log(sortType);
+	if(sortType == 'fas fa-sort-down'){
+		target.className = 'fas fa-sort-up';
+	}else{
+		target.className = 'fas fa-sort-down';
+	}
+	
+}
+
+function toggleStar(mdNo) {
+	var target = $('#'+mdNo)[0];
+	if(target){
+		if(target.className == 'fa-star far'){
+			target.classList.remove('far');
+			target.classList.add('fas');	
+		}else {
+			target.classList.remove('fas');
+			target.classList.add('far');	
+		}
+	}
+}
+
+
+
+function searchDateOfVisitor(page,searchType,searchType2){
+	if(page) nowPage = page;
+	if(searchType) sortTarget = searchType;
+	if(searchType2) sortType = searchType2;
+	
+	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	var data = {
+		"startDate" : startDate,
+		"endDate" : endDate,
+		"page" : nowPage,
+		"searchType" : sortTarget,
+		"searchType2" : sortType
+	}
+	
+	console.log(nowPage);
+
+	$.ajax({
+		url:"<%=request.getContextPath()%>/expert/business/visitor/agebysex.do",
+		type:"post",
+		data:JSON.stringify(data),	
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			printData(data.salesByAgeList,$('#ageBySexList'),$('#ageBySexList-list-template'),"ageBySexList");
+			printPagination(data.pageMaker,$('#ageBySexPagination'),$('#ageBySexList-pagination-template'));
+		},
+		error:function(error){
+			AjaxErrorSecurityRedirectHandler(error.status);	
+		}
+	});
+}
+
+function listSort(data,type){
+	
+}
+
+Handlebars.registerHelper({
+	"unitFilter" : function(unit){
+		var newUnit = unit.slice(0,-1).substr(1);
+		return newUnit;
+	},
+	"componentFilter" : function(component){
+		return component.replace(/\[(.*?)\]/gm,'').replaceAll('|',',');
+	},
+	"signActive" : function(pageNum){
+		if(pageNum == nowPage) return 'active';
+	},
+	"classFilter": function(className){
+		return className.replace("의약품","");
+	},
+	"startNum":function(page){
+		return page*5-4;
+	},
+	"endNum":function(page){
+		return page*5;
+	},
+	"ageRange":function(age){
+		var range = age + "~" + (age + 9);
+		return range;
+	},
+	"numToComma":function(num){
+		var comma = num.toLocaleString('ko-KR');
+		return comma;
+	}
+// 	"starCheck": function(selectMd){
+// 		if(select)
+// 		return null;
+// 	}
+});
+
+function printData(replyArr,target,templateObject,targetName){
+	var template=Handlebars.compile(templateObject.html());
+	var html = template(replyArr);
+	if(targetName == "medicineSearch") $('.mdList').remove();
+	if(targetName == "basisSearch") $('.basisList').remove();
+	if(targetName == "compareList") $('.compareList').remove();
+	if(targetName == "selectList") $('.selectList').remove();
+	if(targetName == "ageBySexList") $('.ageBySexList').remove();
+	target.after(html);
+}
+
+/* pagination */
+function printPagination(pageMaker,target,templateObject){
+	var pageNumArray = new Array(pageMaker.endPage-pageMaker.startPage+1);
+	for(var i=0;i<pageMaker.endPage-pageMaker.startPage+1;i++){
+		pageNumArray[i]=pageMaker.startPage+i;
+	}	
+	pageMaker.pageNum=pageNumArray;  
+	pageMaker.prevPageNum=pageMaker.startPage-1;
+	pageMaker.nextPageNum=pageMaker.endPage+1;
+	
+	var template=Handlebars.compile(templateObject.html());	
+	var html = template(pageMaker);	
+	target.html("").html(html);
+}
+
+</script>

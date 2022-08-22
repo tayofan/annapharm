@@ -1,0 +1,137 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import kr.or.annapharm.dao.MedicineDAO;
+import kr.or.annapharm.dao.PrescriptionDAO;
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+import kr.or.annapharm.dto.ReadMedicineInfoVO;
+import kr.or.annapharm.dto.UpdatePrescriptionVO;
+
+public class PrescriptionServiceImpl implements PrescriptionService {
+
+	private PrescriptionDAO prescriptionDAO;
+	
+	private MedicineDAO medicineDAO;
+
+	public void setPrescriptionDAO(PrescriptionDAO prescriptionDAO) {
+		this.prescriptionDAO = prescriptionDAO;
+	}
+
+	@Override
+	public List<PrescriptionVO> getPrescriptionList(String prescriptionCode) throws Exception {
+		List<PrescriptionVO> prescriptionList = null;
+
+		prescriptionList = prescriptionDAO.selectPrescriptionList(prescriptionCode);
+
+		return prescriptionList;
+	}
+
+	@Override
+	public PrescriptionVO getPrescriptionOne(PrescriptionVO vo) throws Exception {
+		PrescriptionVO prescriptionOne = null;
+
+		prescriptionOne = prescriptionDAO.selectPrescriptionOne(vo);
+
+		return prescriptionOne;
+	}
+
+	@Override
+	public int getPrescriptionCount(String patientCode) throws Exception {
+		int prescriptionCount = 0;
+
+		prescriptionCount = prescriptionDAO.selectPrescriptionCount(patientCode);
+
+		return prescriptionCount;
+	}
+
+	// 과거 처방 이력에서 처방전 선택 -> 해당 처방전의 상세내역 출력 (헤지)
+	@Override
+	public List<PrescriptionDetailVO> getPrescriptioinDetil(String psCode) throws Exception {
+		List<PrescriptionDetailVO> prescriptionDetail = null;
+
+		prescriptionDetail = prescriptionDAO.selectPrescriptionDetail(psCode);
+
+		return prescriptionDetail;
+	}
+
+	// 개요 : 약사 조제 화면에서 약의 정보를 확인할 수 있게 도와주는 외부 URL을 가져오기 위한 메서드
+	// 작성자 : 이병진
+	@Override
+	public ReadMedicineInfoVO getMedicineInfo(String psCode) throws Exception {
+		// 의약품 안전나라 약품 상세 URL
+		String detailUrl = "https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=";
+
+		ReadMedicineInfoVO vo = prescriptionDAO.selectMedicineInfoOne(psCode);
+		String medicienUrl = detailUrl + vo.getMdNo();
+		vo.setMdUrl(medicienUrl);
+
+		return vo;
+	}
+
+	// 헤지 : 기존 처방전 삭제
+	@Override
+	public void deleteOriginalPrescription(List<UpdatePrescriptionVO> voList) throws Exception {
+		
+		prescriptionDAO.deleteOriginalPrescription(voList.get(0).getPsCode());
+		
+	}
+
+	// 헤지 : 수정 처방전 추가
+//	@Override
+//	public void insertUpdatePrescription(UpdatePrescriptionVO vo) throws SQLException {
+//		
+//		insertUpdatePrescription(vo);
+//	}
+
+	// 헤지 : 기존 처방전 삭제 후 수정 처방전 추가
+	@Override
+	public void updatePrescription(List<UpdatePrescriptionVO> voList) throws Exception {
+		// System.out.println("업데이트 서비스");
+		for(UpdatePrescriptionVO vo : voList) {
+			// System.out.println("업데이트 서비스 22");
+			prescriptionDAO.insertUpdatePrescription(vo);
+		}
+		
+	}
+	
+	// 헤지 : 새 처방전 작성(처방전추가)
+	@Override
+	public String insertNewPrescription(PrescriptionVO vo) throws Exception {
+		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+		String formatedNow = now.format(formatter);
+		
+//		System.out.println(formatedNow);
+		//String psCode = concat(replace(to_char(sysdate), '/', ''),lpad(pre_num_seq.nextval,4,0));
+		
+		//String psCode = sysdate + dao.nextValue();
+		//vo.setPsCode(psCode);
+		
+		String psCode = formatedNow + prescriptionDAO.selectPreNumSeq();
+		//System.out.println("처방전 코드 : " + psCode);
+		
+		vo.setPsCode(Long.parseLong(psCode));
+		
+		prescriptionDAO.insertNewPrescription(vo);
+//		
+//		// 약 추가 테이블
+//		UpdatePrescriptionVO mediVo = new UpdatePrescriptionVO();
+//		 
+//		mediVo.setPsCode(psCode);
+//		
+		// 처방전을 insert 한 후 psCode를 리턴해준다.
+		return psCode;
+		
+	}
+	
+	
+
+
+}

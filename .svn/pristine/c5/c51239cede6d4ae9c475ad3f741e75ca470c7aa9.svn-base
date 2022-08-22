@@ -1,0 +1,22 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.dto.MemberVO;
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public interface ExpertDashBoardService {
+
+	//실시간 처방내역
+	public List<Map<String, String>> getExpertDashBoardList(MemberVO id) throws Exception;
+	
+	//약사IN
+	public List<Map<String, String>> getPharmacistINList() throws Exception;
+	
+	//최근누적재고
+	public List<Map<String, String>> getCumulativeStockList(String id) throws Exception;
+	
+
+}

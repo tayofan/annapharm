@@ -1,0 +1,21 @@
+package kr.or.annapharm.dto;
+
+public class SelectListVO extends CompareMedicineVO {
+
+	private String chemistCode;
+
+	/**
+	 * @return the chemistCode
+	 */
+	public String getChemistCode() {
+		return chemistCode;
+	}
+
+	/**
+	 * @param chemistCode the chemistCode to set
+	 */
+	public void setChemistCode(String chemistCode) {
+		this.chemistCode = chemistCode;
+	}
+	
+}

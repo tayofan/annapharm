@@ -1,0 +1,33 @@
+package kr.or.annapharm.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.PatientVO;
+
+public class PatientDAOImpl implements IPatientDAO {
+	
+	private SqlSession session;
+	
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+	
+	
+	@Override
+	public List<PatientVO> selectPatientList() throws Exception {
+		return session.selectList("Patient-Mapper.selectPatientList");
+	}
+
+
+	@Override
+	public int selectPatientListCount() throws Exception {
+		return session.selectOne("Patient-Mapper.selectPatientListCount");
+	}
+
+
+
+
+}

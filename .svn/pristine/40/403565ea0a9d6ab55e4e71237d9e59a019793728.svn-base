@@ -1,0 +1,14 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.BoardVO;
+
+public interface AnnapharmInDAO {
+
+	public List<BoardVO> SelectSearchAnnapharmInList(SearchCriteria cri) throws SQLException;
+
+	public int selectAnnapharmInCriteriaTotalCount(SearchCriteria cri) throws SQLException;
+}

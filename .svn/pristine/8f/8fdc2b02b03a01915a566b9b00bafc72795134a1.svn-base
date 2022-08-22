@@ -1,0 +1,12 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import kr.or.annapharm.command.SearchCriteria;
+
+public interface BoardService {
+
+	public Map<String, Object> getBoardList(SearchCriteria cri) throws SQLException;
+
+}

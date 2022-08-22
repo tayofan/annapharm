@@ -1,0 +1,54 @@
+package kr.or.annapharm.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.BoardVO;
+import kr.or.annapharm.dto.ProductVO;
+
+
+public class ProductDAOImpl implements ProductDAO {
+	
+	private SqlSession session;
+	
+	public void setSession(SqlSession session) {
+		this.session = session;
+	}
+	
+	@Override
+	public List<ProductVO> selectProductCriteria(SearchCriteria cri) throws SQLException {
+		
+		cri.setPerPageNum(28);
+		
+		int offset = cri.getStartRowNum();
+		int limit = cri.getPerPageNum();
+
+		RowBounds rowBounds = new RowBounds(offset,limit);
+
+		return session.selectList("Product-Mapper.selectProductList", cri, rowBounds);
+	}
+
+	@Override
+	public int selectProductCriteriaTotalCount(SearchCriteria cri) throws SQLException {
+		return session.selectOne("Product-Mapper.selectSearchProductListCount", cri);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

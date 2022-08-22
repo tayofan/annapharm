@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="member_box">
+	<div class="member_b1">
+		<div class="member_n1">총 누적회원 수</div>
+		<h4 class="member_n2">255</h4>
+		<div class="member_n3"><span>이전달 대비</span><b>15%</b><bb>▲</bb></div>
+	</div>
+	<div class="member_b2">
+		<div class="member_n1">약사회원 수</div>
+		<h4 class="member_n2">255</h4>
+		<div class="member_n3"><span>이전달 대비</span><b>15%</b><bb>▲</bb></div>
+	</div>
+	<div class="member_b3">
+		<div class="member_n1">의사회원 수</div>
+		<h4 class="member_n2">255</h4>
+		<div class="member_n3"><span>이전달 대비</span><b>15%</b><bb>▲</bb></div>
+	</div>
+	<div class="member_b4">
+		<div class="member_n1">일반회원 수</div>
+		<h4 class="member_n2">255</h4>
+		<div class="member_n3"><span>어제 대비</span><b>15%</b><bb>▲</bb></div>
+	</div>
+	<div class="member_b5">
+		<div class="member_n1">오늘의 총 신규회원 수</div>
+		<h4 class="member_n2">255</h4>
+		<div class="member_n3"><span>어제 대비</span><b>15%</b><bb>▲</bb></div>
+	</div>
+</div>

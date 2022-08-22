@@ -1,0 +1,18 @@
+package kr.or.annapharm.service;
+
+import java.util.List;
+
+import kr.or.annapharm.dto.PrescriptionDetailVO;
+import kr.or.annapharm.dto.PrescriptionVO;
+
+public interface PrescriptionService {
+
+	public List<PrescriptionVO> getPrescriptionList(String prescriptionCode) throws Exception;
+	
+	public PrescriptionVO getPrescriptionOne (PrescriptionVO vo) throws Exception;
+	
+	public int getPrescriptionCount(String patientCode) throws Exception;
+	
+	// 과거 처방 이력에서 처방전 선택 -> 해당 처방전의 상세내역 출력 (헤지)
+	public List<PrescriptionDetailVO> getPrescriptioinDetil(String psCode) throws Exception;
+}

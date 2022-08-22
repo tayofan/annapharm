@@ -1,0 +1,52 @@
+package kr.or.annapharm.dto;
+
+public class ChemistVO extends MemberVO {
+
+	private String chemistNum;
+	private String pharmacyCode;
+	private String pharmacyName;
+
+	private String authority = "일반";
+
+
+	public String getChemistNum() {
+		return chemistNum;
+	}
+
+	public void setChemistNum(String chemistNum) {
+		this.chemistNum = chemistNum;
+	}
+
+	public String getPharmacyCode() {
+		return pharmacyCode;
+	}
+
+	public void setPharmacyCode(String pharmacyCode) {
+		this.pharmacyCode = pharmacyCode;
+	}
+
+	public String getPharmacyName() {
+		return pharmacyName;
+	}
+
+	public void setPharmacyName(String pharmacyName) {
+		this.pharmacyName = pharmacyName;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+
+	@Override
+	public String toString() {
+		return "ChemistVO [chemistNum=" + chemistNum + ", pharmacyCode=" + pharmacyCode + ", pharmacyName="
+				+ pharmacyName + ", authority=" + authority + "]";
+	}
+
+
+
+}

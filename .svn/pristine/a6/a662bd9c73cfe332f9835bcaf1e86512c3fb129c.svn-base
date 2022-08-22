@@ -1,0 +1,505 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<head>
+<style>
+input[type="date"] {
+	width: 130px;
+	height: 30px;
+	/* 	font-size: em; */
+}
+
+.table td, .table th {
+	padding: 5px;
+	vertical-align: top;
+	border-top: 1px solid #dee2e6;
+}
+
+.btn {
+	width: 110px;
+}
+.card-body11{
+	padding:0px;
+}
+.card-body.p-0 .table tbody>tr>td:first-of-type, .card-body.p-0 .table tbody>tr>th:first-of-type, .card-body.p-0 .table tfoot>tr>td:first-of-type, .card-body.p-0 .table tfoot>tr>th:first-of-type, .card-body.p-0 .table thead>tr>td:first-of-type, .card-body.p-0 .table thead>tr>th:first-of-type {
+    padding-left:0;
+}
+</style>
+</head>
+
+<body>
+	<div class="content-wrapper">
+		<div class="row m-0">
+			<div class="col-6">
+				<div class="row">
+					<div class="card m-0" style="width: 640px; height: 410px;">
+						<div class="card-header">
+							<input type="date" value="2022-01-01" id="startDate"> <span>~</span>
+							<input type="date" value="2022-01-31" id="endDate"> <select
+								id="type" name="type" style="height: 30px;">
+								<option value="receive">입고장</option>
+								<option value="order">발주서</option>
+							</select> <input type="text" style="width: 150px; height: 30px;">
+							<input type="button" value="검색"
+								style="width: 50px; height: 30px;">
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body m-0">
+							<a>입고/발주 검색목록</a>
+							<div id="example2_wrapper"
+								class="dataTables_wrapper dt-bootstrap4">
+								<div class="row">
+									<div class="col-sm-12 col-md-6"></div>
+									<div class="col-sm-12 col-md-6"></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 p-0">
+										<table id="example2"
+											class="table table-bordered table-hover dataTable dtr-inline"
+											aria-describedby="example2_info">
+											<thead class="text-center">
+												<tr>
+													<th class="sorting sorting_asc" tabindex="0"
+														aria-controls="example2" rowspan="1" colspan="1"
+														aria-sort="ascending">No</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">구분</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">제목</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">작성일</th>
+													<th class="sorting" tabindex="0" aria-controls="example2"
+														rowspan="1" colspan="1">작성자</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="odd">
+													<td class="dtr-control sorting_1" tabindex="0">1</td>
+													<td>입고장</td>
+													<td>2022.07.01 입고장</td>
+													<td>2022.07.01</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="dtr-control sorting_1" tabindex="0">2</td>
+													<td>입고장</td>
+													<td>2022.06.24 입고장</td>
+													<td>2022.06.24</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="dtr-control sorting_1" tabindex="0">3</td>
+													<td>입고장</td>
+													<td>2022.06.17 입고장</td>
+													<td>2022.06.17</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="dtr-control sorting_1" tabindex="0">4</td>
+													<td>입고장</td>
+													<td>2022.06.10 입고장</td>
+													<td>2022.06.10</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="sorting_1 dtr-control">5</td>
+													<td>입고장</td>
+													<td>2022.06.03 입고장</td>
+													<td>2022.06.03</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="even">
+													<td class="sorting_1 dtr-control">6</td>
+													<td>입고장</td>
+													<td>2022.05.27 입고장</td>
+													<td>2022.05.27</td>
+													<td>김동글</td>
+												</tr>
+												<tr class="odd">
+													<td class="sorting_1 dtr-control">7</td>
+													<td>입고장</td>
+													<td>2022.05.20 입고장</td>
+													<td>2022.05.20</td>
+													<td>김동글</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-5" style="margin-left: 140px;">
+										<div class="dataTables_paginate paging_simple_numbers"
+											id="example2_paginate">
+											<ul class="pagination">
+												<li class="paginate_button page-item previous disabled"id="example2_previous">
+												<a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">&lt;</a></li>
+												<li class="paginate_button page-item active">
+												<a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
+												<li class="paginate_button page-item ">
+												<a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
+												<li class="paginate_button page-item next" id="example2_next">
+												<a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">&gt;</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin: 5px; padding-left: 390px;">
+					<button type="button" class="btn btn-block btn-success"
+						style="float: right; margin-right: 5px;">입고장작성</button>
+					<button type="button" class="btn btn-block btn-info"
+						style="margin-top: 0px;">발주서작성</button>
+				</div>
+
+				<div class="row border">
+					<div class="card m-0">
+						<div class="card-body" style="width: 640px; height: 679px;">
+							<span>입고/발주 상세내용</span>
+							<div class="border" style="width: 600px; height: 450px;">
+								<div class="card">
+									<div class="card-header">
+										<h1 class="card-title" style="padding-left: 150px;">2022.05.08
+											입고장</h1>
+									</div>
+
+									<div class="card-body table-responsive p-0"
+										style="height: 450px;">
+										<table class="table table-head-fixed">
+											<thead class="text-center">
+												<tr style="">
+													<th style="width: 50px;">NO</th>
+													<th style="width: 74px;">분류코드</th>
+													<th>약명</th>
+													<th>제조일</th>
+													<th style="width: 42px;">수량</th>
+													<th style="width: 51px;">단위</th>
+													<th style="width: 90px;">금액(원)</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>112</td>
+													<td>포크랄시럽(포수클로랄)_(9.5g/95mL)</td>
+													<td>2022.05.06</td>
+													<td>6</td>
+													<td>병</td>
+													<td>1200</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>112</td>
+													<td>독세정3밀리그램(독세핀염산염)_(3.39mg/1정)</td>
+													<td>2022.05.04</td>
+													<td>8</td>
+													<td>정</td>
+													<td>2200</td>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td>112</td>
+													<td>리치나잇정6밀리그램(독세핀염산염)_(6.78mg/1정)</td>
+													<td>2022.05.05</td>
+													<td>20</td>
+													<td>정</td>
+													<td>10200</td>
+												</tr>
+												<tr>
+													<td>4</td>
+													<td>112</td>
+													<td>루나팜정(플루니트라제팜)_(1mg/1정)</td>
+													<td>2022.05.01</td>
+													<td>11</td>
+													<td>정</td>
+													<td>6800</td>
+												</tr>
+												<tr>
+													<td>5</td>
+													<td>112</td>
+													<td>할시온정0.125밀리그램(트리아졸람)_(0.125mg/1정)</td>
+													<td>2022.05.03</td>
+													<td>8</td>
+													<td>정</td>
+													<td>6800</td>
+												</tr>
+												<tr>
+													<td>6</td>
+													<td>113</td>
+													<td>테그레톨씨알정200밀리그램(카르바마제핀)_(0.2g/1정)</td>
+													<td>2022.05.06</td>
+													<td>10</td>
+													<td>정</td>
+													<td>8100</td>
+												</tr>
+												<tr>
+													<td>7</td>
+													<td>113</td>
+													<td>가바텍스캡슐100밀리그램(가바펜틴)_(0.1g/1캡슐)</td>
+													<td>2022.05.04</td>
+													<td>6</td>
+													<td>캡슐</td>
+													<td>7650</td>
+												</tr>
+												<tr>
+													<td>8</td>
+													<td>113</td>
+													<td>유니토파정(토피라메이트)_(0.1g/1정)</td>
+													<td>2022.05.06</td>
+													<td>3</td>
+													<td>정</td>
+													<td>800</td>
+												</tr>
+												<tr>
+													<td>9</td>
+													<td>114</td>
+													<td>에이펙스정(아세클로페낙)_(0.1g/1정)</td>
+													<td>2022.05.06</td>
+													<td>12</td>
+													<td>정</td>
+													<td>4200</td>
+												</tr>
+												<tr>
+													<td>10</td>
+													<td>114</td>
+													<td>이지엔6애니연질캡슐(이부프로펜)_(0.2g/1캡슐)</td>
+													<td>2022.05.03</td>
+													<td>8</td>
+													<td>캡슐</td>
+													<td>4300</td>
+												</tr>
+												<tr>
+													<td>11</td>
+													<td>218</td>
+													<td>삼성로수바스타틴정20밀리그램(로수바스타틴칼슘)_(20.8mg/1정)</td>
+													<td>2022.05.04</td>
+													<td>2</td>
+													<td>정</td>
+													<td>1200</td>
+												</tr>
+												<tr>
+													<td>12</td>
+													<td>222</td>
+													<td>에르도캡슐300밀리그램(에르도스테인)_(0.3g/1캡슐)</td>
+													<td>2022.05.02</td>
+													<td>4</td>
+													<td>캡슐</td>
+													<td>3200</td>
+												</tr>
+												<tr>
+													<td>13</td>
+													<td>396</td>
+													<td>피오스크정15밀리그램(피오글리타존염산염)_(16.53mg/1정)</td>
+													<td>2022.05.05</td>
+													<td>9</td>
+													<td>정</td>
+													<td>2800</td>
+												</tr>
+												<tr>
+													<td>14</td>
+													<td>618</td>
+													<td>미래세파드록실캡슐(수출명: MERIXIL CAP.)_(0.5g/1캡슐)</td>
+													<td>2022.05.06</td>
+													<td>30</td>
+													<td>캡슐</td>
+													<td>13500</td>
+												</tr>
+												<tr>
+													<td>15</td>
+													<td>629</td>
+													<td>조이록신정400밀리그램(목시플록사신염산염)_(0.4368g/1정)</td>
+													<td>2022.04.28</td>
+													<td>11</td>
+													<td>정</td>
+													<td>6800</td>
+												</tr>
+												<tr>
+													<td>16</td>
+													<td>112</td>
+													<td>나카인주사(로피바카인염산염수화물)_(0.158g/20mL)</td>
+													<td>2022.05.06</td>
+													<td>10</td>
+													<td>앰플</td>
+													<td>104000</td>
+												</tr>
+												<tr>
+													<td>17</td>
+													<td>112</td>
+													<td>플렌뷰산_(1000mL)</td>
+													<td>2022.05.03</td>
+													<td>6</td>
+													<td>통</td>
+													<td>74000</td>
+												</tr>
+												<tr>
+													<td>18</td>
+													<td>721</td>
+													<td>하프렙산_(2000mL)</td>
+													<td>2022.05.03</td>
+													<td>5</td>
+													<td>통</td>
+													<td>47000</td>
+												</tr>
+												<tr>
+													<td>19</td>
+													<td>641</td>
+													<td>알나졸정400밀리그람(알벤다졸)_(0.4g/1정)</td>
+													<td>2022.04.28</td>
+													<td>10</td>
+													<td>정</td>
+													<td>5400</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+								</div>
+								<div class="border"
+									style="width: 300px; height: 110px; float: left;">
+									<h2 style="text-align: center;">입고 합계 금액</h2>
+									<br>
+									<h2 style="text-align: center;">310,150 원</h2>
+								</div>
+								<button type="button" class="btn btn-block btn-dark btn-lg"
+									style="margin-left: 100px; float: left; width: 140px; height: 52px; font-weight: bold; font-size: 1.2em;">QR출력하기</button>
+								<button type="button" class="btn btn-block btn-primary"
+									style="float: left; margin-left: 10px; width: 140px; height: 52px; font-size: 1.2em; font-weight: bold;">수정하기</button>
+								<button type="button" class="btn btn-block btn-danger"
+									style="float: right; width: 137px; height: 52px; font-size: 1.2em; font-weight: bold;">삭제하기</button>
+
+							</div>
+						</div>
+						<!-- /.card-body -->
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<div class="col-6">
+				<div class="card m-0">
+					<div class="card-header" style="height: 100px;">
+						<h2 style="text-align: center; font-weight: bold;">-똥글똥글약국
+							재고현황-</h2>
+						<button type="button" class="btn btn-block btn-danger btn-sm"
+							style="font-weight: bold; font-size: 1.05em; float: left;">부족품신청</button>
+						<select id="type" name="type"
+							style="height: 30px; margin-left: 78px;">
+							<option value="all">전체</option>
+							<option value="ETC">전문</option>
+							<option value="OTC">일반</option>
+						</select> <input list="classification-code" id="ice-cream-choice"
+							name="ice-cream-choice" value="분류코드입력"
+							style="width: 122px; height: 31px;">
+						<datalist id="classification-code">
+							<option value="100">신경계 감각기관용 의약품</option>
+							<option value="110">중추신경계용 약</option>
+							<option value="111">전신마취제</option>
+							<option value="112">최면진정제</option>
+							<option value="113">항전간제</option>
+							<option value="114">해열,진통,소염제</option>
+							<option value="115">각성제,흥분제</option>
+							<option value="116">진훈제</option>
+							<option value="117">정신신경용제</option>
+							<option value="119">기타의 중추신경용 약</option>
+							<option value="120">말초신경계용 약</option>
+							<option value="121">국소마취제</option>
+							<option value="122">골격근이완제</option>
+						</datalist>
+						<input type="text" style="width: 150px; height: 30px;"> <input
+							type="button" value="검색" style="width: 50px; height: 30px;">
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body11" style="height: 1040px;">
+						<div class="card">					
+							<div class="card-body p-0" style="width:606px; height:1040px;">
+								<div id="example2_wrapper"
+									class="dataTables_wrapper dt-bootstrap4" style="width:626px;">
+									<div class="row">
+										<div class="col-sm-12 col-md-6"></div>
+										<div class="col-sm-12 col-md-6"></div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="example2"
+												class="table table-bordered table-hover dataTable dtr-inline"
+												aria-describedby="example2_info">
+												<thead>
+													<tr>
+														<th>No</th> 
+														<th>약코드</th>
+														<th>구분</th>
+														<th>분류코드</th>
+														<th>약명</th>
+														<th>수량</th>
+														<th>단위</th>
+														<th>적정재고</th>
+														<th>유통기한</th>
+														<th>약위치</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr class="odd">
+														<td class="dtr-control">1</td>
+														<td>12345678</td>
+														<td>전문</td>
+														<td>112</td>
+														<td>알나졸정400밀리그람(알벤다졸)_(0.4g/1정)</td>
+														<td>99</td>
+														<td>정</td>
+														<td>50</td>
+														<td>2022.09.09</td>
+														<td>A7</td>
+													</tr>
+													
+												</tbody>
+											</table> 
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-5">										
+										<div class="col-sm-12 col-md-7">
+											<div class="dataTables_paginate paging_simple_numbers"
+												id="example2_paginate">
+												<ul class="pagination">
+													<li class="paginate_button page-item previous disabled" id="example2_previous">
+													<a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">&lt;</a></li> 
+													<li class="paginate_button page-item active">
+													<a href="#" aria-controls="example2" data-dt-idx="1"tabindex="0" class="page-link">1</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#"aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#"aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
+													<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
+													<li class="paginate_button page-item next"id="example2_next">
+													<a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">&gt;</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+			</div>
+		</div>
+	</div>
+</body>

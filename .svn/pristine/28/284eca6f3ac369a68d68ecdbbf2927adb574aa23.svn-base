@@ -1,0 +1,42 @@
+package kr.or.annapharm.dao;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.annapharm.dto.PatientVO;
+import kr.or.annapharm.dto.PrescriptionHistoryVO;
+import kr.or.annapharm.dto.PrescriptionLogVO;
+
+public interface IPatientDAO {
+
+	// 처방 대기 환자 목록
+//	List<Map<String, String>> selectPatientList() throws Exception;
+	
+	List<Map<String, String>> selectWaitingPatientList() throws Exception;
+	
+	// 처방 대기 환자 목록 : 환자의 최근 처방일
+	String selectPatiengLastPrescriptionDate(String patientCode) throws Exception;
+
+	// 처방 대기 환자 중 선택한 환자 조회(환자코드)
+	List<PatientVO> selectPatientOne(String patientCode) throws Exception;
+	List<PatientVO> selectWaitingPatientChoice(String patientCode) throws Exception;
+
+	// 선택한 환자 조회(아이디, 생년월일)
+	List<PatientVO> selectPatientToNameRegnum(PatientVO vo) throws Exception;
+
+	// 헤지 : 환자의 과거 처방 내역
+	List<PrescriptionHistoryVO> selectPatientPrescription(String code) throws Exception;
+
+	List<PrescriptionLogVO> selectPrescriptionLogByPharmacist(String code) throws Exception;
+
+	/**
+	 * @param doctorCode : 의사 코드
+	 * @return	: 의사/병원명을 가져올 VO
+	 * @throws Exception
+	 * 	개요 : 의사 코드로 의사/병원명을 가져오는 메서드
+	 * 	작성자 : 이병진
+	 */
+	PrescriptionLogVO selectDoctorNameByCode(String doctorCode) throws Exception;
+
+}

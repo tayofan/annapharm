@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Prescription-Mapper">
+
+	<sql id="search">
+		<if test="searchType == 't'.toString()">
+			and title like '%'||#{keyword}||'%'
+		</if>
+		<if test="searchType == 'w'.toString()">
+			and writer like '%'||#{keyword}||'%'
+		</if>
+		<if test="searchType == 'c'.toString()">
+			and content like '%'||#{keyword}||'%'
+		</if>
+		<if test="searchType == 'tc'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'
+			)
+		</if>
+		<if test="searchType == 'cw'.toString()">
+			and (
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'
+			)
+		</if>
+		<if test="searchType == 'tcw'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'
+			)
+		</if>
+	</sql>
+
+	
+	<select id="selectPrescriptionList" resultType="prescription">
+		select ps_code
+		      ,doctor_code
+		      ,patient_code
+		      ,chemist_code
+		      ,ps_date
+		      ,ps_lastdate
+		      ,ps_modify_req
+		      ,ps_complete_date
+		      ,ps_status
+		  from prescription
+		 where patient_code = #{patientCode}
+	</select>
+	
+	<select id="selectPrescriptionOne" resultType="prescription">
+		select ps_code
+		      ,doctor_code
+		      ,patient_code
+		      ,chemist_code
+		      ,ps_date
+		      ,ps_lastdate
+		      ,ps_modify_req
+		      ,ps_complete_date
+		      ,ps_status
+		  from prescription
+		 where patient_code = #{patientCode}
+           and ps_code = #{psCode}
+	</select>
+	
+	<select id="selectPrescriptionCount" resultType="int">
+		select count(a.psCode)
+		  from pre_drug a, prescription b
+		 where b.patient_code = #{patientCode}
+		   and a.ps_code = b.ps_code
+	</select>
+	
+	<!-- 헤지 : 처방이력에서 처방전 선택 후 처방 상세 내역 출력  -->
+	<select id="selectPrescriptionDetail" resultType="prescriptionDetail">
+		select substr(a.md_class,1,2) as md_class
+		     , b.mi_type
+		     , a.mi_code
+		     , b.mi_use
+		     , a.md_name
+		     , c.pre_drug_count
+		     , c.pre_drug_day
+		     , c.ps_code
+		  from medicine a, medicine_info b, pre_drug c, prescription d
+		 where d.ps_code = #{psCode}
+		   and a.mi_code = b.mi_code
+		   and a.md_no = c.md_no
+		   and c.ps_code = d.ps_code
+	</select>
+
+</mapper>
+
+

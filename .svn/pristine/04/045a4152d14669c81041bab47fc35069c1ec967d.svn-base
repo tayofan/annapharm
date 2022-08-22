@@ -1,0 +1,58 @@
+package kr.or.annapharm.controller;
+
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import kr.or.annapharm.command.InsertRetrieveCommand;
+import kr.or.annapharm.dto.ChemistVO;
+import kr.or.annapharm.service.RetrieveService;
+
+@RestController
+@RequestMapping("/retrieve")
+public class RetrieveRestController {
+
+	@Autowired
+	RetrieveService retrieveService;
+
+
+	@RequestMapping(value = "/registRetrieve", method = RequestMethod.POST)
+	public ResponseEntity<String> registRetrieve(@RequestBody InsertRetrieveCommand data, HttpSession session)
+			throws Exception {
+		ResponseEntity<String> entity = null;
+		System.out.println("///////////////////////////////" + data.getFlag());
+		int temp = data.getFlag();
+		//세션에서 약사번호, 약국코드 가져오기
+		ChemistVO chemist = (ChemistVO) session.getAttribute("loginUser");
+		data.setChemistCode(chemist.getChemistCode());
+		data.setPharmacyCode(chemist.getPharmacyCode());
+
+		System.out.println("temp : " + temp);
+
+		if (temp == 0) {
+			System.out.println("통과?");
+			int retrieveNo = retrieveService.selectRetrieveNo();
+			System.out.println("//////////////////////////"+retrieveNo);
+			data.setRetrieveNo(retrieveNo);
+
+			retrieveService.insertRetrieve(data);
+		}
+
+//		data.setRetrieveNo();
+		retrieveService.insertRetrieveList(data);
+
+		entity = new ResponseEntity<String>(HttpStatus.OK);
+
+		return entity;
+	}
+
+}

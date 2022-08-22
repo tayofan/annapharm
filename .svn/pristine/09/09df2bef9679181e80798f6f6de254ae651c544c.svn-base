@@ -1,0 +1,147 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+import kr.or.annapharm.command.PageMaker;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dao.MedicineDAO;
+import kr.or.annapharm.dao.MedicineInfoDAO;
+import kr.or.annapharm.dao.ProductDAO;
+import kr.or.annapharm.dto.ProductVO;
+
+
+public class ProductServiceImpl implements ProductService {
+	
+	private ProductDAO productDAO;
+	private MedicineDAO medicineDAO;
+	private MedicineInfoDAO medicineInfoDAO;
+	
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
+
+	public void setMedicineDAO(MedicineDAO medicineDAO) {
+		this.medicineDAO = medicineDAO;
+	}
+
+	public void setMedicineInfoDAO(MedicineInfoDAO medicineInfoDAO) {
+		this.medicineInfoDAO = medicineInfoDAO;
+	}
+	
+	@Override
+	public Map<String, Object> getProductList(SearchCriteria cri) throws SQLException{
+		Date now = new Date();
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		// DB에서 Product 전체 리스트를 가져옴, 가져온 리스트에 약구분, 분류코드, 약명을 setting, 중복된 약의 재고의 수를 합치고, 나타내어지는 리스트 목록은 한개로해줌
+		List<ProductVO> firstProductList = productDAO.selectProductCriteria(cri); 
+		// 유통기한이 지나거나, 적정재고수보다 재고수가 적은 약 컬럼에 경고마크 부여하고, 경고마크가 부여된 컬럼이 먼저 출력되게 해줌.
+		List<ProductVO> secondProductList = new ArrayList<ProductVO>(); 
+		// 최종적으로 JSP에 나타내어질 리스트
+		List<ProductVO> thridProductList = new ArrayList<ProductVO>();  
+
+		for(ProductVO pro : firstProductList) { // 약구분, 분류코드, 약명을 세팅해주는 반복문
+			pro.setMdName(medicineDAO.selectMedicineName(pro.getMdNo()));
+			pro.setMdClass(medicineDAO.selectMedicineClass(pro.getMdNo()).substring(0,2)); 
+			pro.setMdType(medicineInfoDAO.selectMedicineInfoType(medicineDAO.selectMedicineType(pro.getMdNo())));
+		}
+		
+		for(int i = 0; i < firstProductList.size(); i++) { // 중복된 약의 재고의 수를 합치고, 나타내어지는 리스트 목록은 한개로
+			for(int j = firstProductList.size() - 1 ; j > i; j--) {
+				if(firstProductList.get(i).getMdNo() == firstProductList.get(j).getMdNo()) {
+					firstProductList.get(i).setProductOwnnum(firstProductList.get(i).getProductOwnnum() + firstProductList.get(j).getProductOwnnum());
+					firstProductList.get(i).setProductPosition("");
+					if(now.compareTo(firstProductList.get(j).getProductDate()) >= 0){
+						firstProductList.get(i).setWarnMark("Y");
+					}
+					firstProductList.remove(j);
+					firstProductList.get(i).setDistinctNum(firstProductList.get(i).getDistinctNum() + 1);
+				}
+			}
+			secondProductList.add(firstProductList.get(i));
+		}
+		 
+		for(ProductVO pro : secondProductList) {
+			pro.setDateOver(now.compareTo(pro.getProductDate()));
+			if(now.compareTo(pro.getProductDate()) >= 0 || pro.getProductOwnnumStandard() >= pro.getProductOwnnum()) {
+				pro.setWarnMark("Y");
+			}
+		}
+		
+		for(ProductVO pro : secondProductList) {
+			if(pro.getWarnMark()=="Y") {
+				thridProductList.add(pro);
+			}
+		}
+		
+		for(ProductVO pro : secondProductList) {
+			if(pro.getWarnMark() != "Y") {
+				thridProductList.add(pro);
+			}
+		}
+			
+		cri.setPerPageNum(28);
+		int totalCount = productDAO.selectProductCriteriaTotalCount(cri);
+		// PageMaker 생성.
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+		pageMaker.setDisplayPageNum(28);
+		
+		List<ProductVO> productPageList = new ArrayList<ProductVO>();
+		
+		for (int i = cri.getStartRowNum(); i < cri.getStartRowNum() + cri.getPerPageNum(); i++) {
+			if(thridProductList.size() <= i) {
+				break;
+			}
+			productPageList.add(thridProductList.get(i));
+		}
+		
+		dataMap.put("productList", productPageList);
+		dataMap.put("pageMaker", pageMaker);
+		return dataMap;
+	}
+
+	
+	
+	@Override
+	public List<ProductVO> getProductDetail(int mdNo) throws SQLException {
+		List<ProductVO> detail = productDAO.selectProductOneDetail(mdNo);
+		for(ProductVO pro : detail) {
+			pro.setMdName(medicineDAO.selectMedicineName(pro.getMdNo()));
+			pro.setMdClass(medicineDAO.selectMedicineClass(pro.getMdNo()).substring(0,2)); 
+			pro.setMdType(medicineInfoDAO.selectMedicineInfoType(medicineDAO.selectMedicineType(pro.getMdNo())));
+		}
+		return detail;
+	}
+
+	@Override
+	public void updateProductDetail(ProductVO product) throws SQLException {
+		System.out.println("Ser No"+product.getMdNo());
+		System.out.println("Ser QR"+product.getProductQr());
+		System.out.println("Ser DATE"+product.getProductDate());
+		System.out.println("Ser POS"+product.getProductPosition());
+		productDAO.updateProductDetail(product);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+

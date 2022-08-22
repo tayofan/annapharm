@@ -1,0 +1,124 @@
+package kr.or.annapharm.service;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+
+
+
+import kr.or.annapharm.command.PageMaker;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dao.AnnapharmInDAO;
+import kr.or.annapharm.dao.ReplyDAO;
+import kr.or.annapharm.dto.AnnapharmInVO;
+
+public class AnnapharmInServiceImpl implements AnnapharmInService {
+
+
+	private AnnapharmInDAO annapharmInDAO;
+
+	private SqlSessionFactory sqlSessionFactory;
+	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+		this.sqlSessionFactory = sqlSessionFactory;
+	}
+
+	public void setAnnapharmInDAO(AnnapharmInDAO annapharmInDAO) {
+		this.annapharmInDAO = annapharmInDAO;
+	}
+
+	private ReplyDAO replyDAO;
+	public void setReplyDAO(ReplyDAO replyDAO) {
+		this.replyDAO = replyDAO;
+	}
+
+
+
+	@Override
+	public Map<String, Object> getAnnapharmInList(SearchCriteria cri) throws SQLException {
+
+		/* SqlSession session = sqlSessionFactory.openSession(); */
+
+
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		System.out.println("cri page : " + cri.getPage());
+
+		List<AnnapharmInVO> annapharmInList = annapharmInDAO.SelectSearchAnnapharmInList(/* session, */ cri);
+
+
+		// reply count 입력
+//		if(annapharmInList!=null) for (AnnapharmInVO annapharmIn : annapharmInList) {
+//				int replycnt = replyDAO.countReply(/* session, */ annapharmIn.getChemist_in_code());
+//			annapharmIn.setChemist_in_reply_cnt(replycnt);
+//		}
+
+
+		int totalCount = annapharmInDAO.selectAnnapharmInCriteriaTotalCount(/* session, */ cri);
+
+		System.out.println("annapharmInList :" + annapharmInList.size());
+		System.out.println("totalCount :" + totalCount);
+
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+
+		dataMap.put("annapharmInList", annapharmInList);
+		dataMap.put("pageMaker", pageMaker);
+
+		return dataMap;
+	}
+
+	@Override
+	public AnnapharmInVO getAnnapharmIn(int bno) throws SQLException {
+		/* SqlSession session = sqlSessionFactory.openSession(); */
+
+		AnnapharmInVO AnnapharmIn = annapharmInDAO.selectAnnapharmInByBno(/* session, */ bno);
+		annapharmInDAO.increaseViewCnt(/* session, */ bno);
+		return AnnapharmIn;
+	}
+
+	@Override
+	public AnnapharmInVO getAnnapharmInForModify(int bno) throws SQLException {
+		/* SqlSession session = sqlSessionFactory.openSession(); */
+
+
+		AnnapharmInVO AnnapharmIn = annapharmInDAO.selectAnnapharmInByBno(/* session, */ bno);
+		return AnnapharmIn;
+	}
+
+
+
+	@Override
+	public void regist(AnnapharmInVO AnnapharmIn) throws SQLException {
+		/* SqlSession session = sqlSessionFactory.openSession(); */
+
+
+		int chemist_in_code = annapharmInDAO.selectAnnapharmInSeqNext(/* session */);
+
+		AnnapharmIn.setChemistInCode(""+chemist_in_code);
+
+		annapharmInDAO.insertAnnapharmIn(/* session, */ AnnapharmIn);
+
+	}
+
+	@Override
+	public void modify(AnnapharmInVO AnnapharmIn) throws SQLException {
+		/* SqlSession session = sqlSessionFactory.openSession(); */
+		annapharmInDAO.updateAnnapharmIn(/* session, */ AnnapharmIn);
+
+	}
+
+	@Override
+	public void remove(int chemist_in_code) throws SQLException {
+		/* SqlSession session = sqlSessionFactory.openSession(); */
+		annapharmInDAO.deleteAnnapharmIn(/* session, */ chemist_in_code);
+
+	}
+
+
+
+
+}

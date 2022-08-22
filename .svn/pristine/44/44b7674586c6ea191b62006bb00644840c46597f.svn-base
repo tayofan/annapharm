@@ -1,0 +1,450 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
+
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title><decorator:title default="ddit's System"/></title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <!-- summernote -->
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.css">
+
+  <!-- <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css"> -->
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/sweetalert2/sweetalert2.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/toastr/toastr.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css?v=3.2.0">
+     
+     <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/menu.css">
+         <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/expert.css">
+
+  
+  <decorator:head />
+  
+  <style>   
+   	body { background:#292e33;}
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+<%@ include file="./main/header.jsp" %>
+
+<decorator:body />
+
+<%@ include file="./expert/footer.jsp" %>	
+</div>
+
+<!-- jQuery -->
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js?v=3.2.0"></script>
+<!-- summernote -->
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- FontAwesome -->
+<script src="https://kit.fontawesome.com/1fc71bb455.js" crossorigin="anonymous"></script>
+
+<script src="<%=request.getContextPath() %>/resources/js/common.js" ></script>
+
+<script src="<%=request.getContextPath() %>/resources/js/menu.js" ></script>
+
+
+<script>
+	$('div.wrapper').css({
+		"max-width":"1280px",
+		"margin":"0 auto"
+	});
+</script>
+
+<!-- 환자 선택 후 해당 환자 정보 출력 -->
+<script>
+function patientClick(code){
+	$.ajax({
+		url:"readCode.do",
+		data : {"code":code},
+		type:"post",
+		success:function(res){
+// 			선택 환자 정보
+// 			console.log(res.preInfo);
+// 			console.log(res.preInfo.patient_name);
+// 			console.log(res.preInfo.patient_birth);
+// 			console.log(res.preInfo.patient_phone);
+// 			console.log(res.preInfo.patient_addr);
+			$('#patient_name').attr('value', res.info.patientName);
+			$('#patient_birth').attr('value', res.info.patientBirth);
+			$('#patient_phone').attr('value', res.info.patientPhone);
+			$('#patient_addr').attr('value', res.info.patientAddr);
+
+			console.log('res : ',res);
+
+			//console.log('preinfo : ', res.preInfo);
+
+			// 하나의 처방전의 약 갯수 세기
+			//console.log(res.medicineName.length);
+
+			// 하나의 처방전에 약 명 출력하기
+			console.log(1, res.medicineName);
+			
+			//과거 처방 이력 목록
+			/* printData2(res.preInfo,$('#prescriptionList'),$('#prescription-list-template')) */
+			
+			printData2(res.preInfo,$('#prescriptionList'),$('#prescription-list-template'))
+			
+		},
+		error:function(){
+			alert("오류입니다.");
+		}
+	});
+}
+</script>
+<!-- 헤지 : 과거 처방 이력에서 처방전 하나 선택 -> 처방 상세 내역 출력 -->
+<script>
+	function preClick(psCode, psStatus){
+ 		console.log(psCode);
+ 		console.log(psStatus);
+		
+		$.ajax({
+			url:"readPre.do",
+			data : {"psCode":psCode,
+				    "psStatus":psStatus},
+			type:"post",
+			success:function(res){
+				printData3(res.detailInfo,$('#prescriptionDetail'),$('#prescriptionDetail-list-template'))
+				
+				if(res.psStatus == "조제대기" || res.psStatus == "수정요청"){
+					$('#abc').removeClass("preDetailBtn");
+					$('#abc').addClass("btnBlueGreen");
+					$('#abc').attr("href", "#");
+					$('#abc').attr("check", "1");
+				}else{
+					$('#abc').removeClass("btnBlueGreen");
+					$('#abc').addClass("preDetailBtn");
+					$('#abc').attr("href", "#");
+					$('#abc').attr("check", "0");
+				}
+				
+			},
+			error:function(){
+				alert("오류입니다.");
+			}
+		});
+	}
+	
+	function updateBtn(psCode, psStatus){
+		console.log("뭐니 :", $('#abc').attr("check"));
+		console.log(psStatus)
+		
+		if($('#abc').attr("check") == 1){
+			$('#preAdd').removeClass("preDetailBtn");
+			$('#preAdd').addClass("preAddBtn");
+			
+			$('#preStore').removeClass("preDetailBtn");
+			$('#preStore').addClass("preStoreBtn");
+			
+			$('#preCancel').removeClass("preDetailBtn");
+			$('#preCancel').addClass("preCancelBtn");
+		}else{
+			$('#preAdd').removeClass("preAddBtn");
+			$('#preAdd').addClass("preDetailBtn");
+			
+			$('#preStore').removeClass("preStoreBtn");
+			$('#preStore').addClass("preDetailBtn");
+			
+			$('#preCancel').removeClass("preCancelBtn");
+			$('#preCancel').addClass("preDetailBtn");
+		}
+	}
+	
+	function ex01(){
+		
+		alert('눌리기')
+		
+	}
+	
+	
+</script>
+
+<!-- checkbox event -->
+<script>
+  $(function () {
+    //Enable check and uncheck all functionality
+    $('.checkbox-toggle').click(function () {
+      var clicks = $(this).data('clicks')
+      if (clicks) {
+        //Uncheck all checkboxes
+        	$('.mailbox-messages input[class="abled"]').prop('checked', false)
+        	$('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+      } else {
+        //Check all checkboxes
+        	$('.mailbox-messages input[class="abled"]').prop('checked', true)
+        	$('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+      }
+      $(this).data('clicks', !clicks)
+    })
+  })
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" ></script>
+<script  type="text/x-handlebars-template"  id="subMenu-list-template">
+	{{#each .}}
+		<li class="nav-item subMenu" >
+    		<a href="javascript:goPage('<%=request.getContextPath()%>{{murl}}','{{mcode}}');" class="nav-link">
+        		<i class="{{micon}}"></i>
+          		 <p>{{mname}}</p>
+      		</a>
+		</li>
+	{{/each}}
+</script>
+
+<!-- 선택환자 처방전 출력하는 기능 -->
+<script  type="text/x-handlebars-template"  id="prescription-list-template">
+	{{#each .}}
+	<tbody class="prescription_tboy" id="prescription_tboy">
+		<tr id="{{psCode}}" onClick="preClick({{psCode}}, '{{psStatus}}')">
+			<td>{{inc @index}}</td>	
+			<td>{{psCode}}</td>
+			<td>{{prettifyDate psDate}}</td>
+			<td>{{medicineName}}</td>
+			<td>{{hospitalName}}</td>
+			<td>{{memName}}</td>
+			{{#ifhj01 psStatus }}
+				<td class="statusEnd">{{psStatus}}</td>
+			{{else}}
+				{{#ifhj02 psStatus }}
+					<td class="statusReady">{{psStatus}}</td>
+				{{else}}
+					<td class="statusUpdate">{{psStatus}}</td>
+				{{/ifhj02}}
+			{{/ifhj01}}
+			
+		</tr>
+	</tbody>
+	{{/each}}
+</script>
+
+<script>
+Handlebars.registerHelper('ifhj01', function(v1, options) {
+	  if(v1 == '조제완료') {
+	    return options.fn(this);
+	  }
+	  return options.inverse(this);
+});
+Handlebars.registerHelper('ifhj02', function(v1, options) {
+	  if(v1 == '조제대기') {
+	    return options.fn(this);
+	  }
+	  return options.inverse(this);
+});
+</script>
+
+<!-- 과거처방이력에서 처방전 하나 선택 -> 해당 처방전의 상세 내역 출력  -->
+<script  type="text/x-handlebars-template"  id="prescriptionDetail-list-template">
+	{{#each .}}
+	<tbody class="prescriptionDetail_tboy" id="prescriptionDetail_tboy">
+		<tr>
+			<td>{{inc @index}}</td>
+			<td>{{mdClass}}</td>
+			<td>{{miType}}</td>
+			<td>{{miCode}}</td>
+			<td>{{miUse}}</td>
+			<td>{{mdName}}</td>
+			<td>{{preDrugCount}}</td>
+			<td>{{preDrugDay}}</td>
+			<td>급여</td>
+		</tr>
+	</tbody>
+	{{/each}}
+</script>
+
+
+<!-- 이름과 생년월일로 조회된 회원을 출력하는 기능 -->
+<script  type="text/x-handlebars-template"  id="lookUp-list-template">
+	{{#each .}}
+	<tbody id="lookUp_tboy">
+		<tr>
+			<td>{{inc @index}}</td>
+			<td>{{patientName}}</td>
+			<td>{{patientRegnum}}</td>
+			<td>{{patientPhone}}</td>
+		</tr>
+	{{/each}}
+</script>
+
+
+<script>
+
+Handlebars.registerHelper("inc", function(value,options){
+    return parseInt(value) + 1;
+
+});
+
+Handlebars.registerHelper({
+	"prettifyDate":function(timeValue){ //Handlbars에 날짜출력함수 등록
+		var dateObj=new Date(timeValue);
+		var year=dateObj.getFullYear();
+		var month=dateObj.getMonth()+1;
+		var date=dateObj.getDate();
+		return year+"/"+month+"/"+date;
+	},
+	"LookUpCheck":function(replyer){
+		var result="none";
+		if(replyer == "${loginUser.id}") result="visible";
+		return result;
+	}
+});
+
+function LookUp_read(){
+	$('.lookUp_tbody').remove();
+	var lookUpName = $('#lookUpName').val();
+	var lookUpBirth = $('#lookUpBirth').val();
+
+	console.log(lookUpName);
+	console.log(lookUpBirth);
+
+	var data={
+			"lookUpName":lookUpName,
+			"lookUpBirth":lookUpBirth
+	}
+
+	$.ajax({
+		url:"lookUp",
+		type:"post",
+		data:data,
+		success:function(data){
+			alert('회원이 조회되었습니다.');
+			console.log(data);
+			if(data == ""){
+				var str = "<tr class='lookUp_tbody'><td colspan='4'>조회 결과가 없습니다.</td></tr>";
+				$('#lookUp_List').append(str)
+			}else{
+				printData(data,$('#lookUp_List'),$('#lookUp-list-template'))
+			}
+		},
+		error:function(error){
+			alert('회원 조회에 실패하였습니다.')
+			/* AjaxErrorSecurityRedirectHandler(error.status); */
+		}
+	});
+}
+
+function printData(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.lookUp_tbody').remove();
+	target.append(html);
+}
+
+function printData2(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.abcd').remove();
+	target.append(html);
+}
+
+/* 해당 환자의  과거 처방 이력 출력 */
+function printData2(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.prescription_tboy').remove();
+	target.after(html);
+}
+
+/* 과거처방이력에서 처방전 선택 -> 해당 처방전의 상세 내역 출력 */
+function printData3(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.prescriptionDetail_tboy').remove();
+	target.after(html);
+}
+</script>
+
+<%@ include file="/WEB-INF/views/expert/business_management/compare_js.jsp" %>				
+
+<script>
+	function a(){
+		<%-- goPage('<%=request.getContextPath()%>${menu.murl}','${menu.mcode}');
+		subMenu_go('${menu.mcode}'.substring(0,3)+"0000"); --%>
+		var mediName = document.querySelector(".mediName");
+	 	console.log(mediName);
+	}
+	
+</script>
+
+<%-- <script>
+function goPage(url,mCode){
+	//alert(url);
+	$('iframe[name="ifr"]').attr("src",url);
+
+	// HTML5 지원브라우저에서 사용 가능
+	if (typeof(history.pushState) == 'function') {
+	    //현재 주소를 가져온다.
+	    var renewURL = location.href;
+	    //현재 주소 중 .do 뒤 부분이 있다면 날려버린다.
+	    renewURL = renewURL.substring(0, renewURL.indexOf(".do")+3);
+
+	    if (mCode != 'M000000') {
+	        renewURL += "?mCode="+mCode;
+	    }
+	    //페이지를 리로드하지 않고 페이지 주소만 변경할 때 사용
+	    history.pushState(mCode, null, renewURL);
+
+	} else {
+	    location.hash = "#"+mCode;
+	}
+}
+
+function subMenu_go(mCode){
+	//alert(mCode);
+	if(mCode!="M000000"){
+
+		$.ajax({
+			url:"<%=request.getContextPath()%>/subMenu.do?mCode="+mCode,
+			method:"get",
+			success:function(data){
+				printData(data,$('.subMenuList'),$('#subMenu-list-template'),'.subMenu');
+			},
+			error:function(error){
+				AjaxErrorSecurityRedirectHandler(error.status);
+			}
+		});
+
+
+	}else{
+		$('.subMenuList').html("");
+	}
+}
+
+
+//handelbars printElement (args : data Array, appent target, handlebar template, remove class)
+function printData(dataArr,target,templateObject,removeClass){
+
+	var template=Handlebars.compile(templateObject.html());
+
+	var html = template(dataArr);
+
+	$(removeClass).remove();
+	target.append(html);
+}
+
+
+</script> --%>
+</body>
+
+</html>
+

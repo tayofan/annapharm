@@ -1,0 +1,92 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script type="text/x-handlebars-template"  id="ageBySexList-list-template" >
+{{#each .}}
+<tr class="ageBySexList hover">
+	<td class="text-center">{{ageRange age}}</td>
+	<td>{{sex}}</td>
+	<td class="text-right">{{countPs}}</td>
+	<td class="text-right">{{sumPrice}}</td>
+	<td class="text-right">{{countNoPs}}</td>
+	<td class="text-right">{{sumNoPrice}}</td>
+	<td class="text-right">{{countTotal}}</td>
+	<td class="text-right">{{sumTotal}}</td>
+</tr>
+{{/each}}
+</script>
+						
+<script type="text/x-handlebars-template"  id="ageBySexList-pagination-template" >
+<div class="col-6" style="padding-top: 7px; font-size: 14px;">Showing {{startNum cri.page}} to {{#if next}}{{endNum cri.page}}{{else}}{{totalCount}}{{/if}} of {{totalCount}} entries</div>
+<div class="col-6" style="text-align: right;">
+<ul id="pagination" class="pagination pagination-sm justify-content-end m-0" >								
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor(1);" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-left'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor({{#if prev}}{{prevPageNum}}{{else}}1{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-left'></i>
+		</a>
+	</li>
+	{{#each pageNum}}
+	<li class="paginate_button page-item {{signActive this}}">
+		<a href="javascript:searchDateOfVisitor({{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			{{this}}
+		</a>
+	</li>
+	{{/each}}
+	
+	<li class="paginate_button page-item ">
+		<a href="javascript:searchDateOfVisitor({{#if next}}{{nextPageNum}}{{else}}{{realEndPage}}{{/if}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-right'></i>
+		</a>
+	</li>
+	<li class="paginate_button page-item">
+		<a href="javascript:searchDateOfVisitor({{realEndPage}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+			<i class='fas fa-angle-double-right'></i>
+		</a>
+	</li>	
+</ul>
+</div>
+</script>
+
+<script>
+$(function(){
+	var end = new Date();
+	var endDate = $('#endDate').val(end.toISOString().substring(0, 10));
+	var start = new Date();
+	start = new Date(start.setMonth(start.getMonth() - 1));
+	var startDate = $('#startDate').val(start.toISOString().substring(0, 10));
+	
+	$('#endDate').attr('max',end.toISOString().substring(0, 10));
+	$('#startDate').attr('max',end.toISOString().substring(0, 10));
+	
+	$('#endDate').change(function(){
+		var changeEnd = $(this).val();
+		$('#startDate').attr('max',changeEnd);
+		
+		var endDate = $('#endDate').val();
+		var startDate = $('#startDate').val();
+		
+		if(!compareDate(startDate,endDate)){
+			$('#startDate').val(endDate);
+		}
+	})
+});
+
+function compareDate(startDate, endDate) {
+	
+	var start = new Date(startDate);
+	var end = new Date(endDate);
+	
+	var result;
+	
+	if(start <= end) result = true;
+	else result = false;
+	
+	return result;
+}
+</script>

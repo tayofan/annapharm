@@ -1,0 +1,319 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.jsp.controller.MakeFileName;
+import com.jsp.exception.InvalidPasswordException;
+import com.jsp.exception.NotFoundIdException;
+
+import kr.or.annapharm.command.PageMaker;
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.ChemistVO;
+import kr.or.annapharm.dto.DoctorVO;
+import kr.or.annapharm.dto.HospitalVO;
+import kr.or.annapharm.dto.MemberVO;
+import kr.or.annapharm.dto.MenuVO;
+import kr.or.annapharm.dto.PatientVO;
+import kr.or.annapharm.dto.PharmacyVO;
+import kr.or.annapharm.error.NotEqualUserInfo;
+import kr.or.annapharm.security.User;
+import kr.or.annapharm.service.BoardService;
+import kr.or.annapharm.service.HospitalService;
+import kr.or.annapharm.service.MemberService;
+import kr.or.annapharm.service.MenuService;
+import kr.or.annapharm.service.PharmacyService;
+
+@Controller
+public class CommonController {
+
+	@Autowired
+	private MenuService menuService;
+
+	@Autowired
+	private HospitalService hospitalService;
+
+	@Autowired
+	private PharmacyService pharmacyService;
+
+	@Autowired
+	private MemberService memberService;
+
+	@RequestMapping("/main")
+	public String main() {
+		String url = "home";
+		return url;
+	}
+
+	@RequestMapping("/main/common/index")
+	public String loginIndex() {
+		String url = "main/common/index";
+		return url;
+	}
+
+	@RequestMapping("/index")
+	public String index(@RequestParam(defaultValue = "U000000") String mCode, Model model) throws SQLException {
+		String url = "main/common/indexPage";
+
+		List<MenuVO> menuList = menuService.getUserMenuList();
+		// 로그인한 사용자가 의사일 경우
+		// List<MenuVO> menuList = menuService.getDoctorMenuList();
+		// 로그인한 사용자가 약사일 경우
+		// List<MenuVO> menuList = menuService.getChemistMenuList();
+
+		MenuVO menu = menuService.getMenuByMcode(mCode);
+
+		System.out.println(menu.toString());
+
+		model.addAttribute("menuList", menuList);
+		model.addAttribute("menu", menu);
+
+		return url;
+	}
+
+	// 회원가입유형 선택 페이지
+	@RequestMapping("/signUp/main")
+	public String signUpForm() {
+		String url = "common/signUpMain";
+		return url;
+	}
+
+	// 의사 회원가입폼으로 이동
+	@RequestMapping("/signUp/doctorResistForm")
+	public ModelAndView doctorResistForm(ModelAndView mnv) throws SQLException {
+		String url = "common/signUpFormDoctor";
+
+		// 근무 병원 출력용 데이터 가져오기()
+		List<HospitalVO> hospitalName = hospitalService.getHospitalName();
+
+		// System.out.println("병원 개수 : " + hospitalName.size());
+
+		mnv.addObject("hospitalName", hospitalName);
+		mnv.setViewName(url);
+
+		return mnv;
+	}
+
+	// 의사회원등록
+	@RequestMapping(value = "/signUp/doctor", method = RequestMethod.POST)
+	public String registDoctor(DoctorVO doctorVO) throws Exception {
+		String url = "main/common/loginForm";
+
+		// System.out.println(doctorVO.toString());
+		// 회원 타입을 의사로 변경
+		doctorVO.setAuthority("의사");
+
+		memberService.insertMember(doctorVO);
+		memberService.insertDoctor(doctorVO);
+
+		return url;
+	}
+
+	// 약사 회원가입 폼
+	@RequestMapping("/signUp/chemistResistForm")
+	public String chemistResistForm() throws SQLException {
+		String url = "common/signUpFormChemist";
+
+		return url;
+	}
+
+	// 근무 약국 찾기 새창 화면 띄우기
+	@RequestMapping("/signUp/list")
+	public ModelAndView opensearchPharmacy(SearchCriteria cri, ModelAndView mnv) throws SQLException {
+		String url = "common/searchPharmacy";
+		Map<String, Object> dataMap = pharmacyService.getPharmacyList(cri);
+
+		if (cri.getKeyword() == null) {
+			cri.setKeyword("");
+		}
+		mnv.addObject("dataMap", dataMap);
+		mnv.setViewName(url);
+
+		return mnv;
+	}
+
+	// 약사회원등록
+	@RequestMapping(value = "/signUp/chemist", method = RequestMethod.POST)
+	public String registChemist(ChemistVO chemistVO) throws Exception {
+		String url = "main/common/loginForm";
+
+		// 회원 타입을 약사로 변경
+		chemistVO.setAuthority("약사");
+
+		memberService.insertMember(chemistVO);
+		memberService.insertChemist(chemistVO);
+
+		return url;
+	}
+
+	// 일반 회원 회원가입
+	@RequestMapping("/signUp/userResistForm")
+	public String userResistForm() {
+		String url = "common/signUpFormUser";
+		return url;
+	}
+
+	// 일반회원등록
+	@RequestMapping(value = "/signUp/user", method = RequestMethod.POST)
+	public String registUser(MemberVO memberVO) throws Exception {
+		String url = "main/common/loginForm";
+
+		if (memberService.isPatient(memberVO.getMemRegnum()) == 1) {
+			// 환자로 이미 등록되어있을때
+			memberService.updateMemId(memberVO);
+		} else {
+			// 환자로 등록되어있지 않을때
+			PatientVO patient = new PatientVO();
+
+			patient.setMemId(memberVO.getMemId());
+			patient.setPatientCode(MakeFileName.toUUIDFileName(memberVO.getMemRegnum().substring(0, 5), "$$"));
+			patient.setPatientName(memberVO.getMemName());
+			patient.setPatientRegnum(memberVO.getMemRegnum());
+			patient.setPatientPhone(memberVO.getMemTel());
+			patient.setPatientAddr(memberVO.getMemAddr() + "$$" + memberVO.getMemAddr2());
+
+			memberService.insertPatient(patient);
+		}
+
+		memberService.insertMember(memberVO);
+
+		return url;
+	}
+
+	// 로그인 폼 이동
+	@RequestMapping(value = "/common/loginForm", method = RequestMethod.GET)
+	public String loginForm(@RequestParam(defaultValue = "") String error, HttpServletResponse response) {
+		String url = "main/common/loginForm";
+
+		if (error.equals("-1")) {
+			response.setStatus(302);
+		}
+		return url;
+	}
+
+	// 로그인 후 회원별 메인페이지로 이동
+	@RequestMapping(value = "/common/login", method = RequestMethod.POST)
+	public String login(MemberVO member, HttpServletRequest request) throws Exception {
+		String url = "";
+		try {
+			memberService.login(member.getMemId(), member.getMemPwd());
+			member = memberService.getMember(member.getMemId());
+			memberService.updateLoginDate(member.getMemId());
+
+			HttpSession session = request.getSession();
+			session.setAttribute("loginUser", member);
+			session.setMaxInactiveInterval(6 * 60);
+
+			if (member.getMemAuthority().equals("일반")) {
+				url = "main/common/index";
+			}
+			if (member.getMemAuthority().equals("의사")) {
+				url = "main/common/index";
+			}
+			if (member.getMemAuthority().equals("약사")) {
+				url = "main/common/index";
+			}
+
+		} catch (NotFoundIdException | InvalidPasswordException e) {
+			// e.printStackTrace();
+			request.setAttribute("message", e.getMessage());
+			url = "main/common/login_fail";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// Exceptin 처리
+			throw e;
+		}
+		return url;
+	}
+
+	@RequestMapping("/common/foundIdPassword")
+	public String foundIdPassword() {
+		String url = "main/common/foundIdPassword";
+		return url;
+	}
+
+
+
+	@RequestMapping(value = "/foundPassword", method = RequestMethod.POST)
+	public ModelAndView foundPassword(MemberVO member, ModelAndView mnv,HttpServletRequest request) throws Exception {
+		String url = "main/common/changePassword";
+
+		try {
+			if(memberService.getMember(member.getMemId()) == null) {
+				throw new NotFoundIdException();
+			}
+			if(memberService.foundId(member) == null) {
+				throw new NotEqualUserInfo();
+			}
+			mnv.addObject("member", member);
+			mnv.setViewName(url);
+
+		} catch (NotFoundIdException | NotEqualUserInfo | InvalidPasswordException e) {
+			// e.printStackTrace();
+			request.setAttribute("message", e.getMessage());
+			url = "main/common/login_fail";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// Exceptin 처리
+			throw e;
+		}
+
+
+		return mnv;
+	}
+	@RequestMapping("/security/accessDenied")
+	public void accessDenied() {
+	}
+
+	@RequestMapping("/common/loginTimeOut")
+	public String loginTimeOut(Model model) throws Exception {
+		String url = "security/sessionOut";
+
+		model.addAttribute("message", "세션이 만료되었습니다.\\n다시 로그인 하세요!");
+		return url;
+	}
+
+//	@RequestMapping(value = "/common/login", method = RequestMethod.POST)
+//	public String login(String id, String pwd, HttpSession session) throws Exception {
+//		String url = "redirect:/index.do";
+//		try {
+//			memberService.login(id, pwd);
+//			session.setAttribute("loginUser", memberService.getMember(id));
+//		} catch (NotFoundIdException | InvalidPasswordException e) {
+//			//model.addAttribute("message", e.getMessage());
+//			url = "common/login_fail";
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw e;
+//		}
+//		return url;
+//	}
+//
+//	@RequestMapping(value = "/common/logout", method = RequestMethod.GET)
+//	public String logout(HttpSession session) {
+//		String url = "redirect:/";
+//		session.invalidate();
+//		return url;
+//	}
+
+}

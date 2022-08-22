@@ -1,0 +1,39 @@
+package kr.or.annapharm;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import kr.or.annapharm.dao.MedicineDAO;
+import kr.or.annapharm.dto.MedicineVO;
+
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:kr/or/annapharm/context/root-context.xml")
+public class DAOTest {
+	
+	@Autowired
+	private MedicineDAO medicineDAO;
+	
+//	@Before
+//	public void init()throws SQLException{
+//		medicineDAO = se
+//	}
+//	
+//	@After
+//	public void destroy() throws SQLException{
+//		conn.close();
+//	}
+	
+	@Test
+	public void testSQL() throws Exception{
+		MedicineVO vo = medicineDAO.selectMedicineAll(200002787);
+		
+		Assert.assertEquals("세르비아캡슐(엔테로코쿠스페슘스트레인세르넬레68균)", vo.getMd_name());
+	}
+
+}

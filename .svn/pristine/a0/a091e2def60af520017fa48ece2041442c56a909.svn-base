@@ -1,0 +1,121 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"  ></script>
+<!-- 처방전 상세내역 출력 핸들바스 -->
+<script  type="text/x-handlebars-template"  id="SA-prescription-list-template">
+	{{#each .}}
+		<tr class="SA-PrescriptionTr">
+			<td class="dtr-control sorting_1 stringType" tabindex="0" data-toggle="tooltip" title="{{mdName}}">
+				{{mdName}}
+			</td>
+			<td data-toggle="tooltip" title="{{miCompany}}" >{{miCompany}}</td>
+			<td>{{miUse}}</td>
+			<td>{{insurance}}</td>
+			<td class="number">{{preDrugNum}}</td>
+			<td class="number">{{preDrugCount}}</td>
+			<td class="number">{{preDrugDay}}</td>
+			<td class="number">{{miPrice}}</td>
+			<td class="number">{{total}}</td>
+		</tr>
+	{{/each}}
+</script>
+
+<!-- 토글 생성 -->
+<script>
+	window.onload = function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	}
+</script>
+
+<script>
+	// 매출목록 클릭 시 해당하는 처방전의 상세 내역을 가져오는 ajax
+	function salesAnalysisDetail(psCode){
+		$.ajax({
+			url:"read",
+			type:"get",
+			data:{"psCode":psCode},
+			success:function(res){
+				// 핸들바스 생성
+				printSAPrescription(res,$('#SA-PrescriptionTbody'),$('#SA-prescription-list-template'))
+
+				var totalFee = res[0].prescriptTotalFee + '(￦)';
+				// 합계 금액 계산
+				$('#totalFee').html(totalFee);
+			},
+			error:function(error){
+				alert("처방전 조회에 실패하였습니다.");
+			}
+		});
+	}
+</script>
+
+
+<script>
+	// 체크박스 전체 선택버튼 클릭
+	function checkboxAll(){
+		// 버튼 클릭시 check박스 값이 들어간 뒤 findListChecked()가 실행되도록 지연시간을 둠
+		setTimeout(() => findListChecked(), 1);
+		console.log('check', '확인');
+	}
+
+	// 체크 여부 확인
+	function findListChecked(){
+
+		var arr = [];
+		var check = document.getElementsByClassName('abled');
+
+		// 목록 전체에서 체크된 checkbox 찾고 배열에 넣기
+		for(let i = 0; i < check.length; i++){
+			if(check[i].checked){
+				arr.push(check[i]);
+			}
+		}
+
+		var count = 0;			// 총 매출건
+		var total = 0;			// 약제비/판매액
+		var charge = 0;			// 청구액
+		var patientCharge = 0;	// 본인부담금
+		var deposit = 0;		// 입금액
+		var compoundingFee = 0;	// 조제료
+		var medicienBill = 0;	// 약가
+
+		// 체크한 값의 항목	합계를 모두 더하기
+		for(let i = 0; i < arr.length; i++){
+			var main = arr[i].parentNode.parentNode.parentNode;
+
+			total += parseInt($(main).find('td:eq(4)').text().replace(/,/g,""));
+			charge += parseInt($(main).find('td:eq(5)').text().replace(/,/g,""));
+			patientCharge += parseInt($(main).find('td:eq(6)').text().replace(/,/g,""));
+			deposit += parseInt($(main).find('td:eq(7)').text().replace(/,/g,""));
+			compoundingFee += parseInt($(main).find('td:eq(8)').text().replace(/,/g,""));
+			medicienBill += parseInt($(main).find('td:eq(9)').text().replace(/,/g,""));
+
+		}
+
+		// 항목합계에 데이터 넣기
+		count = arr.length;
+		$('#total_salesCount').val(count.toLocaleString('ko-KR') + '(건)');
+		$('#total_salesFee').val(total.toLocaleString('ko-KR') + '(￦)');
+		$('#total_compoundingFee').val(compoundingFee.toLocaleString('ko-KR') + '(￦)');
+		$('#total_carge').val(charge.toLocaleString('ko-KR') + '(￦)');
+		$('#total_salesDrugFee').val(medicienBill.toLocaleString('ko-KR') + '(￦)');
+		$('#total_copay').val(patientCharge.toLocaleString('ko-KR') + '(￦)');
+		$('#total_deposit').val(deposit.toLocaleString('ko-KR') + '(￦)');
+
+		// 표 아래 값 표시
+		$('#checkboxCount').text(count);
+	}
+
+</script>
+
+<script>
+// 처방전 상세내역 출력 핸들바스 생성
+function printSAPrescription(list,target,templateObject){
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(list);
+	$('.SA-PrescriptionTr').remove();
+	target.append(html);
+}
+</script>

@@ -1,0 +1,121 @@
+package kr.or.annapharm.controller;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
+import kr.or.annapharm.command.SearchCriteria;
+import kr.or.annapharm.dto.AnnapharmInVO;
+import kr.or.annapharm.service.AnnapharmInService;
+import kr.or.annapharm.service.BoardService;
+
+@Controller
+@RequestMapping("annapharmIn")
+public class AnnapharmInController {
+
+	@Resource(name="annapharmInService")
+	private AnnapharmInService service;
+
+	@RequestMapping("/list")
+	public ModelAndView list(SearchCriteria cri, ModelAndView mnv) throws SQLException{
+		String url = "main/annapharmIn/list";
+
+		Map<String, Object> dataMap = service.getAnnapharmInList(cri);
+
+		mnv.addObject("dataMap", dataMap);
+		mnv.setViewName(url);
+
+		return mnv;
+	}
+	
+
+	@RequestMapping("/registForm")
+	public String registForm(){
+		String url="main/annapharmIn/regist";
+		return url;
+	}
+
+	@RequestMapping("/regist")
+	public String regist(AnnapharmInVO annapharmIn,HttpServletRequest request, //BoardVO board,
+						 RedirectAttributes rttr)throws Exception{
+		String url="redirect:/main/annapharmIn/list.do";
+
+		annapharmIn.setChemistInTitle((String)request.getAttribute("XSStitle"));
+
+		service.regist(annapharmIn);
+		
+		rttr.addFlashAttribute("from","regist");
+		
+		return url;
+	}
+	
+	@RequestMapping("/detail")
+	public ModelAndView detail(int chemist_in_code, String from, ModelAndView mnv )throws SQLException{
+		String url="main/annapharmIn/detail";		
+		
+		AnnapharmInVO annapharmIn =null;
+		if(from!=null && from.equals("list")) {
+			annapharmIn=service.getAnnapharmIn(chemist_in_code);
+			url="redirect:/board/detail.do?bno="+chemist_in_code;
+		}else {
+			annapharmIn=service.getAnnapharmInForModify(chemist_in_code);
+		}
+					
+		mnv.addObject("annapharmIn",annapharmIn);		
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+	@RequestMapping("/modifyForm")
+	public ModelAndView modifyForm(int chemist_in_code,ModelAndView mnv)throws SQLException{
+		String url="main/annapharmIn/modify";
+		
+		AnnapharmInVO annapharmIn = service.getAnnapharmInForModify(chemist_in_code);
+		
+		mnv.addObject("annapharmIn",annapharmIn);		
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+	@RequestMapping(value="/modify",method=RequestMethod.POST)
+	public String modifyPost(AnnapharmInVO annapharmIn,HttpServletRequest request, //BoardModifyCommand modifyReq,
+							 RedirectAttributes rttr) throws Exception{
+		
+		String url = "redirect:/main/annapharmIn/detail.do";
+		
+		annapharmIn.setChemistInTitle((String)request.getAttribute("XSStitle"));
+				
+		service.modify(annapharmIn);
+		
+		rttr.addFlashAttribute("from","modify");
+		rttr.addAttribute("chemist_in_code",annapharmIn.getChemistInCode());
+		
+		return url;
+	}
+	
+	@RequestMapping(value="/remove",method=RequestMethod.POST)
+	public String remove(int chemist_in_code, RedirectAttributes rttr) throws Exception{
+		String url = "redirect:/main/annapharmIn/detail";
+		service.remove(chemist_in_code);		
+		
+		rttr.addAttribute("chemist_in_code", chemist_in_code);
+		rttr.addFlashAttribute("from","remove");
+		return url;		
+	}
+	
+
+}
+
+
+

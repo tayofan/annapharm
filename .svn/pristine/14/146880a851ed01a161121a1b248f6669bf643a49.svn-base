@@ -1,0 +1,70 @@
+package kr.or.annapharm.dto;
+
+public class MedicineInfoVO {
+	int mi_code;
+	String mi_company;
+	String mi_use;
+	int mi_type;
+	String mi_name;
+	String mi_standard;
+	String mi_unit;
+	int mi_price;
+	String mi_maincode;
+	
+	public int getMi_code() {
+		return mi_code;
+	}
+	public void setMi_code(int mi_code) {
+		this.mi_code = mi_code;
+	}
+	public String getMi_company() {
+		return mi_company;
+	}
+	public void setMi_company(String mi_company) {
+		this.mi_company = mi_company;
+	}
+	public String getMi_use() {
+		return mi_use;
+	}
+	public void setMi_use(String mi_use) {
+		this.mi_use = mi_use;
+	}
+	public int getMi_type() {
+		return mi_type;
+	}
+	public void setMi_type(int mi_type) {
+		this.mi_type = mi_type;
+	}
+	public String getMi_name() {
+		return mi_name;
+	}
+	public void setMi_name(String mi_name) {
+		this.mi_name = mi_name;
+	}
+	public String getMi_standard() {
+		return mi_standard;
+	}
+	public void setMi_standard(String mi_standard) {
+		this.mi_standard = mi_standard;
+	}
+	public String getMi_unit() {
+		return mi_unit;
+	}
+	public void setMi_unit(String mi_unit) {
+		this.mi_unit = mi_unit;
+	}
+	public int getMi_price() {
+		return mi_price;
+	}
+	public void setMi_price(int mi_price) {
+		this.mi_price = mi_price;
+	}
+	public String getMi_maincode() {
+		return mi_maincode;
+	}
+	public void setMi_maincode(String mi_maincode) {
+		this.mi_maincode = mi_maincode;
+	}
+	
+	
+}

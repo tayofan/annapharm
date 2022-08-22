@@ -1,0 +1,23 @@
+package kr.or.annapharm.command;
+
+import java.util.List;
+
+public class ReceiveOrderCommand {
+	private List<String> Receive;
+	private List<String> Order;
+	
+	public List<String> getReceive() {
+		return Receive;
+	}
+	public void setReceive(List<String> receive) {
+		Receive = receive;
+	}
+	public List<String> getOrder() {
+		return Order;
+	}
+	public void setOrder(List<String> order) {
+		Order = order;
+	}
+	
+	
+}
